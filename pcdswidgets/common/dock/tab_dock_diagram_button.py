@@ -3,22 +3,10 @@
 from enum import IntEnum, auto
 from pathlib import Path
 
-from pydm.widgets.base import PyDMPrimitiveWidget
 from pydm.widgets.channel import PyDMChannel
-from pydm.widgets.designer_settings import update_property_for_widget
 from qtpy.QtCore import Q_ENUMS, QRect, Qt
 from qtpy.QtGui import QCloseEvent, QPainter, QPaintEvent, QPalette, QPen, QPixmap
-from qtpy.QtWidgets import (
-    QAction,
-    QComboBox,
-    QDialog,
-    QFormLayout,
-    QHBoxLayout,
-    QPushButton,
-    QSizePolicy,
-    QVBoxLayout,
-    QWidget,
-)
+from qtpy.QtWidgets import QSizePolicy, QWidget
 
 import pcdswidgets
 
@@ -46,7 +34,12 @@ class DiagramOption(IntEnum):
       (If the new enum is "NAME", the file should be "name.svg")
     """
 
-    BLANK = auto()
+    # BLANK is pinned to 0 so it matches Qt Designer's default for an unset enum
+    # property (a freshly-dropped widget then renders blank rather than erroring).
+    # The rest use auto(), so append new options at the END only -- reordering or
+    # inserting mid-list renumbers everything below it and changes what saved .ui
+    # files display.
+    BLANK = 0
     ATTENUATOR = auto()
     BEAM_STOPPER = auto()
     DIFF_ION_PUMP = auto()
@@ -82,92 +75,7 @@ class DiagramOption(IntEnum):
         return QPixmap(str(self.get_image_path()))
 
 
-class DiagramEditor(QDialog):
-    """
-    Dialog for DiagramEditExtension: pick the rendered diagram from a
-    dropdown. Choices come from the widget's editable_choice_properties.
-
-    This is a trimmed version of the builder's MacroValueEditor: a plain
-    button has no macros, so it only renders the choice dropdowns.
-    """
-
-    def __init__(self, widget: "TabDockDiagramButton", parent: QWidget | None):
-        super().__init__(parent)
-        self.widget = widget
-        self.choice_widgets: dict[str, QComboBox] = {}
-        self.setup_ui()
-
-    def setup_ui(self):
-        self.setWindowTitle("Diagram Editor")
-        outer_layout = QVBoxLayout()
-        outer_layout.setContentsMargins(5, 5, 5, 5)
-        outer_layout.setSpacing(5)
-        self.setLayout(outer_layout)
-
-        edit_form_layout = QFormLayout()
-        outer_layout.addLayout(edit_form_layout)
-
-        for prop_name, choices in self.widget.editable_choice_properties.items():
-            combo = QComboBox()
-            for label, value in choices.items():
-                combo.addItem(label, value)
-            # Pre-select the widget's current value. property() returns an int
-            # (pyqt5) or an enum member (pyside6); normalize to the stored value.
-            current = self.widget.property(prop_name)
-            current = getattr(current, "value", current)
-            index = combo.findData(current)
-            combo.setCurrentIndex(index if index >= 0 else 0)
-            self.choice_widgets[prop_name] = combo
-            edit_form_layout.addRow(prop_name, combo)
-
-        button_layout = QHBoxLayout()
-        outer_layout.addLayout(button_layout)
-
-        self.save_button = QPushButton("&Save")
-        self.save_button.setAutoDefault(True)
-        self.save_button.setDefault(True)
-        self.save_button.clicked.connect(self.save_changes)
-        update_button = QPushButton("&Update")
-        update_button.clicked.connect(self.save_changes)
-        cancel_button = QPushButton("&Cancel")
-        cancel_button.clicked.connect(self.cancel_changes)
-        button_layout.addWidget(cancel_button)
-        button_layout.addWidget(update_button)
-        button_layout.addWidget(self.save_button)
-
-    def save_changes(self):
-        for prop_name, combo in self.choice_widgets.items():
-            update_property_for_widget(self.widget, prop_name, combo.currentData())
-        if self.sender() == self.save_button:
-            self.accept()
-
-    def cancel_changes(self):
-        self.close()
-
-
-class DiagramEditExtension:
-    """
-    Adds an "Edit Diagram" option to the designer task menu on double or
-    right click, mirroring PyDM's BasicSettingsExtension pattern.
-
-    PyDM maps the first action returned by actions() to double-click.
-    """
-
-    def __init__(self, widget: "TabDockDiagramButton"):
-        self.widget = widget
-        self.edit_diagram_action = QAction("&Edit Diagram", self.widget)
-        self.edit_diagram_action.triggered.connect(self.open_dialog)
-
-    def actions(self) -> list[QAction]:
-        """PyDM checks this to decide which actions to prepend in designer."""
-        return [self.edit_diagram_action]
-
-    def open_dialog(self):
-        dialog = DiagramEditor(self.widget, parent=self.widget)
-        dialog.exec_()
-
-
-class TabDockDiagramButton(TabDockButton, PyDMPrimitiveWidget):
+class TabDockDiagramButton(TabDockButton):
     """
     Behaves identically to TabDockButton, but renders a standard symbol and lightpath info.
     """
@@ -199,24 +107,13 @@ class TabDockDiagramButton(TabDockButton, PyDMPrimitiveWidget):
     SPECTROMETER = DiagramOption.SPECTROMETER
     WAVE_FRONT_SENSOR = DiagramOption.WAVE_FRONT_SENSOR
 
-    # Expose the "diagram" enum property as a dropdown in the double-click
-    # picker. Ordered alphabetically by device name (BLANK first) because
-    # PyQt5's native property-editor enum dropdown cannot be reliably sorted.
-    editable_choice_properties = {
-        "diagram": {
-            opt.name: int(opt) for opt in sorted(DiagramOption, key=lambda o: (o != DiagramOption.BLANK, o.name))
-        },
-    }
-
-    _qt_designer_ = {
+    _qt_designer = {
         "group": "ECS Common Dock",
         "is_container": False,
-        "extensions": [DiagramEditExtension],
     }
 
     def __init__(self, parent: QWidget | None = None):
         super().__init__(parent)
-        PyDMPrimitiveWidget.__init__(self)
         self._image_pixmap: QPixmap | None = None
         self.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
         self.setFlat(True)

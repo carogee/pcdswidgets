@@ -10,11 +10,7 @@ from pydm.widgets.channel import PyDMChannel
 from pytestqt.qtbot import QtBot
 from qtpy.QtCore import QObject
 
-from pcdswidgets.common.dock.tab_dock_diagram_button import (
-    DiagramEditor,
-    DiagramOption,
-    TabDockDiagramButton,
-)
+from pcdswidgets.common.dock.tab_dock_diagram_button import DiagramOption, TabDockDiagramButton
 
 try:
     from qtpy.QtCore import pyqtSignal as Signal
@@ -51,24 +47,6 @@ def test_diagram_options(qtbot: QtBot, diagram_button: TabDockDiagramButton, dia
     assert getattr(diagram_button, diagram_option.name) == DiagramOption[diagram_option.name]
     # Make sure there's no funny business in the rendering pipeline that explodes
     qtbot.wait(50)
-
-
-def test_diagram_picker_dropdown(qtbot: QtBot, diagram_button: TabDockDiagramButton):
-    """The double-click picker lists all options alphabetically and preselects the current one."""
-    diagram_button.setDiagram(DiagramOption.MIRROR)
-    dialog = DiagramEditor(diagram_button, parent=diagram_button)
-    qtbot.add_widget(dialog)
-    combo = dialog.choice_widgets["diagram"]
-
-    labels = [combo.itemText(i) for i in range(combo.count())]
-    # Every option is offered
-    assert set(labels) == {opt.name for opt in DiagramOption}
-    # BLANK first, then alphabetical
-    assert labels[0] == "BLANK"
-    assert labels[1:] == sorted(labels[1:])
-    # The widget's current diagram is preselected
-    assert combo.currentText() == "MIRROR"
-    assert combo.currentData() == int(DiagramOption.MIRROR)
 
 
 def test_lightpath_channel(qtbot: QtBot, diagram_button: TabDockDiagramButton):
