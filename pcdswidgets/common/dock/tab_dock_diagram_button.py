@@ -10,7 +10,7 @@ from qtpy.QtWidgets import QSizePolicy, QWidget
 
 import pcdswidgets
 
-from .tab_dock_button import TabDockButton
+from .tab_dock_button import ScreenSource, TabDockButton
 
 try:
     from qtpy.QtCore import Property  # type: ignore
@@ -72,6 +72,20 @@ class TabDockDiagramButton(TabDockButton):
     """
     Behaves identically to TabDockButton, but renders a standard symbol and lightpath info.
     """
+
+    # Re-declare the inherited ``source`` enum *and* its Property on this
+    # subclass. Qt serializes an enum property under the class that declares the
+    # Property, so without this Designer writes ``TabDockButton::FILE_PATH`` --
+    # but only subclasses listed in a .ui's <customwidgets> are registered with
+    # the uiloader, so that base-class scope raises NoSuchClassError on load.
+    # Re-declaring here moves the serialized scope to ``TabDockDiagramButton::``,
+    # which does resolve. (The Property body just defers to the base getter/setter.)
+    Q_ENUMS(ScreenSource)
+    ScreenSource = ScreenSource
+    FILE_PATH = ScreenSource.FILE_PATH
+    SCREEN_NAME = ScreenSource.SCREEN_NAME
+    WIDGET_NAME = ScreenSource.WIDGET_NAME
+    source = Property(ScreenSource, TabDockButton.readSource, TabDockButton.setSource)
 
     Q_ENUMS(DiagramOption)
     DiagramOption = DiagramOption
