@@ -26,6 +26,7 @@ class DiagramOption(IntEnum):
     Options for which diagram to show on the widget.
 
     If you want to add a new option:
+
     - Add an entry here, note that order/count don't affect anything and won't break old screens.
       (Old screens need the old enum name to exist and nothing more)
     - Copy the new entry into the enums specified at the top of the class body below

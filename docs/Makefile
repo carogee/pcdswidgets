@@ -22,4 +22,5 @@ clean:
 # "make mode" option.  $(O) is meant as a shortcut for $(SPHINXOPTS).
 %: Makefile
 	python ../examples/show_symbol.py
+	pandoc -s ../README.md -o source/generated/README.rst
 	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)

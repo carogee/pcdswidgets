@@ -57,3 +57,7 @@ generated/path_defs.py: pyproject.toml $(shell find pcdswidgets/builder -type f)
 
 pixi:
 	pixi run install
+
+# Documentation
+html:
+	cd docs && pixi run $(MAKE) html

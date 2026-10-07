@@ -2,10 +2,10 @@
 Symbol Icons
 ============
 
-The Icons for every symbol is also available for usage through code, not the
+The icon for every symbol is also available for use through code, not just in
 Qt Designer.
-Like the Symbols, all the Icons are based on the same super class and share a
-set of common properties that can be used to tweak its look and feel.
+Like the symbols, all the icons are based on the same superclass and share a
+set of common properties that can be used to tweak their look and feel.
 
 
 Gauges
@@ -14,13 +14,13 @@ Gauges
 =================== ========== ========================================================================
 Name                Icon       Import
 =================== ========== ========================================================================
-Rough               |rough|    ``from pcdswidgets.icons import RoughGaugeSymbolIcon``
-Cathode             |cathode|  ``from pcdswidgets.icons import CathodeGaugeSymbolIcon``
-Hot Cathode         |hcathode| ``from pcdswidgets.icons import HotCathodeGaugeSymbolIcon``
-Cold Cathode        |ccathode| ``from pcdswidgets.icons import ColdCathodeGaugeSymbolIcon``
-Cold Cathode Combo  |cccombo|  ``from pcdswidgets.icons import ColdCathodeComboGaugeSymbolIcon``
-Hot Cathode Combo   |hccombo|  ``from pcdswidgets.icons import HotCathodeComboGaugeSymbolIcon``
-Capactiance Manom   |manom|    ``from pcdswidgets.icons import CapManometerGaugeSymbolIcon``
+Rough               |rough|    ``from pcdswidgets.symbols import RoughGaugeSymbolIcon``
+Cathode             |cathode|  ``from pcdswidgets.symbols import CathodeGaugeSymbolIcon``
+Hot Cathode         |hcathode| ``from pcdswidgets.symbols import HotCathodeGaugeSymbolIcon``
+Cold Cathode        |ccathode| ``from pcdswidgets.symbols import ColdCathodeGaugeSymbolIcon``
+Cold Cathode Combo  |cccombo|  ``from pcdswidgets.symbols import ColdCathodeComboGaugeSymbolIcon``
+Hot Cathode Combo   |hccombo|  ``from pcdswidgets.symbols import HotCathodeComboGaugeSymbolIcon``
+Capacitance Manom   |manom|    ``from pcdswidgets.symbols import CapManometerGaugeSymbolIcon``
 =================== ========== ========================================================================
 
 .. |rough| image:: /_static/icons/RoughGaugeSymbolIcon.png
@@ -38,16 +38,16 @@ Valves
 ================== =========== =================================================================
 Name               Icon        Import
 ================== =========== =================================================================
-Pneumatic          |pneuvalve| ``from pcdswidgets.icons import PneumaticValveSymbolIcon``
-Pneumatic NO       |pnnovalve| ``from pcdswidgets.icons import PneumaticValveNOSymbolIcon``
-Pneumatic DA       |pndavalve| ``from pcdswidgets.icons import PneumaticValveNOSymbolIcon``
-Aperture           |aperture|  ``from pcdswidgets.icons import ApertureValveSymbolIcon``
-Fast Shutter       |fshutter|  ``from pcdswidgets.icons import FastShutterSymbolIcon``
-Right Angle Manual |ramvalve|  ``from pcdswidgets.icons import RightAngleManualValveSymbolIcon``
-Needle             |nvalve|    ``from pcdswidgets.icons import NeedleValveSymbolIcon``
-Proportional       |propvalve| ``from pcdswidgets.icons import ProportionalValveSymbolIcon``
-ControlValve       |control|   ``from pcdswidgets.icons import ControlValveSymbolIcon``
-ControlOnlyValve   |cntrlonly| ``from pcdswidgets.icons import ControlOnlyValveSymbolIcon``
+Pneumatic          |pneuvalve| ``from pcdswidgets.symbols import PneumaticValveSymbolIcon``
+Pneumatic NO       |pnnovalve| ``from pcdswidgets.symbols import PneumaticValveNOSymbolIcon``
+Pneumatic DA       |pndavalve| ``from pcdswidgets.symbols import PneumaticValveDASymbolIcon``
+Aperture           |aperture|  ``from pcdswidgets.symbols import ApertureValveSymbolIcon``
+Fast Shutter       |fshutter|  ``from pcdswidgets.symbols import FastShutterSymbolIcon``
+Right Angle Manual |ramvalve|  ``from pcdswidgets.symbols import RightAngleManualValveSymbolIcon``
+Needle             |nvalve|    ``from pcdswidgets.symbols import NeedleValveSymbolIcon``
+Proportional       |propvalve| ``from pcdswidgets.symbols import ProportionalValveSymbolIcon``
+ControlValve       |control|   ``from pcdswidgets.symbols import ControlValveSymbolIcon``
+ControlOnlyValve   |cntrlonly| ``from pcdswidgets.symbols import ControlOnlyValveSymbolIcon``
 ================== =========== =================================================================
 
 .. |pneuvalve| image:: /_static/icons/PneumaticValveSymbolIcon.png
@@ -68,10 +68,10 @@ Pumps
 ============ ========== ============================================================
 Name         Icon       Import
 ============ ========== ============================================================
-Ion          |ionp|     ``from pcdswidgets.icons import IonPumpSymbolIcon``
-Turbo        |turbop|   ``from pcdswidgets.icons import TurboPumpSymbolIcon``
-Scroll       |scrollp|  ``from pcdswidgets.icons import ScrollPumpSymbolIcon``
-Getter       |getter|   ``from pcdswidgets.icons import GetterPumpSymbolIcon``
+Ion          |ionp|     ``from pcdswidgets.symbols import IonPumpSymbolIcon``
+Turbo        |turbop|   ``from pcdswidgets.symbols import TurboPumpSymbolIcon``
+Scroll       |scrollp|  ``from pcdswidgets.symbols import ScrollPumpSymbolIcon``
+Getter       |getter|   ``from pcdswidgets.symbols import GetterPumpSymbolIcon``
 ============ ========== ============================================================
 
 .. |ionp| image:: /_static/icons/IonPumpSymbolIcon.png
@@ -86,7 +86,7 @@ Others
 ============ ========== ============================================================
 Name         Icon       Import
 ============ ========== ============================================================
-RGA          |rga|      ``from pcdswidgets.icons import RGASymbolIcon``
+RGA          |rga|      ``from pcdswidgets.symbols import RGASymbolIcon``
 ============ ========== ============================================================
 
 .. |rga| image:: /_static/icons/RGASymbolIcon.png

@@ -6,7 +6,6 @@ exclude-newer = "7d"
 [tasks]
 test = "./pixi_scripts/test.sh"
 install = "./pixi_scripts/install.sh"
-process-diagram-png = "python -m pcdswidgets.icons.process_diagram_png"
 
 [activation]
 scripts = ["./pixi_scripts/env_setup.sh"]
@@ -15,6 +14,7 @@ scripts = ["./pixi_scripts/env_setup.sh"]
 python = "==3.12.12"
 numpy = ">=2.4.6,<3"
 pyqt = "==5.15.9"
+pandoc = ">=3.11,<4"
 
 [pypi-dependencies]
 pyqt5-stubs = "==5.15.6.0"

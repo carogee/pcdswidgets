@@ -89,7 +89,6 @@ YamlToolbar = "pcdswidgets.common.toolbar.yaml_toolbar:YamlToolbar"
 [project.optional-dependencies]
 dev = [
     "jinja2>=3",
-    "pillow>=12.3.0",
     "ruff>=0.15.8",
     "tomlkit>=0.14.0",
 ]

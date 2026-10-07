@@ -3,7 +3,7 @@ Mixins
 ======
 
 A couple of mixin classes were created to help us make it easy to create new
-symbol widgets and ensure that the code has an uniform behavior.
+symbol widgets and ensure that the code has a uniform behavior.
 
 
 Interlock

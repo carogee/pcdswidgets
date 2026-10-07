@@ -210,7 +210,7 @@
              <bool>true</bool>
             </property>
             <property name="channel">
-             <string>ca://${MOTOR}:bHomeCmd_RBV</string>
+             <string>ca://${MOTOR}:bHomed_RBV</string>
             </property>
             <property name="showLabels">
              <bool>false</bool>

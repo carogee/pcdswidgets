@@ -165,7 +165,7 @@ class MotorExpertScreenBeckhoffBase(DesignerWidget):
             ("channel", """ca://${MOTOR}:bDone_RBV"""),
         ],
         "bHomed_ind": [
-            ("channel", """ca://${MOTOR}:bHomeCmd_RBV"""),
+            ("channel", """ca://${MOTOR}:bHomed_RBV"""),
         ],
         "bPowerEnabled_ind": [
             ("channel", """ca://${MOTOR}:bPowerIsEnabled_RBV"""),

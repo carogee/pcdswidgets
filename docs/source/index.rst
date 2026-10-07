@@ -1,44 +1,34 @@
-===========
-PCDSWidgets
-===========
-
-LCLS PyDM Widget Library
+.. include:: generated/README.rst
 
 .. toctree::
     :maxdepth: 1
-    :caption: Widgets
+    :caption: User Documentation
 
-    vacuum.rst
-    icons.rst
-
-.. toctree::
-   :maxdepth: 1
-   :caption: API Documentation
-   :hidden:
-
-   mixins.rst
-   utils.rst
-
+    install.rst
+    catalog.rst
+    widgets/widgets.rst
+    pcdswidgets_show.rst
 
 .. toctree::
-   :maxdepth: 1
-   :caption: Developer Documentation
-   :hidden:
+    :maxdepth: 1
+    :caption: Developer Documentation
 
-   dev.rst
-   addwidget.rst
-
-.. toctree::
-   :maxdepth: 1
-   :caption: Related Projects
-   :hidden:
-
-   PyDM <https://github.com/slaclab/pydm>
+    developer/environment.rst
+    developer/testing.rst
+    developer/widgets.rst
+    developer/build.rst
+    developer/misc_api.rst
 
 .. toctree::
-   :maxdepth: 1
-   :caption: Links
-   :hidden:
+    :maxdepth: 1
+    :caption: Links
 
-   PCDSWidgets GitHub <https://github.com/pcdshub/pcdswidgets>
-   PCDS-wide GitHub <https://github.com/pcdshub>
+    pydm documentation <https://slaclab.github.io/pydm>
+    pcdswidgets on github <https://github.com/pcdshub/pcdswidgets>
+
+.. toctree::
+    :maxdepth: 1
+    :caption: Version
+    :hidden:
+
+    release.rst

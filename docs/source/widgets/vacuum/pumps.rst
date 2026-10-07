@@ -8,6 +8,12 @@ Ion Pump
 .. autoclass:: pcdswidgets.vacuum.pumps.IonPump
    :members:
 
+Ion Pump (No Interlock)
+-----------------------
+
+.. autoclass:: pcdswidgets.vacuum.pumps.IonPumpNoIlk
+   :members:
+
 Turbo Pump
 ----------
 

@@ -19,12 +19,15 @@
 <!--  Include a screenshot of the related widgets in designer and in pydm -->
 
 ## Pre-merge Checklist
-- [ ] Screenshots of these widgets in designer are included above (`try_in_designer.sh`)
-- [ ] Screenshots of these widgets working in PyDM are included above (`try_in_pydm.sh`)
-- [ ] Description and screenshot and of these widgets working are added to the ECS Widget Catalog https://confluence.slac.stanford.edu/spaces/PCDS/pages/716925985/ECS+UI+UX+pcdswidgets+Widget+Catalog
+### For All Widget Work:
+- [ ] Screenshots of these widgets in designer are included above (`pixi run designer`)
+- [ ] Screenshots of these widgets working in PyDM are included above (`pixi run pydm`)
+- [ ] Catalog entries are included, with up-to-date text and images (docs/source/catalog.rst)
+- [ ] Widget has its own documentation page and it is up-to-date
+- [ ] New/changed widgets are part of the test suite (semi-automatic)
+### For All PRs:
 - [ ] Code works interactively
 - [ ] Code contains descriptive docstrings, including context and API
 - [ ] New/changed functions and methods are covered in the test suite where possible
-- [ ] New/changed widgets are part of the test suite (semi-automatic)
 - [ ] Test suite passes locally
 - [ ] Test suite passes on GitHub Actions
