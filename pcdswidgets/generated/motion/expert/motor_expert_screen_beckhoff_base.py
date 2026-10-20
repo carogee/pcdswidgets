@@ -38,14 +38,18 @@ class MotorExpertScreenBeckhoffBase(DesignerWidget):
     encoderCount_rbv: "PyDMLabel"
     errorBool_rbv: "PyDMLabel"
     errorCode_rbv: "PyDMLabel"
+    errorMessage_rbv: "PyDMLabel"
     frame: "QtWidgets.QFrame"
     highLimitEnable_rbv: "PyDMLabel"
     highLimitTravel_set: "PyDMLineEdit"
+    highLimitUnits_lbl: "PyDMLabel"
     homeCmd_cmd_2: "PyDMPushButton"
     homeMode_set: "PyDMEnumComboBox"
+    homePositionUnits_lbl: "PyDMLabel"
     homePosition_set: "PyDMLineEdit"
     lbl_done: "QtWidgets.QLabel"
     lbl_encoderCount: "QtWidgets.QLabel"
+    lbl_errMessage: "QtWidgets.QLabel"
     lbl_errorBool: "QtWidgets.QLabel"
     lbl_errorCode: "QtWidgets.QLabel"
     lbl_highLimitEnable: "QtWidgets.QLabel"
@@ -63,36 +67,45 @@ class MotorExpertScreenBeckhoffBase(DesignerWidget):
     lbl_velocity: "QtWidgets.QLabel"
     lowLimitEnable_rbv: "PyDMLabel"
     lowLimitTravel_set: "PyDMLineEdit"
+    lowLimitUnits_lbl: "PyDMLabel"
     negMotionEnabled_rbv: "PyDMLabel"
+    offsetUnits_lbl: "PyDMLabel"
     posMotionEnabled_rbv: "PyDMLabel"
     reset_cmd: "PyDMPushButton"
     userEnable_set: "PyDMEnumComboBox"
     userOffset_set: "PyDMLineEdit"
+    velocityUnits_lbl: "PyDMLabel"
     velocity_set: "PyDMLineEdit"
 
     ui_form = Ui_Form
     _macro_to_widget = {
         "MOTOR": [
             "DeviceName",
-            "negMotionEnabled_rbv",
-            "bHomed_ind",
-            "posMotionEnabled_rbv",
             "bDone_ind",
-            "homeCmd_cmd_2",
             "bPowerEnabled_ind",
-            "errorCode_rbv",
             "errorBool_rbv",
-            "reset_cmd",
+            "errorMessage_rbv",
+            "bHomed_ind",
             "encoderCount_rbv",
+            "errorCode_rbv",
+            "posMotionEnabled_rbv",
+            "negMotionEnabled_rbv",
+            "lowLimitUnits_lbl",
+            "velocity_set",
             "highLimitEnable_rbv",
             "highLimitTravel_set",
-            "userOffset_set",
-            "velocity_set",
-            "lowLimitTravel_set",
-            "lowLimitEnable_rbv",
-            "userEnable_set",
-            "homeMode_set",
+            "offsetUnits_lbl",
+            "velocityUnits_lbl",
+            "homePositionUnits_lbl",
             "homePosition_set",
+            "lowLimitTravel_set",
+            "homeMode_set",
+            "userOffset_set",
+            "userEnable_set",
+            "highLimitUnits_lbl",
+            "lowLimitEnable_rbv",
+            "reset_cmd",
+            "homeCmd_cmd_2",
         ],
     }
     _widget_to_macro = {
@@ -117,16 +130,25 @@ class MotorExpertScreenBeckhoffBase(DesignerWidget):
         "errorCode_rbv": [
             "MOTOR",
         ],
+        "errorMessage_rbv": [
+            "MOTOR",
+        ],
         "highLimitEnable_rbv": [
             "MOTOR",
         ],
         "highLimitTravel_set": [
             "MOTOR",
         ],
+        "highLimitUnits_lbl": [
+            "MOTOR",
+        ],
         "homeCmd_cmd_2": [
             "MOTOR",
         ],
         "homeMode_set": [
+            "MOTOR",
+        ],
+        "homePositionUnits_lbl": [
             "MOTOR",
         ],
         "homePosition_set": [
@@ -138,7 +160,13 @@ class MotorExpertScreenBeckhoffBase(DesignerWidget):
         "lowLimitTravel_set": [
             "MOTOR",
         ],
+        "lowLimitUnits_lbl": [
+            "MOTOR",
+        ],
         "negMotionEnabled_rbv": [
+            "MOTOR",
+        ],
+        "offsetUnits_lbl": [
             "MOTOR",
         ],
         "posMotionEnabled_rbv": [
@@ -151,6 +179,9 @@ class MotorExpertScreenBeckhoffBase(DesignerWidget):
             "MOTOR",
         ],
         "userOffset_set": [
+            "MOTOR",
+        ],
+        "velocityUnits_lbl": [
             "MOTOR",
         ],
         "velocity_set": [
@@ -179,17 +210,34 @@ class MotorExpertScreenBeckhoffBase(DesignerWidget):
         "errorCode_rbv": [
             ("channel", """ca://${MOTOR}:nErrorId_RBV"""),
         ],
+        "errorMessage_rbv": [
+            ("channel", """ca://${MOTOR}:sErrorMessage_RBV"""),
+        ],
         "highLimitEnable_rbv": [
             ("channel", """ca://${MOTOR}:NC:SoftPosMaxOn:Val_RBV"""),
         ],
         "highLimitTravel_set": [
             ("channel", """ca://${MOTOR}:NC:MaxPos:Val_RBV"""),
         ],
+        "highLimitUnits_lbl": [
+            (
+                "rules",
+                """[{"name": "highLimitUnitsVis", "property": "Visible", "initial_value": "", "expression": "len(str(ch[0]).strip()) == 0", "channels": [{"channel": "ca://${MOTOR}:NC:MaxPos:Val_RBV.EGU", "trigger": true, "use_enum": false}]}]""",
+            ),
+            ("channel", """ca://${MOTOR}.EGU"""),
+        ],
         "homeCmd_cmd_2": [
             ("channel", """ca://${MOTOR}:bHomeCmd"""),
         ],
         "homeMode_set": [
             ("channel", """ca://${MOTOR}:eHomeMode_RBV"""),
+        ],
+        "homePositionUnits_lbl": [
+            (
+                "rules",
+                """[{"name": "homePositionUnitsVis", "property": "Visible", "initial_value": "", "expression": "len(str(ch[0]).strip()) == 0", "channels": [{"channel": "ca://${MOTOR}:fHomePosition_RBV.EGU", "trigger": true, "use_enum": false}]}]""",
+            ),
+            ("channel", """ca://${MOTOR}.EGU"""),
         ],
         "homePosition_set": [
             ("channel", """ca://${MOTOR}:fHomePosition_RBV"""),
@@ -200,8 +248,22 @@ class MotorExpertScreenBeckhoffBase(DesignerWidget):
         "lowLimitTravel_set": [
             ("channel", """ca://${MOTOR}:NC:MinPos:Val_RBV"""),
         ],
+        "lowLimitUnits_lbl": [
+            (
+                "rules",
+                """[{"name": "lowLimitUnitsVis", "property": "Visible", "initial_value": "", "expression": "len(str(ch[0]).strip()) == 0", "channels": [{"channel": "ca://${MOTOR}:NC:MinPos:Val_RBV.EGU", "trigger": true, "use_enum": false}]}]""",
+            ),
+            ("channel", """ca://${MOTOR}.EGU"""),
+        ],
         "negMotionEnabled_rbv": [
             ("channel", """ca://${MOTOR}:bNegativeMotionIsEnabled_RBV"""),
+        ],
+        "offsetUnits_lbl": [
+            (
+                "rules",
+                """[{"name": "offsetUnitsVis", "property": "Visible", "initial_value": "", "expression": "len(str(ch[0]).strip()) == 0", "channels": [{"channel": "ca://${MOTOR}:OFF.EGU", "trigger": true, "use_enum": false}]}]""",
+            ),
+            ("channel", """ca://${MOTOR}.EGU"""),
         ],
         "posMotionEnabled_rbv": [
             ("channel", """ca://${MOTOR}:bPositiveMotionIsEnabled_RBV"""),
@@ -214,6 +276,12 @@ class MotorExpertScreenBeckhoffBase(DesignerWidget):
         ],
         "userOffset_set": [
             ("channel", """ca://${MOTOR}:OFF"""),
+        ],
+        "velocityUnits_lbl": [
+            (
+                "rules",
+                """[{"name": "velUnitsText", "property": "Text", "initial_value": "", "expression": "'{}/s'.format(ch[0])", "channels": [{"channel": "ca://${MOTOR}.EGU", "trigger": true, "use_enum": false}]}, {"name": "velUnitsVis", "property": "Visible", "initial_value": "", "expression": "len(str(ch[0]).strip()) == 0", "channels": [{"channel": "ca://${MOTOR}:fVelocity_RBV.EGU", "trigger": true, "use_enum": false}]}]""",
+            ),
         ],
         "velocity_set": [
             ("channel", """ca://${MOTOR}:fVelocity_RBV"""),

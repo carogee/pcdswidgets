@@ -145,35 +145,91 @@
           <property name="verticalSpacing">
            <number>8</number>
           </property>
-          <item row="4" column="1" alignment="Qt::AlignHCenter">
-           <widget class="PyDMLabel" name="negMotionEnabled_rbv">
+          <item row="1" column="1" alignment="Qt::AlignHCenter">
+           <widget class="PyDMByteIndicator" name="bDone_ind">
             <property name="minimumSize">
              <size>
-              <width>150</width>
-              <height>24</height>
+              <width>25</width>
+              <height>25</height>
              </size>
             </property>
-            <property name="font">
-             <font>
-              <pointsize>11</pointsize>
-             </font>
+            <property name="maximumSize">
+             <size>
+              <width>25</width>
+              <height>25</height>
+             </size>
             </property>
             <property name="toolTip">
-             <string>Negative motion enable readback.</string>
+             <string>Motion complete indicator.</string>
             </property>
-            <property name="styleSheet">
-             <string notr="true">border: 1px solid gray;</string>
+            <property name="alarmSensitiveContent">
+             <bool>false</bool>
             </property>
-            <property name="alignment">
-             <set>Qt::AlignCenter</set>
+            <property name="alarmSensitiveBorder">
+             <bool>true</bool>
             </property>
             <property name="channel">
-             <string>ca://${MOTOR}:bNegativeMotionIsEnabled_RBV</string>
+             <string>ca://${MOTOR}:bDone_RBV</string>
+            </property>
+            <property name="showLabels">
+             <bool>false</bool>
+            </property>
+            <property name="circles">
+             <bool>true</bool>
+            </property>
+            <property name="numBits">
+             <number>1</number>
             </property>
            </widget>
           </item>
-          <item row="7" column="0">
-           <widget class="QLabel" name="lbl_errorBool">
+          <item row="0" column="1" alignment="Qt::AlignHCenter">
+           <widget class="PyDMByteIndicator" name="bPowerEnabled_ind">
+            <property name="minimumSize">
+             <size>
+              <width>25</width>
+              <height>25</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>25</width>
+              <height>25</height>
+             </size>
+            </property>
+            <property name="toolTip">
+             <string>Power enabled indicator.</string>
+            </property>
+            <property name="alarmSensitiveBorder">
+             <bool>true</bool>
+            </property>
+            <property name="channel">
+             <string>ca://${MOTOR}:bPowerIsEnabled_RBV</string>
+            </property>
+            <property name="showLabels">
+             <bool>false</bool>
+            </property>
+            <property name="circles">
+             <bool>true</bool>
+            </property>
+            <property name="numBits">
+             <number>1</number>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0">
+           <widget class="QLabel" name="lbl_posMotion">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>25</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>25</height>
+             </size>
+            </property>
             <property name="font">
              <font>
               <pointsize>11</pointsize>
@@ -182,7 +238,153 @@
              </font>
             </property>
             <property name="text">
-             <string>Error Bool</string>
+             <string>+ Motion Enable</string>
+            </property>
+           </widget>
+          </item>
+          <item row="8" column="0">
+           <widget class="QLabel" name="lbl_errMessage">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>25</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>25</height>
+             </size>
+            </property>
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>Error Message</string>
+            </property>
+           </widget>
+          </item>
+          <item row="6" column="1">
+           <widget class="PyDMLabel" name="errorBool_rbv">
+            <property name="minimumSize">
+             <size>
+              <width>150</width>
+              <height>25</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>25</height>
+             </size>
+            </property>
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
+            <property name="toolTip">
+             <string>Error boolean readback.</string>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">border: 1px solid gray;</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+            <property name="channel">
+             <string>ca://${MOTOR}:bError_RBV</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="0">
+           <widget class="QLabel" name="lbl_negMotion">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>25</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>25</height>
+             </size>
+            </property>
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+              <weight>50</weight>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>- Motion Enable</string>
+            </property>
+           </widget>
+          </item>
+          <item row="8" column="1">
+           <widget class="PyDMLabel" name="errorMessage_rbv">
+            <property name="minimumSize">
+             <size>
+              <width>150</width>
+              <height>25</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>25</height>
+             </size>
+            </property>
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
+            <property name="toolTip">
+             <string/>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">border: 1px solid gray;</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+            <property name="precision">
+             <number>0</number>
+            </property>
+            <property name="showUnits">
+             <bool>false</bool>
+            </property>
+            <property name="precisionFromPV">
+             <bool>true</bool>
+            </property>
+            <property name="alarmSensitiveContent">
+             <bool>false</bool>
+            </property>
+            <property name="alarmSensitiveBorder">
+             <bool>true</bool>
+            </property>
+            <property name="PyDMToolTip">
+             <string/>
+            </property>
+            <property name="channel">
+             <string>ca://${MOTOR}:sErrorMessage_RBV</string>
+            </property>
+            <property name="enableRichText">
+             <bool>false</bool>
+            </property>
+            <property name="displayLabelText">
+             <bool>false</bool>
+            </property>
+            <property name="disconnectedText">
+             <string/>
+            </property>
+            <property name="displayFormat">
+             <enum>PyDMLabel::String</enum>
             </property>
            </widget>
           </item>
@@ -223,176 +425,20 @@
             </property>
            </widget>
           </item>
-          <item row="3" column="1" alignment="Qt::AlignHCenter">
-           <widget class="PyDMLabel" name="posMotionEnabled_rbv">
-            <property name="minimumSize">
-             <size>
-              <width>150</width>
-              <height>24</height>
-             </size>
-            </property>
-            <property name="font">
-             <font>
-              <pointsize>11</pointsize>
-             </font>
-            </property>
-            <property name="toolTip">
-             <string>Positive motion enable readback.</string>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">border: 1px solid gray;</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignCenter</set>
-            </property>
-            <property name="channel">
-             <string>ca://${MOTOR}:bPositiveMotionIsEnabled_RBV</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="1" alignment="Qt::AlignHCenter">
-           <widget class="PyDMByteIndicator" name="bDone_ind">
-            <property name="minimumSize">
-             <size>
-              <width>25</width>
-              <height>25</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>25</width>
-              <height>25</height>
-             </size>
-            </property>
-            <property name="toolTip">
-             <string>Motion complete indicator.</string>
-            </property>
-            <property name="alarmSensitiveContent">
-             <bool>false</bool>
-            </property>
-            <property name="alarmSensitiveBorder">
-             <bool>true</bool>
-            </property>
-            <property name="channel">
-             <string>ca://${MOTOR}:bDone_RBV</string>
-            </property>
-            <property name="showLabels">
-             <bool>false</bool>
-            </property>
-            <property name="circles">
-             <bool>true</bool>
-            </property>
-            <property name="numBits">
-             <number>1</number>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0">
-           <widget class="QLabel" name="lbl_done">
-            <property name="font">
-             <font>
-              <pointsize>11</pointsize>
-              <weight>50</weight>
-              <bold>false</bold>
-             </font>
-            </property>
-            <property name="text">
-             <string>Done</string>
-            </property>
-           </widget>
-          </item>
-          <item row="4" column="0">
-           <widget class="QLabel" name="lbl_negMotion">
-            <property name="font">
-             <font>
-              <pointsize>11</pointsize>
-              <weight>50</weight>
-              <bold>false</bold>
-             </font>
-            </property>
-            <property name="text">
-             <string>- Motion Enable</string>
-            </property>
-           </widget>
-          </item>
-          <item row="11" column="1">
-           <widget class="PyDMPushButton" name="homeCmd_cmd_2">
-            <property name="minimumSize">
-             <size>
-              <width>140</width>
-              <height>24</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>140</width>
-              <height>32</height>
-             </size>
-            </property>
-            <property name="toolTip">
-             <string>Send a home command.</string>
-            </property>
-            <property name="text">
-             <string>Home</string>
-            </property>
-            <property name="channel">
-             <string>ca://${MOTOR}:bHomeCmd</string>
-            </property>
-            <property name="pressValue">
-             <string>1</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1" alignment="Qt::AlignHCenter">
-           <widget class="PyDMByteIndicator" name="bPowerEnabled_ind">
-            <property name="minimumSize">
-             <size>
-              <width>25</width>
-              <height>25</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>25</width>
-              <height>25</height>
-             </size>
-            </property>
-            <property name="toolTip">
-             <string>Power enabled indicator.</string>
-            </property>
-            <property name="alarmSensitiveBorder">
-             <bool>true</bool>
-            </property>
-            <property name="channel">
-             <string>ca://${MOTOR}:bPowerIsEnabled_RBV</string>
-            </property>
-            <property name="showLabels">
-             <bool>false</bool>
-            </property>
-            <property name="circles">
-             <bool>true</bool>
-            </property>
-            <property name="numBits">
-             <number>1</number>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="0">
-           <widget class="QLabel" name="lbl_homed">
-            <property name="font">
-             <font>
-              <pointsize>11</pointsize>
-              <weight>50</weight>
-              <bold>false</bold>
-             </font>
-            </property>
-            <property name="text">
-             <string>Motor is Homed</string>
-            </property>
-           </widget>
-          </item>
           <item row="0" column="0">
            <widget class="QLabel" name="lbl_powerEnabled">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>25</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>25</height>
+             </size>
+            </property>
             <property name="font">
              <font>
               <pointsize>11</pointsize>
@@ -405,118 +451,20 @@
             </property>
            </widget>
           </item>
-          <item row="8" column="1" alignment="Qt::AlignHCenter">
-           <widget class="PyDMLabel" name="errorCode_rbv">
+          <item row="5" column="0">
+           <widget class="QLabel" name="lbl_encoderCount">
             <property name="minimumSize">
              <size>
-              <width>150</width>
-              <height>24</height>
-             </size>
-            </property>
-            <property name="font">
-             <font>
-              <pointsize>11</pointsize>
-             </font>
-            </property>
-            <property name="toolTip">
-             <string>Error code readback.</string>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">border: 1px solid gray;</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignCenter</set>
-            </property>
-            <property name="channel">
-             <string>ca://${MOTOR}:nErrorId_RBV</string>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="0">
-           <widget class="QLabel" name="lbl_posMotion">
-            <property name="font">
-             <font>
-              <pointsize>11</pointsize>
-              <weight>50</weight>
-              <bold>false</bold>
-             </font>
-            </property>
-            <property name="text">
-             <string>+ Motion Enable</string>
-            </property>
-           </widget>
-          </item>
-          <item row="8" column="0">
-           <widget class="QLabel" name="lbl_errorCode">
-            <property name="font">
-             <font>
-              <pointsize>11</pointsize>
-              <weight>50</weight>
-              <bold>false</bold>
-             </font>
-            </property>
-            <property name="text">
-             <string>Error Code</string>
-            </property>
-           </widget>
-          </item>
-          <item row="7" column="1" alignment="Qt::AlignHCenter">
-           <widget class="PyDMLabel" name="errorBool_rbv">
-            <property name="minimumSize">
-             <size>
-              <width>150</width>
-              <height>24</height>
-             </size>
-            </property>
-            <property name="font">
-             <font>
-              <pointsize>11</pointsize>
-             </font>
-            </property>
-            <property name="toolTip">
-             <string>Error boolean readback.</string>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">border: 1px solid gray;</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignCenter</set>
-            </property>
-            <property name="channel">
-             <string>ca://${MOTOR}:bError_RBV</string>
-            </property>
-           </widget>
-          </item>
-          <item row="11" column="0">
-           <widget class="PyDMPushButton" name="reset_cmd">
-            <property name="minimumSize">
-             <size>
-              <width>140</width>
-              <height>24</height>
+              <width>0</width>
+              <height>25</height>
              </size>
             </property>
             <property name="maximumSize">
              <size>
-              <width>140</width>
-              <height>32</height>
+              <width>16777215</width>
+              <height>25</height>
              </size>
             </property>
-            <property name="toolTip">
-             <string>Send an error-reset command.</string>
-            </property>
-            <property name="text">
-             <string>Clear Error</string>
-            </property>
-            <property name="channel">
-             <string>ca://${MOTOR}:bReset</string>
-            </property>
-            <property name="pressValue">
-             <string>1</string>
-            </property>
-           </widget>
-          </item>
-          <item row="5" column="0">
-           <widget class="QLabel" name="lbl_encoderCount">
             <property name="font">
              <font>
               <pointsize>11</pointsize>
@@ -534,7 +482,13 @@
             <property name="minimumSize">
              <size>
               <width>150</width>
-              <height>24</height>
+              <height>25</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>25</height>
              </size>
             </property>
             <property name="font">
@@ -556,6 +510,209 @@
             </property>
            </widget>
           </item>
+          <item row="7" column="1">
+           <widget class="PyDMLabel" name="errorCode_rbv">
+            <property name="minimumSize">
+             <size>
+              <width>150</width>
+              <height>25</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>25</height>
+             </size>
+            </property>
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
+            <property name="toolTip">
+             <string>Error code readback.</string>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">border: 1px solid gray;</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+            <property name="channel">
+             <string>ca://${MOTOR}:nErrorId_RBV</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="lbl_homed">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>25</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>25</height>
+             </size>
+            </property>
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+              <weight>50</weight>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>Motor is Homed</string>
+            </property>
+           </widget>
+          </item>
+          <item row="6" column="0">
+           <widget class="QLabel" name="lbl_errorBool">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>25</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>25</height>
+             </size>
+            </property>
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+              <weight>50</weight>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>Error Bool</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="lbl_done">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>25</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>25</height>
+             </size>
+            </property>
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+              <weight>50</weight>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>Done</string>
+            </property>
+           </widget>
+          </item>
+          <item row="7" column="0">
+           <widget class="QLabel" name="lbl_errorCode">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>25</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>25</height>
+             </size>
+            </property>
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+              <weight>50</weight>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>Error Code</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="1" alignment="Qt::AlignHCenter">
+           <widget class="PyDMLabel" name="posMotionEnabled_rbv">
+            <property name="minimumSize">
+             <size>
+              <width>150</width>
+              <height>25</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>25</height>
+             </size>
+            </property>
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
+            <property name="toolTip">
+             <string>Positive motion enable readback.</string>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">border: 1px solid gray;</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+            <property name="channel">
+             <string>ca://${MOTOR}:bPositiveMotionIsEnabled_RBV</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="1" alignment="Qt::AlignHCenter">
+           <widget class="PyDMLabel" name="negMotionEnabled_rbv">
+            <property name="minimumSize">
+             <size>
+              <width>150</width>
+              <height>25</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>25</height>
+             </size>
+            </property>
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
+            <property name="toolTip">
+             <string>Negative motion enable readback.</string>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">border: 1px solid gray;</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+            <property name="channel">
+             <string>ca://${MOTOR}:bNegativeMotionIsEnabled_RBV</string>
+            </property>
+           </widget>
+          </item>
          </layout>
         </item>
         <item>
@@ -566,8 +723,20 @@
           <property name="verticalSpacing">
            <number>8</number>
           </property>
-          <item row="7" column="0">
-           <widget class="QLabel" name="lbl_userEnable">
+          <item row="8" column="0">
+           <widget class="QLabel" name="lbl_highLimitEnable">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>25</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>25</height>
+             </size>
+            </property>
             <property name="font">
              <font>
               <pointsize>11</pointsize>
@@ -576,39 +745,73 @@
              </font>
             </property>
             <property name="text">
-             <string>User Enable</string>
+             <string>+ Limit Enable</string>
             </property>
            </widget>
           </item>
-          <item row="6" column="0">
-           <widget class="QLabel" name="lbl_homePosition">
-            <property name="font">
-             <font>
-              <pointsize>11</pointsize>
-              <weight>50</weight>
-              <bold>false</bold>
-             </font>
+          <item row="11" column="2">
+           <widget class="PyDMLabel" name="lowLimitUnits_lbl">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>25</height>
+             </size>
             </property>
-            <property name="text">
-             <string>Home Position</string>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>25</height>
+             </size>
+            </property>
+            <property name="toolTip">
+             <string/>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+            </property>
+            <property name="rules">
+             <string>[{&quot;name&quot;: &quot;lowLimitUnitsVis&quot;, &quot;property&quot;: &quot;Visible&quot;, &quot;initial_value&quot;: &quot;&quot;, &quot;expression&quot;: &quot;len(str(ch[0]).strip()) == 0&quot;, &quot;channels&quot;: [{&quot;channel&quot;: &quot;ca://${MOTOR}:NC:MinPos:Val_RBV.EGU&quot;, &quot;trigger&quot;: true, &quot;use_enum&quot;: false}]}]</string>
+            </property>
+            <property name="PyDMToolTip">
+             <string/>
+            </property>
+            <property name="channel">
+             <string>ca://${MOTOR}.EGU</string>
             </property>
            </widget>
           </item>
-          <item row="5" column="0">
-           <widget class="QLabel" name="lbl_homeMode">
-            <property name="font">
-             <font>
-              <pointsize>11</pointsize>
-              <weight>50</weight>
-              <bold>false</bold>
-             </font>
+          <item row="2" column="1">
+           <widget class="PyDMLineEdit" name="velocity_set">
+            <property name="minimumSize">
+             <size>
+              <width>120</width>
+              <height>25</height>
+             </size>
             </property>
-            <property name="text">
-             <string>Home Mode</string>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>25</height>
+             </size>
+            </property>
+            <property name="toolTip">
+             <string>Motor velocity setpoint.</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+            <property name="showUnits">
+             <bool>true</bool>
+            </property>
+            <property name="precisionFromPV">
+             <bool>true</bool>
+            </property>
+            <property name="channel">
+             <string>ca://${MOTOR}:fVelocity_RBV</string>
             </property>
            </widget>
           </item>
-          <item row="8" column="1" alignment="Qt::AlignHCenter">
+          <item row="8" column="1">
            <widget class="PyDMLabel" name="highLimitEnable_rbv">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -618,8 +821,14 @@
             </property>
             <property name="minimumSize">
              <size>
-              <width>150</width>
-              <height>24</height>
+              <width>120</width>
+              <height>25</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>25</height>
              </size>
             </property>
             <property name="font">
@@ -668,12 +877,44 @@
             </property>
            </widget>
           </item>
+          <item row="10" column="0">
+           <widget class="QLabel" name="lbl_lowLimitEnable">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>25</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>25</height>
+             </size>
+            </property>
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+              <weight>50</weight>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>- Limit Enable</string>
+            </property>
+           </widget>
+          </item>
           <item row="9" column="1">
            <widget class="PyDMLineEdit" name="highLimitTravel_set">
             <property name="minimumSize">
              <size>
-              <width>150</width>
-              <height>24</height>
+              <width>120</width>
+              <height>25</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>25</height>
              </size>
             </property>
             <property name="toolTip">
@@ -686,7 +927,7 @@
              <number>0</number>
             </property>
             <property name="showUnits">
-             <bool>false</bool>
+             <bool>true</bool>
             </property>
             <property name="precisionFromPV">
              <bool>true</bool>
@@ -708,80 +949,79 @@
             </property>
            </widget>
           </item>
-          <item row="3" column="1">
-           <widget class="PyDMLineEdit" name="userOffset_set">
+          <item row="3" column="2">
+           <widget class="PyDMLabel" name="offsetUnits_lbl">
             <property name="minimumSize">
              <size>
-              <width>150</width>
-              <height>24</height>
+              <width>0</width>
+              <height>25</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>25</height>
              </size>
             </property>
             <property name="toolTip">
-             <string>User coordinate offset setpoint.</string>
+             <string/>
             </property>
             <property name="alignment">
-             <set>Qt::AlignCenter</set>
+             <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
             </property>
-            <property name="precisionFromPV">
-             <bool>true</bool>
+            <property name="rules">
+             <string>[{&quot;name&quot;: &quot;offsetUnitsVis&quot;, &quot;property&quot;: &quot;Visible&quot;, &quot;initial_value&quot;: &quot;&quot;, &quot;expression&quot;: &quot;len(str(ch[0]).strip()) == 0&quot;, &quot;channels&quot;: [{&quot;channel&quot;: &quot;ca://${MOTOR}:OFF.EGU&quot;, &quot;trigger&quot;: true, &quot;use_enum&quot;: false}]}]</string>
+            </property>
+            <property name="PyDMToolTip">
+             <string/>
             </property>
             <property name="channel">
-             <string>ca://${MOTOR}:OFF</string>
+             <string>ca://${MOTOR}.EGU</string>
             </property>
            </widget>
           </item>
-          <item row="10" column="0">
-           <widget class="QLabel" name="lbl_lowLimitEnable">
-            <property name="font">
-             <font>
-              <pointsize>11</pointsize>
-              <weight>50</weight>
-              <bold>false</bold>
-             </font>
-            </property>
-            <property name="text">
-             <string>- Limit Enable</string>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="0">
-           <widget class="QLabel" name="lbl_userOffset">
-            <property name="font">
-             <font>
-              <pointsize>11</pointsize>
-              <weight>50</weight>
-              <bold>false</bold>
-             </font>
-            </property>
-            <property name="text">
-             <string>User Offset</string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="1">
-           <widget class="PyDMLineEdit" name="velocity_set">
+          <item row="2" column="2">
+           <widget class="PyDMLabel" name="velocityUnits_lbl">
             <property name="minimumSize">
              <size>
-              <width>150</width>
-              <height>24</height>
+              <width>0</width>
+              <height>25</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>25</height>
              </size>
             </property>
             <property name="toolTip">
-             <string>Motor velocity setpoint.</string>
+             <string/>
             </property>
             <property name="alignment">
-             <set>Qt::AlignCenter</set>
+             <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
             </property>
-            <property name="precisionFromPV">
-             <bool>true</bool>
+            <property name="rules">
+             <string>[{&quot;name&quot;: &quot;velUnitsText&quot;, &quot;property&quot;: &quot;Text&quot;, &quot;initial_value&quot;: &quot;&quot;, &quot;expression&quot;: &quot;'{}/s'.format(ch[0])&quot;, &quot;channels&quot;: [{&quot;channel&quot;: &quot;ca://${MOTOR}.EGU&quot;, &quot;trigger&quot;: true, &quot;use_enum&quot;: false}]}, {&quot;name&quot;: &quot;velUnitsVis&quot;, &quot;property&quot;: &quot;Visible&quot;, &quot;initial_value&quot;: &quot;&quot;, &quot;expression&quot;: &quot;len(str(ch[0]).strip()) == 0&quot;, &quot;channels&quot;: [{&quot;channel&quot;: &quot;ca://${MOTOR}:fVelocity_RBV.EGU&quot;, &quot;trigger&quot;: true, &quot;use_enum&quot;: false}]}]</string>
             </property>
-            <property name="channel">
-             <string>ca://${MOTOR}:fVelocity_RBV</string>
+            <property name="PyDMToolTip">
+             <string/>
             </property>
            </widget>
           </item>
-          <item row="2" column="0">
-           <widget class="QLabel" name="lbl_velocity">
+          <item row="7" column="0">
+           <widget class="QLabel" name="lbl_userEnable">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>25</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>25</height>
+             </size>
+            </property>
             <property name="font">
              <font>
               <pointsize>11</pointsize>
@@ -790,12 +1030,24 @@
              </font>
             </property>
             <property name="text">
-             <string>Velocity</string>
+             <string>User Enable</string>
             </property>
            </widget>
           </item>
           <item row="9" column="0">
            <widget class="QLabel" name="lbl_highLimitTravel">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>25</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>25</height>
+             </size>
+            </property>
             <property name="font">
              <font>
               <pointsize>11</pointsize>
@@ -808,12 +1060,132 @@
             </property>
            </widget>
           </item>
+          <item row="6" column="2">
+           <widget class="PyDMLabel" name="homePositionUnits_lbl">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>25</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>25</height>
+             </size>
+            </property>
+            <property name="toolTip">
+             <string/>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+            </property>
+            <property name="rules">
+             <string>[{&quot;name&quot;: &quot;homePositionUnitsVis&quot;, &quot;property&quot;: &quot;Visible&quot;, &quot;initial_value&quot;: &quot;&quot;, &quot;expression&quot;: &quot;len(str(ch[0]).strip()) == 0&quot;, &quot;channels&quot;: [{&quot;channel&quot;: &quot;ca://${MOTOR}:fHomePosition_RBV.EGU&quot;, &quot;trigger&quot;: true, &quot;use_enum&quot;: false}]}]</string>
+            </property>
+            <property name="PyDMToolTip">
+             <string/>
+            </property>
+            <property name="channel">
+             <string>ca://${MOTOR}.EGU</string>
+            </property>
+           </widget>
+          </item>
+          <item row="6" column="1">
+           <widget class="PyDMLineEdit" name="homePosition_set">
+            <property name="minimumSize">
+             <size>
+              <width>120</width>
+              <height>25</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>25</height>
+             </size>
+            </property>
+            <property name="toolTip">
+             <string>Home position setpoint.</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+            <property name="showUnits">
+             <bool>true</bool>
+            </property>
+            <property name="precisionFromPV">
+             <bool>true</bool>
+            </property>
+            <property name="channel">
+             <string>ca://${MOTOR}:fHomePosition_RBV</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="lbl_velocity">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>25</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>25</height>
+             </size>
+            </property>
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+              <weight>50</weight>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>Velocity</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0">
+           <widget class="QLabel" name="lbl_userOffset">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>25</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>25</height>
+             </size>
+            </property>
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+              <weight>50</weight>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>User Offset</string>
+            </property>
+           </widget>
+          </item>
           <item row="11" column="1">
            <widget class="PyDMLineEdit" name="lowLimitTravel_set">
             <property name="minimumSize">
              <size>
-              <width>150</width>
-              <height>24</height>
+              <width>120</width>
+              <height>25</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>25</height>
              </size>
             </property>
             <property name="toolTip">
@@ -826,7 +1198,7 @@
              <number>0</number>
             </property>
             <property name="showUnits">
-             <bool>false</bool>
+             <bool>true</bool>
             </property>
             <property name="precisionFromPV">
              <bool>true</bool>
@@ -848,7 +1220,191 @@
             </property>
            </widget>
           </item>
-          <item row="10" column="1" alignment="Qt::AlignHCenter">
+          <item row="5" column="0">
+           <widget class="QLabel" name="lbl_homeMode">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>25</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>25</height>
+             </size>
+            </property>
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+              <weight>50</weight>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>Home Mode</string>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="1">
+           <widget class="PyDMEnumComboBox" name="homeMode_set">
+            <property name="minimumSize">
+             <size>
+              <width>120</width>
+              <height>25</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>25</height>
+             </size>
+            </property>
+            <property name="toolTip">
+             <string>Homing mode selection.</string>
+            </property>
+            <property name="channel">
+             <string>ca://${MOTOR}:eHomeMode_RBV</string>
+            </property>
+           </widget>
+          </item>
+          <item row="11" column="0">
+           <widget class="QLabel" name="lbl_lowLimitTravel">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>25</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>25</height>
+             </size>
+            </property>
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+              <weight>50</weight>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>- Limit Travel</string>
+            </property>
+           </widget>
+          </item>
+          <item row="6" column="0">
+           <widget class="QLabel" name="lbl_homePosition">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>25</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>25</height>
+             </size>
+            </property>
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+              <weight>50</weight>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>Home Position</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="1">
+           <widget class="PyDMLineEdit" name="userOffset_set">
+            <property name="minimumSize">
+             <size>
+              <width>120</width>
+              <height>25</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>25</height>
+             </size>
+            </property>
+            <property name="toolTip">
+             <string>User coordinate offset setpoint.</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+            <property name="showUnits">
+             <bool>true</bool>
+            </property>
+            <property name="precisionFromPV">
+             <bool>true</bool>
+            </property>
+            <property name="channel">
+             <string>ca://${MOTOR}:OFF</string>
+            </property>
+           </widget>
+          </item>
+          <item row="7" column="1">
+           <widget class="PyDMEnumComboBox" name="userEnable_set">
+            <property name="minimumSize">
+             <size>
+              <width>120</width>
+              <height>25</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>25</height>
+             </size>
+            </property>
+            <property name="toolTip">
+             <string>User enable selection.</string>
+            </property>
+            <property name="channel">
+             <string>ca://${MOTOR}:bUserEnable_RBV</string>
+            </property>
+           </widget>
+          </item>
+          <item row="9" column="2">
+           <widget class="PyDMLabel" name="highLimitUnits_lbl">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>25</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>25</height>
+             </size>
+            </property>
+            <property name="toolTip">
+             <string/>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+            </property>
+            <property name="rules">
+             <string>[{&quot;name&quot;: &quot;highLimitUnitsVis&quot;, &quot;property&quot;: &quot;Visible&quot;, &quot;initial_value&quot;: &quot;&quot;, &quot;expression&quot;: &quot;len(str(ch[0]).strip()) == 0&quot;, &quot;channels&quot;: [{&quot;channel&quot;: &quot;ca://${MOTOR}:NC:MaxPos:Val_RBV.EGU&quot;, &quot;trigger&quot;: true, &quot;use_enum&quot;: false}]}]</string>
+            </property>
+            <property name="PyDMToolTip">
+             <string/>
+            </property>
+            <property name="channel">
+             <string>ca://${MOTOR}.EGU</string>
+            </property>
+           </widget>
+          </item>
+          <item row="10" column="1">
            <widget class="PyDMLabel" name="lowLimitEnable_rbv">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -858,8 +1414,14 @@
             </property>
             <property name="minimumSize">
              <size>
-              <width>150</width>
-              <height>24</height>
+              <width>120</width>
+              <height>25</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>25</height>
              </size>
             </property>
             <property name="font">
@@ -908,89 +1470,108 @@
             </property>
            </widget>
           </item>
-          <item row="7" column="1">
-           <widget class="PyDMEnumComboBox" name="userEnable_set">
-            <property name="minimumSize">
-             <size>
-              <width>150</width>
-              <height>24</height>
-             </size>
-            </property>
-            <property name="toolTip">
-             <string>User enable selection.</string>
-            </property>
-            <property name="channel">
-             <string>ca://${MOTOR}:bUserEnable_RBV</string>
-            </property>
-           </widget>
-          </item>
-          <item row="5" column="1">
-           <widget class="PyDMEnumComboBox" name="homeMode_set">
-            <property name="minimumSize">
-             <size>
-              <width>150</width>
-              <height>24</height>
-             </size>
-            </property>
-            <property name="toolTip">
-             <string>Homing mode selection.</string>
-            </property>
-            <property name="channel">
-             <string>ca://${MOTOR}:eHomeMode_RBV</string>
-            </property>
-           </widget>
-          </item>
-          <item row="6" column="1">
-           <widget class="PyDMLineEdit" name="homePosition_set">
-            <property name="minimumSize">
-             <size>
-              <width>150</width>
-              <height>24</height>
-             </size>
-            </property>
-            <property name="toolTip">
-             <string>Home position setpoint.</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignCenter</set>
-            </property>
-            <property name="precisionFromPV">
-             <bool>true</bool>
-            </property>
-            <property name="channel">
-             <string>ca://${MOTOR}:fHomePosition_RBV</string>
-            </property>
-           </widget>
-          </item>
-          <item row="8" column="0">
-           <widget class="QLabel" name="lbl_highLimitEnable">
-            <property name="font">
-             <font>
-              <pointsize>11</pointsize>
-              <weight>50</weight>
-              <bold>false</bold>
-             </font>
-            </property>
-            <property name="text">
-             <string>+ Limit Enable</string>
-            </property>
-           </widget>
-          </item>
-          <item row="11" column="0">
-           <widget class="QLabel" name="lbl_lowLimitTravel">
-            <property name="font">
-             <font>
-              <pointsize>11</pointsize>
-              <weight>50</weight>
-              <bold>false</bold>
-             </font>
-            </property>
-            <property name="text">
-             <string>- Limit Travel</string>
-            </property>
-           </widget>
-          </item>
          </layout>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="buttonsLayout">
+        <property name="spacing">
+         <number>24</number>
+        </property>
+        <item>
+         <spacer name="buttonsLeftSpacer">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <widget class="PyDMPushButton" name="reset_cmd">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>140</width>
+            <height>30</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>140</width>
+            <height>30</height>
+           </size>
+          </property>
+          <property name="toolTip">
+           <string>Send an error-reset command.</string>
+          </property>
+          <property name="text">
+           <string>Clear Error</string>
+          </property>
+          <property name="channel">
+           <string>ca://${MOTOR}:bReset</string>
+          </property>
+          <property name="pressValue">
+           <string>1</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="PyDMPushButton" name="homeCmd_cmd_2">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>140</width>
+            <height>30</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>140</width>
+            <height>30</height>
+           </size>
+          </property>
+          <property name="toolTip">
+           <string>Send a home command.</string>
+          </property>
+          <property name="text">
+           <string>Home</string>
+          </property>
+          <property name="channel">
+           <string>ca://${MOTOR}:bHomeCmd</string>
+          </property>
+          <property name="pressValue">
+           <string>1</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer name="buttonsRightSpacer">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
         </item>
        </layout>
       </item>
