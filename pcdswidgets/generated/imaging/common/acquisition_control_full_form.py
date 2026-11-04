@@ -12,8 +12,9 @@ from pydm.widgets.byte import PyDMByteIndicator
 from pydm.widgets.enum_combo_box import PyDMEnumComboBox
 from pydm.widgets.label import PyDMLabel
 from pydm.widgets.pushbutton import PyDMPushButton
-from pydm.widgets.spinbox import PyDMSpinbox
 from qtpy import QtCore, QtGui, QtWidgets
+
+from pcdswidgets.common.widget_overrides.spinbox_click_to_scroll import PyDMSpinBoxClickToScroll
 
 
 class Ui_Form(object):
@@ -26,7 +27,7 @@ class Ui_Form(object):
         self.gridLayout_2.setObjectName("gridLayout_2")
         self.horizontalLayout_3 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_3.setObjectName("horizontalLayout_3")
-        self.exposures_per_capture = PyDMSpinbox(Form)
+        self.exposures_per_capture = PyDMSpinBoxClickToScroll(Form)
         self.exposures_per_capture.setToolTip("")
         self.exposures_per_capture.setShowUnits(False)
         self.exposures_per_capture.setPrecisionFromPV(False)
@@ -161,7 +162,7 @@ class Ui_Form(object):
         self.horizontalLayout_2.setContentsMargins(0, 0, 0, 0)
         self.horizontalLayout_2.setSpacing(3)
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
-        self.multiple_count = PyDMSpinbox(self.multiple_count_group)
+        self.multiple_count = PyDMSpinBoxClickToScroll(self.multiple_count_group)
         self.multiple_count.setMaximumSize(QtCore.QSize(65, 16777215))
         self.multiple_count.setToolTip("")
         self.multiple_count.setShowUnits(False)

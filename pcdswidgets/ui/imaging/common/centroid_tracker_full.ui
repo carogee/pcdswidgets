@@ -484,7 +484,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QComboBox" name="threshold_mode_combo">
+      <widget class="ComboBoxNoScroll" name="threshold_mode_combo">
        <property name="sizePolicy">
         <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
          <horstretch>0</horstretch>
@@ -567,7 +567,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QDoubleSpinBox" name="roi_multiplier_spinbox"/>
+      <widget class="DoubleSpinBoxClickToScroll" name="roi_multiplier_spinbox"/>
      </item>
      <item>
       <widget class="QPushButton" name="set_roi_button">
@@ -584,6 +584,16 @@
   </layout>
  </widget>
  <customwidgets>
+  <customwidget>
+   <class>DoubleSpinBoxClickToScroll</class>
+   <extends>QDoubleSpinBox</extends>
+   <header>pcdswidgets.common.widget_overrides.spinbox_click_to_scroll</header>
+  </customwidget>
+  <customwidget>
+   <class>ComboBoxNoScroll</class>
+   <extends>QComboBox</extends>
+   <header>pcdswidgets.common.widget_overrides.combobox_no_scroll</header>
+  </customwidget>
   <customwidget>
    <class>PyDMLabel</class>
    <extends>QLabel</extends>

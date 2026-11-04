@@ -10,8 +10,8 @@
 # ruff: noqa: E501
 from qtpy import QtCore, QtWidgets
 
+from pcdswidgets.common.widget_overrides.spinbox_click_to_scroll import PyDMSpinBoxClickToScroll
 from pcdswidgets.imaging.common.colorselect_button import ColorButton
-from pcdswidgets.imaging.common.spinbox import PyDMSpinboxEnter
 
 
 class Ui_Form(object):
@@ -38,7 +38,7 @@ class Ui_Form(object):
         self.label_8 = QtWidgets.QLabel(Form)
         self.label_8.setObjectName("label_8")
         self.horizontalLayout.addWidget(self.label_8)
-        self.x_spinbox_1 = PyDMSpinboxEnter(Form)
+        self.x_spinbox_1 = PyDMSpinBoxClickToScroll(Form)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -63,7 +63,7 @@ class Ui_Form(object):
         self.label_9 = QtWidgets.QLabel(Form)
         self.label_9.setObjectName("label_9")
         self.horizontalLayout.addWidget(self.label_9)
-        self.y_spinbox_1 = PyDMSpinboxEnter(Form)
+        self.y_spinbox_1 = PyDMSpinBoxClickToScroll(Form)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -122,7 +122,7 @@ class Ui_Form(object):
         self.label_10 = QtWidgets.QLabel(Form)
         self.label_10.setObjectName("label_10")
         self.horizontalLayout_2.addWidget(self.label_10)
-        self.x_spinbox_2 = PyDMSpinboxEnter(Form)
+        self.x_spinbox_2 = PyDMSpinBoxClickToScroll(Form)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -147,7 +147,7 @@ class Ui_Form(object):
         self.label_11 = QtWidgets.QLabel(Form)
         self.label_11.setObjectName("label_11")
         self.horizontalLayout_2.addWidget(self.label_11)
-        self.y_spinbox_2 = PyDMSpinboxEnter(Form)
+        self.y_spinbox_2 = PyDMSpinBoxClickToScroll(Form)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -206,7 +206,7 @@ class Ui_Form(object):
         self.label_15 = QtWidgets.QLabel(Form)
         self.label_15.setObjectName("label_15")
         self.horizontalLayout_4.addWidget(self.label_15)
-        self.x_spinbox_3 = PyDMSpinboxEnter(Form)
+        self.x_spinbox_3 = PyDMSpinBoxClickToScroll(Form)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -231,7 +231,7 @@ class Ui_Form(object):
         self.label_16 = QtWidgets.QLabel(Form)
         self.label_16.setObjectName("label_16")
         self.horizontalLayout_4.addWidget(self.label_16)
-        self.y_spinbox_3 = PyDMSpinboxEnter(Form)
+        self.y_spinbox_3 = PyDMSpinBoxClickToScroll(Form)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -290,7 +290,7 @@ class Ui_Form(object):
         self.label_12 = QtWidgets.QLabel(Form)
         self.label_12.setObjectName("label_12")
         self.horizontalLayout_3.addWidget(self.label_12)
-        self.x_spinbox_4 = PyDMSpinboxEnter(Form)
+        self.x_spinbox_4 = PyDMSpinBoxClickToScroll(Form)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -315,7 +315,7 @@ class Ui_Form(object):
         self.label_13 = QtWidgets.QLabel(Form)
         self.label_13.setObjectName("label_13")
         self.horizontalLayout_3.addWidget(self.label_13)
-        self.y_spinbox_4 = PyDMSpinboxEnter(Form)
+        self.y_spinbox_4 = PyDMSpinBoxClickToScroll(Form)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)

@@ -120,41 +120,41 @@
         <number>0</number>
        </property>
        <item>
-        <widget class="PyDMImageView" name="image_view">
+        <widget class="PCDSImageView" name="image_view" native="true">
          <property name="toolTip">
           <string/>
          </property>
-         <property name="alarmSensitiveContent">
+         <property name="alarmSensitiveContent" stdset="0">
           <bool>false</bool>
          </property>
-         <property name="alarmSensitiveBorder">
+         <property name="alarmSensitiveBorder" stdset="0">
           <bool>true</bool>
          </property>
-         <property name="PyDMToolTip">
+         <property name="PyDMToolTip" stdset="0">
           <string/>
          </property>
-         <property name="channel">
+         <property name="channel" stdset="0">
           <string/>
          </property>
-         <property name="autoDownsample">
+         <property name="autoDownsample" stdset="0">
           <bool>true</bool>
          </property>
-         <property name="imageWidth">
+         <property name="imageWidth" stdset="0">
           <number>0</number>
          </property>
-         <property name="normalizeData">
+         <property name="normalizeData" stdset="0">
           <bool>false</bool>
          </property>
-         <property name="imageChannel">
+         <property name="imageChannel" stdset="0">
           <string>${img_protocol}${cam_prefix}${stream_plugin}${suffix_waveform_channel}</string>
          </property>
-         <property name="widthChannel">
+         <property name="widthChannel" stdset="0">
           <string>${img_protocol}${cam_prefix}${stream_plugin}${suffix_width_channel}</string>
          </property>
-         <property name="maxRedrawRate">
+         <property name="maxRedrawRate" stdset="0">
           <number>30</number>
          </property>
-         <property name="showAxes">
+         <property name="showAxes" stdset="0">
           <bool>false</bool>
          </property>
         </widget>
@@ -192,7 +192,7 @@
          <x>0</x>
          <y>0</y>
          <width>408</width>
-         <height>437</height>
+         <height>436</height>
         </rect>
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_2"/>
@@ -282,6 +282,34 @@
       </widget>
      </item>
      <item>
+      <widget class="QLabel" name="stream_rate_label">
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
+       <property name="toolTip">
+        <string>Caps the view rate via the stream's MinCallbackTime PV. Does not affect the camera rate, calc plugins, or other streams. Shared setting that affects all viewers.</string>
+       </property>
+       <property name="text">
+        <string>    Max View FPS:</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="ComboBoxNoScroll" name="stream_rate_combo">
+       <property name="maximumSize">
+        <size>
+         <width>90</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="toolTip">
+        <string>Caps the view rate via the stream's MinCallbackTime PV. Does not affect the camera rate, calc plugins, or other streams. Shared setting that affects all viewers.</string>
+       </property>
+      </widget>
+     </item>
+     <item>
       <spacer name="bottom_spacer">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
@@ -315,14 +343,19 @@
  </widget>
  <customwidgets>
   <customwidget>
+   <class>ComboBoxNoScroll</class>
+   <extends>QComboBox</extends>
+   <header>pcdswidgets.common.widget_overrides.combobox_no_scroll</header>
+  </customwidget>
+  <customwidget>
    <class>PyDMLabel</class>
    <extends>QLabel</extends>
    <header>pydm.widgets.label</header>
   </customwidget>
   <customwidget>
-   <class>PyDMImageView</class>
+   <class>PCDSImageView</class>
    <extends>QWidget</extends>
-   <header>pydm.widgets.image</header>
+   <header>pcdswidgets.imaging.common.pcds_image_view</header>
   </customwidget>
  </customwidgets>
  <resources/>

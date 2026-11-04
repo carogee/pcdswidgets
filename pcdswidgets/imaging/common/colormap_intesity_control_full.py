@@ -58,6 +58,7 @@ class ColormapIntesityControlFull(ColormapIntesityControlFullBase):
             parent=self.histogram_container,
             orientation="horizontal",
         )
+        self._histogram.setFocusPolicy(QtCore.Qt.StrongFocus)
         layout.addWidget(self._histogram)
 
         # link callbacks for ui
@@ -117,6 +118,9 @@ class ColormapIntesityControlFull(ColormapIntesityControlFullBase):
 
     def eventFilter(self, obj, event) -> bool:
         if obj is self._histogram.viewport():
+            if event.type() == QtCore.QEvent.Wheel and not self._histogram.hasFocus():
+                # Ignore scroll-zoom until the user clicks into the histogram.
+                return True
             if event.type() == QtCore.QEvent.MouseButtonPress:
                 if event.button() == QtCore.Qt.LeftButton:
                     self._graph_press_active = True

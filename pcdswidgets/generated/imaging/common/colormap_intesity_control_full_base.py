@@ -25,7 +25,7 @@ from .colormap_intesity_control_full_form import *
 
 class ColormapIntesityControlFullBase(DesignerWidget):
     Form: "QtWidgets.QWidget"
-    colormap_combo: "QtWidgets.QComboBox"
+    colormap_combo: "ComboBoxNoScroll"
     colormap_label: "QtWidgets.QLabel"
     histogram_container: "QtWidgets.QWidget"
     normalize_check: "QtWidgets.QCheckBox"

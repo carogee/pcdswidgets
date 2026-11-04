@@ -198,13 +198,16 @@ Common: pcdswidgets/ui/imaging/common
      - Function
      - Example
    * - :any:`AcquisitionControlFull`
-     - | A panel for controlling camera acquisition, such as
-       | starting/stopping and setting the capture mode.
+     - | A panel for controlling camera acquisition, including
+       | starting/stopping acquisition and setting the capture mode.
      - N/a
    * - :any:`CameraViewerStretch`
      - | Top-level camera viewer that displays the live image alongside a
-       | sidebar of collapsible control panels.
-     - N/a
+       | sidebar of collapsible control panels. Acts as a container: any
+       | widget dropped here is automatically adopted into the sidebar on
+       | first show. Note that most imaging widgets will automatically
+       | connect to the camera preview.
+     - .. image:: /_static/catalog/camera_viewer_stretch.png
    * - :any:`CentroidTrackerFull`
      - N/a
      - N/a
@@ -220,8 +223,8 @@ Common: pcdswidgets/ui/imaging/common
      - A panel for adjusting exposure time and acquisition timing/rate.
      - N/a
    * - :any:`MarkerSelectionFull`
-     - | Widget for placing and configuring up to four crosshair markers
-       | (position, color, style, visibility) on camViewer image.
+     - | A widget for placing and configuring up to four crosshair markers
+       | (position, color, style, visibility) on the camera viewer image.
      - .. image:: /_static/catalog/marker_selection_full.png
 
 **Motion**

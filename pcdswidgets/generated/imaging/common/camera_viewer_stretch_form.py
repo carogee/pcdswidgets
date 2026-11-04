@@ -8,9 +8,11 @@
 #
 # Augmented by pcdswidgets.builder.build
 # ruff: noqa: E501
-from pydm.widgets.image import PyDMImageView
 from pydm.widgets.label import PyDMLabel
 from qtpy import QtCore, QtGui, QtWidgets
+
+from pcdswidgets.common.widget_overrides.combobox_no_scroll import ComboBoxNoScroll
+from pcdswidgets.imaging.common.pcds_image_view import PCDSImageView
 
 
 class Ui_Form(object):
@@ -60,17 +62,17 @@ class Ui_Form(object):
         self.image_container_layout = QtWidgets.QVBoxLayout(self.image_container)
         self.image_container_layout.setContentsMargins(0, 0, 0, 0)
         self.image_container_layout.setObjectName("image_container_layout")
-        self.image_view = PyDMImageView(self.image_container)
+        self.image_view = PCDSImageView(self.image_container)
         self.image_view.setToolTip("")
-        self.image_view.setAlarmSensitiveContent(False)
-        self.image_view.setAlarmSensitiveBorder(True)
-        self.image_view.setPyDMToolTip("")
-        self.image_view.setChannel("")
-        self.image_view.setAutoDownsample(True)
-        self.image_view.setImageWidth(0)
-        self.image_view.setNormalizeData(False)
-        self.image_view.setMaxRedrawRate(30)
-        self.image_view.setShowAxes(False)
+        self.image_view.setProperty("alarmSensitiveContent", False)
+        self.image_view.setProperty("alarmSensitiveBorder", True)
+        self.image_view.setProperty("PyDMToolTip", "")
+        self.image_view.setProperty("channel", "")
+        self.image_view.setProperty("autoDownsample", True)
+        self.image_view.setProperty("imageWidth", 0)
+        self.image_view.setProperty("normalizeData", False)
+        self.image_view.setProperty("maxRedrawRate", 30)
+        self.image_view.setProperty("showAxes", False)
         self.image_view.setObjectName("image_view")
         self.image_container_layout.addWidget(self.image_view)
         self.sidebar_scroll = QtWidgets.QScrollArea(self.main_splitter)
@@ -85,7 +87,7 @@ class Ui_Form(object):
         self.sidebar_scroll.setWidgetResizable(True)
         self.sidebar_scroll.setObjectName("sidebar_scroll")
         self.sidebar_content = QtWidgets.QWidget()
-        self.sidebar_content.setGeometry(QtCore.QRect(0, 0, 408, 437))
+        self.sidebar_content.setGeometry(QtCore.QRect(0, 0, 408, 436))
         self.sidebar_content.setObjectName("sidebar_content")
         self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.sidebar_content)
         self.verticalLayout_2.setObjectName("verticalLayout_2")
@@ -125,6 +127,16 @@ class Ui_Form(object):
         self.PyDMLabel.setDisplayFormat(PyDMLabel.Decimal)
         self.PyDMLabel.setObjectName("PyDMLabel")
         self.bottom_bar.addWidget(self.PyDMLabel)
+        self.stream_rate_label = QtWidgets.QLabel(Form)
+        font = QtGui.QFont()
+        font.setPointSize(9)
+        self.stream_rate_label.setFont(font)
+        self.stream_rate_label.setObjectName("stream_rate_label")
+        self.bottom_bar.addWidget(self.stream_rate_label)
+        self.stream_rate_combo = ComboBoxNoScroll(Form)
+        self.stream_rate_combo.setMaximumSize(QtCore.QSize(90, 16777215))
+        self.stream_rate_combo.setObjectName("stream_rate_combo")
+        self.bottom_bar.addWidget(self.stream_rate_combo)
         spacerItem1 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.bottom_bar.addItem(spacerItem1)
         self.active_pv_label = QtWidgets.QLabel(Form)
@@ -145,4 +157,17 @@ class Ui_Form(object):
         self.fps_label.setText(_translate("Form", "FPS:"))
         self.display_fps_label.setText(_translate("Form", "##"))
         self.fps_label2.setText(_translate("Form", " / "))
+        self.stream_rate_label.setToolTip(
+            _translate(
+                "Form",
+                "Caps the view rate via the stream's MinCallbackTime PV. Does not affect the camera rate, calc plugins, or other streams. Shared setting that affects all viewers.",
+            )
+        )
+        self.stream_rate_label.setText(_translate("Form", "    Max View FPS:"))
+        self.stream_rate_combo.setToolTip(
+            _translate(
+                "Form",
+                "Caps the view rate via the stream's MinCallbackTime PV. Does not affect the camera rate, calc plugins, or other streams. Shared setting that affects all viewers.",
+            )
+        )
         self.active_pv_label.setStyleSheet(_translate("Form", "color: gray;"))

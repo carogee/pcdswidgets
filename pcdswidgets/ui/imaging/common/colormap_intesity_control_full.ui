@@ -34,7 +34,7 @@
     </widget>
    </item>
    <item row="0" column="1">
-    <widget class="QComboBox" name="colormap_combo"/>
+    <widget class="ComboBoxNoScroll" name="colormap_combo"/>
    </item>
    <item row="0" column="2">
     <widget class="QCheckBox" name="normalize_check">
@@ -48,6 +48,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>ComboBoxNoScroll</class>
+   <extends>QComboBox</extends>
+   <header>pcdswidgets.common.widget_overrides.combobox_no_scroll</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

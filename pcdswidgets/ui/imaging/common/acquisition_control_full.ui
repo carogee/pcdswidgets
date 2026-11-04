@@ -29,7 +29,7 @@
    <item row="2" column="1">
     <layout class="QHBoxLayout" name="horizontalLayout_3">
      <item>
-      <widget class="PyDMSpinbox" name="exposures_per_capture">
+      <widget class="PyDMSpinBoxClickToScroll" name="exposures_per_capture">
        <property name="toolTip">
         <string/>
        </property>
@@ -456,7 +456,7 @@
        <number>0</number>
       </property>
       <item>
-       <widget class="PyDMSpinbox" name="multiple_count">
+       <widget class="PyDMSpinBoxClickToScroll" name="multiple_count">
         <property name="maximumSize">
          <size>
           <width>65</width>
@@ -592,6 +592,11 @@
  </widget>
  <customwidgets>
   <customwidget>
+   <class>PyDMSpinBoxClickToScroll</class>
+   <extends>QDoubleSpinBox</extends>
+   <header>pcdswidgets.common.widget_overrides.spinbox_click_to_scroll</header>
+  </customwidget>
+  <customwidget>
    <class>PyDMLabel</class>
    <extends>QLabel</extends>
    <header>pydm.widgets.label</header>
@@ -610,11 +615,6 @@
    <class>PyDMPushButton</class>
    <extends>QPushButton</extends>
    <header>pydm.widgets.pushbutton</header>
-  </customwidget>
-  <customwidget>
-   <class>PyDMSpinbox</class>
-   <extends>QDoubleSpinBox</extends>
-   <header>pydm.widgets.spinbox</header>
   </customwidget>
  </customwidgets>
  <resources/>

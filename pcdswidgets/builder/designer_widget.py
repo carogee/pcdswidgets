@@ -66,6 +66,8 @@ class DesignerWidget(QWidget, PyDMPrimitiveWidget):  # type: ignore
     # Enum/choice properties to expose as dropdowns in the Core Settings editor.
     # Maps a Qt property name to an ordered {display label: value} mapping.
     editable_choice_properties: ClassVar[dict[str, dict[str, int]]] = {}
+    # Map some Qt property name to an arbitrary str
+    editable_str_properties: ClassVar[dict[str, str]] = {}
 
     def __init_subclass__(cls):
         super().__init_subclass__()
@@ -280,6 +282,11 @@ class MacroValueEditor(QDialog):
             self.edit_widgets[macro_name] = QLineEdit()
             self.edit_widgets[macro_name].setText(value)
             edit_form_layout.addRow(macro_name.lower(), self.edit_widgets[macro_name])
+
+        for prop_name, value in self.widget.editable_str_properties.items():
+            self.edit_widgets[prop_name] = QLineEdit()
+            self.edit_widgets[prop_name].setText(self.widget.property(prop_name) or value)
+            edit_form_layout.addRow(prop_name.lower(), self.edit_widgets[prop_name])
 
         for prop_name, choices in self.widget.editable_choice_properties.items():
             combo = QComboBox()

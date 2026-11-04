@@ -29,3 +29,11 @@ pcdswidgets = { path = ".", editable = true, extras = ["dev", "doc", "test", "ty
 [environments]
 default = ["base"]
 typhos = ["typhos"]
+
+# Temporary: pull in certifi update
+[exclude-newer]
+certifi = "0d"
+ca-certificates = "0d"
+
+[pypi-exclude-newer]
+certifi = "0d"

@@ -5,7 +5,6 @@
 import logging
 from collections import deque
 
-from pydm.widgets import PyDMImageView
 from qtpy import QtGui, QtWidgets
 from qtpy.QtCore import QChildEvent, QEvent, Qt, QTimer
 
@@ -16,22 +15,58 @@ except ImportError:
 
 from pcdswidgets.builder.designer_options import DesignerOptions
 from pcdswidgets.builder.icon_options import IconOptions
+from pcdswidgets.common.tools.pv_channel import PVChannel
 from pcdswidgets.generated.imaging.common.camera_viewer_stretch_base import (
     CameraViewerStretchBase,
 )
+from pcdswidgets.imaging.common.pcds_image_view import PCDSImageView
 
 from .collapsible_section import CollapsibleSection
 
 logger = logging.getLogger(__name__)
 
+# AreaDetector plugin PV suffixes that throttle the stream rate.
+_MIN_CALLBACK_TIME_SUFFIX = "MinCallbackTime"
+_MIN_CALLBACK_TIME_RBV_SUFFIX = "MinCallbackTime_RBV"
+
+# MinCallbackTime is the minimum time between callbacks (1/rate)
+# Creates combobox labels for common selections.
+_STREAM_RATE_PRESETS: list[tuple[str, float]] = [
+    ("0.5 Hz", 2.0),
+    ("1 Hz", 1.0),
+    ("5 Hz", 0.2),
+    ("10 Hz", 0.1),
+    ("30 Hz", 1.0 / 30.0),
+    ("Infinite", 0.0),
+]
+
 
 class CameraViewerStretch(CameraViewerStretchBase):
+    """Top-level AreaDetector viewer with a collapsible control sidebar.
+
+    This is a container that combines a live image display with a sidebar
+    for related sub-widgets. Widgets added as direct children are detected
+    on first show, adopted into the sidebar, and wrapped in collapsible sections.
+
+    Adopted child widgets inherit the active camera context where supported,
+    including ``cam_prefix`` and ``stream_plugin``. If a child widget exposes a
+    ``nickname`` property, that value is used as the collapsible section title.
+    Multiple adopted widgets are ordered by their original ``y`` position in
+    the design.
+
+    The sidebar remains hidden until there are adopted widgets to show. The
+    layout can be oriented horizontally or vertically with the
+    ``orientation`` property to control how the sidebar sits relative to the
+    live preview.
+    """
+
     sidebar_toggle: QtWidgets.QPushButton
     sidebar_scroll: QtWidgets.QScrollArea
-    image_view: PyDMImageView
+    image_view: PCDSImageView
     display_fps_label: QtWidgets.QLabel
     main_splitter: QtWidgets.QSplitter
     active_pv_label: QtWidgets.QLabel
+    stream_rate_combo: QtWidgets.QComboBox
 
     designer_options = DesignerOptions(
         group="ECS Imaging Common",
@@ -79,6 +114,7 @@ class CameraViewerStretch(CameraViewerStretchBase):
         self.active_pv_label.setCursor(Qt.PointingHandCursor)
         self.active_pv_label.setToolTip("Click to copy")
         self.active_pv_label.installEventFilter(self)
+        self._setup_stream_rate_combo()
         self._initializing = False
 
     def eventFilter(self, obj, event) -> bool:
@@ -102,6 +138,70 @@ class CameraViewerStretch(CameraViewerStretchBase):
 
     def _toggle_sidebar(self, checked: bool) -> None:
         self.sidebar_scroll.setVisible(checked)
+
+    # -- Stream rate limit -------------------------------------------------
+
+    def _setup_stream_rate_combo(self) -> None:
+        """Populate the stream-rate combobox and wire up its PV read/write channels."""
+        for label, seconds in _STREAM_RATE_PRESETS:
+            self.stream_rate_combo.addItem(label, seconds)
+        self._stream_rate_writer = PVChannel(parent=self)
+        self._stream_rate_reader = PVChannel(parent=self, value_slot=self._on_stream_rate_rbv)
+        # activated write on user interaction
+        self.stream_rate_combo.activated.connect(self._on_stream_rate_selected)
+        self._rebuild_stream_rate_channels()
+
+    def _rebuild_stream_rate_channels(self) -> None:
+        """Point the MinCallbackTime read/write channels at the current cam_prefix/stream_plugin."""
+        cam_prefix = self.get_cam_prefix()
+        if not cam_prefix:
+            return
+        base = f"ca://{cam_prefix}{self.get_macro('stream_plugin')}"
+        self._stream_rate_writer.set_address(base + _MIN_CALLBACK_TIME_SUFFIX)
+        self._stream_rate_reader.set_address(base + _MIN_CALLBACK_TIME_RBV_SUFFIX)
+
+    def after_set_macro(self, macro_name: str, value: str) -> None:
+        self._rebuild_stream_rate_channels()
+
+    def _on_stream_rate_selected(self, index: int) -> None:
+        """Write the selected preset's MinCallbackTime (seconds) to the PV"""
+        seconds = self.stream_rate_combo.itemData(index)
+        if seconds is None:
+            return
+        self._stream_rate_writer.write(float(seconds))
+
+    def _on_stream_rate_rbv(self, value) -> None:
+        """Snap the combobox display to the preset nearest the live MinCallbackTime_RBV.
+
+        Display-only: does not write to PV to make number match exactly
+        """
+        try:
+            seconds = float(value)
+        except (TypeError, ValueError):
+            return
+        index = self._nearest_preset_index(seconds)
+        self.stream_rate_combo.blockSignals(True)
+        self.stream_rate_combo.setCurrentIndex(index)
+        self.stream_rate_combo.blockSignals(False)
+
+    @staticmethod
+    def _nearest_preset_index(seconds: float) -> int:
+        """Return the preset index closest (in Hz) to actual MinCallbackTime."""
+        if seconds < 0.02:  # > 50fps is displayed as unlimited
+            # largest value is always last
+            return len(_STREAM_RATE_PRESETS) - 1
+        target_hz = 1.0 / seconds
+        best_index = 0
+        best_delta = float("inf")
+        for i, (_, preset_seconds) in enumerate(_STREAM_RATE_PRESETS):
+            if preset_seconds <= 0:
+                # skip this preset
+                continue
+            delta = abs((1.0 / preset_seconds) - target_hz)
+            if delta < best_delta:
+                best_delta = delta
+                best_index = i
+        return best_index
 
     # -- Display FPS -------------------------------------------------------
 
@@ -158,6 +258,14 @@ class CameraViewerStretch(CameraViewerStretchBase):
             self._first_show = False
             if not self._is_designer_editing():
                 self._adopt_child_widgets()
+        self.image_view.resume()
+
+    def hideEvent(self, event) -> None:
+        """Pause the image stream when the view goes off-screen (tab/dock switch)."""
+        super().hideEvent(event)
+        if self._initializing:
+            return
+        self.image_view.pause()
 
     def _adopt_child_widgets(self) -> None:
         """

@@ -10,6 +10,8 @@
 # ruff: noqa: E501
 from qtpy import QtCore, QtWidgets
 
+from pcdswidgets.common.widget_overrides.combobox_no_scroll import ComboBoxNoScroll
+
 
 class Ui_Form(object):
     def setupUi(self, Form):
@@ -22,7 +24,7 @@ class Ui_Form(object):
         self.colormap_label = QtWidgets.QLabel(Form)
         self.colormap_label.setObjectName("colormap_label")
         self.gridLayout.addWidget(self.colormap_label, 0, 0, 1, 1)
-        self.colormap_combo = QtWidgets.QComboBox(Form)
+        self.colormap_combo = ComboBoxNoScroll(Form)
         self.colormap_combo.setObjectName("colormap_combo")
         self.gridLayout.addWidget(self.colormap_combo, 0, 1, 1, 1)
         self.normalize_check = QtWidgets.QCheckBox(Form)

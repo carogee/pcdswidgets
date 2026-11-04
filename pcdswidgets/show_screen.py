@@ -127,6 +127,28 @@ def get_parser() -> tuple[ArgumentParser, SubparserAction]:
     _add_subp_arg(
         state_expert, "DEVICE_TOKENS", action="store", help="comma-separated per-device tokens, e.g. D1M1,D2M1,D3M1"
     )
+    _add_subp_arg(
+        state_expert,
+        "MOTOR_TYPE",
+        action="store",
+        choices=["GENERIC", "IMS", "BECKHOFF", "BECKHOFF_LEGACY"],
+        help="Motor type for the Diagnostics cog buttons (default BECKHOFF)",
+    )
+
+    _add_subp_arg(
+        state_expert,
+        "MAX_VISIBLE_STATES",
+        action="store",
+        type=int,
+        help="State rows shown in the Configuration grid before it scrolls (default 3)",
+    )
+    _add_subp_arg(
+        state_expert,
+        "MAX_VISIBLE_MOTORS",
+        action="store",
+        type=int,
+        help="Motor columns (Configuration) / rows (Diagnostics) shown before scrolling (default 3)",
+    )
 
     # FeatureFinder can function as if it was a standalone app, so it's mostly used standalone.
     feature_finder = subparsers.add_parser("FeatureFinder", help="Live plotting GUI")

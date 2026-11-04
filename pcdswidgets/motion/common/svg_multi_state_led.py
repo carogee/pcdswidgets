@@ -35,6 +35,8 @@ class SvgMultiStateLED(PyDMSymbol, DesignerWidget):
         icon="multi_state_led_icon.png",
     )
 
+    editable_str_properties = {"motor": ""}
+
     def __init__(self, *args, **kwargs):
         self._macro_values = {}
         self._motor = ""

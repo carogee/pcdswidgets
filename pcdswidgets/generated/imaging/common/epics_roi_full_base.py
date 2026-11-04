@@ -32,7 +32,7 @@ class EpicsRoiFullBase(DesignerWidget):
     Form: "QtWidgets.QWidget"
     color_selection_button: "ColorButton"
     draw_roi_button: "QtWidgets.QPushButton"
-    height_spinbox: "PyDMSpinboxEnter"
+    height_spinbox: "PyDMSpinBoxClickToScroll"
     label_18: "QtWidgets.QLabel"
     label_19: "QtWidgets.QLabel"
     label_20: "QtWidgets.QLabel"
@@ -41,9 +41,9 @@ class EpicsRoiFullBase(DesignerWidget):
     move_enabled_button: "QtWidgets.QPushButton"
     select_center_button: "QtWidgets.QPushButton"
     visibility_button: "QtWidgets.QPushButton"
-    width_spinbox: "PyDMSpinboxEnter"
-    x_spinbox: "PyDMSpinboxEnter"
-    y_spinbox: "PyDMSpinboxEnter"
+    width_spinbox: "PyDMSpinBoxClickToScroll"
+    x_spinbox: "PyDMSpinBoxClickToScroll"
+    y_spinbox: "PyDMSpinBoxClickToScroll"
 
     ui_form = Ui_Form
     _macro_to_widget = {

@@ -68,7 +68,7 @@
       </widget>
      </item>
      <item>
-      <widget class="PyDMSpinboxEnter" name="x_spinbox_1">
+      <widget class="PyDMSpinBoxClickToScroll" name="x_spinbox_1">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
          <horstretch>0</horstretch>
@@ -133,7 +133,7 @@
       </widget>
      </item>
      <item>
-      <widget class="PyDMSpinboxEnter" name="y_spinbox_1">
+      <widget class="PyDMSpinBoxClickToScroll" name="y_spinbox_1">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
          <horstretch>0</horstretch>
@@ -313,7 +313,7 @@
       </widget>
      </item>
      <item>
-      <widget class="PyDMSpinboxEnter" name="x_spinbox_2">
+      <widget class="PyDMSpinBoxClickToScroll" name="x_spinbox_2">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
          <horstretch>0</horstretch>
@@ -378,7 +378,7 @@
       </widget>
      </item>
      <item>
-      <widget class="PyDMSpinboxEnter" name="y_spinbox_2">
+      <widget class="PyDMSpinBoxClickToScroll" name="y_spinbox_2">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
          <horstretch>0</horstretch>
@@ -558,7 +558,7 @@
       </widget>
      </item>
      <item>
-      <widget class="PyDMSpinboxEnter" name="x_spinbox_3">
+      <widget class="PyDMSpinBoxClickToScroll" name="x_spinbox_3">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
          <horstretch>0</horstretch>
@@ -623,7 +623,7 @@
       </widget>
      </item>
      <item>
-      <widget class="PyDMSpinboxEnter" name="y_spinbox_3">
+      <widget class="PyDMSpinBoxClickToScroll" name="y_spinbox_3">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
          <horstretch>0</horstretch>
@@ -803,7 +803,7 @@
       </widget>
      </item>
      <item>
-      <widget class="PyDMSpinboxEnter" name="x_spinbox_4">
+      <widget class="PyDMSpinBoxClickToScroll" name="x_spinbox_4">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
          <horstretch>0</horstretch>
@@ -868,7 +868,7 @@
       </widget>
      </item>
      <item>
-      <widget class="PyDMSpinboxEnter" name="y_spinbox_4">
+      <widget class="PyDMSpinBoxClickToScroll" name="y_spinbox_4">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
          <horstretch>0</horstretch>
@@ -1023,9 +1023,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>PyDMSpinboxEnter</class>
+   <class>PyDMSpinBoxClickToScroll</class>
    <extends>QDoubleSpinBox</extends>
-   <header>pcdswidgets.imaging.common.spinbox</header>
+   <header>pcdswidgets.common.widget_overrides.spinbox_click_to_scroll</header>
   </customwidget>
   <customwidget>
    <class>ColorButton</class>
