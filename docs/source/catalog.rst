@@ -197,7 +197,7 @@ Beam Diagnostics: pcdswidgets/common/beam_diagnostics
    * - :any:`IpmFull`
      - | Full intensity-position-monitor (IPM) panel: target state mover
        | alongside live Wave8 diode Sum / X Pos / Y Pos readouts, with a
-       | cog button to open the target state-positioner expert screen.
+       | button to open the target state-positioner expert screen and Wave8 Configuration screen.
      - .. image:: /_static/catalog/ipm_full.png
    * - ``IPM_target_expert``
      - | Expert screen for the IPM target state positioner (opened from the
