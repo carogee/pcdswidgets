@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>470</width>
-    <height>320</height>
+    <height>432</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -126,10 +126,10 @@
            <property name="alignment">
             <set>Qt::AlignCenter</set>
            </property>
-           <property name="alarmSensitiveContent" stdset="0">
+           <property name="alarmSensitiveContent">
             <bool>true</bool>
            </property>
-           <property name="channel" stdset="0">
+           <property name="channel">
             <string>ca://${P}:MMS:STATE:GET_RBV</string>
            </property>
           </widget>
@@ -145,24 +145,8 @@
            <property name="toolTip">
             <string>Command the target state (OUT / TARGET1-4).</string>
            </property>
-           <property name="channel" stdset="0">
+           <property name="channel">
             <string>ca://${P}:MMS:STATE:SET</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="3">
-          <widget class="PyDMPushButton" name="PyDMPushButton_reset">
-           <property name="toolTip">
-            <string>Reset state-positioner error.</string>
-           </property>
-           <property name="text">
-            <string>Reset</string>
-           </property>
-           <property name="channel" stdset="0">
-            <string>ca://${P}:MMS:STATE:RESET</string>
-           </property>
-           <property name="pressValue" stdset="0">
-            <string>1</string>
            </property>
           </widget>
          </item>
@@ -200,6 +184,51 @@
          <property name="verticalSpacing">
           <number>2</number>
          </property>
+         <item row="1" column="1">
+          <widget class="PyDMLabel" name="PyDMLabel_err">
+           <property name="font">
+            <font>
+             <pointsize>10</pointsize>
+            </font>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+           <property name="alarmSensitiveContent">
+            <bool>true</bool>
+           </property>
+           <property name="channel">
+            <string>ca://${P}:MMS:STATE:ERR_RBV</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="4">
+          <widget class="PyDMLabel" name="PyDMLabel_done">
+           <property name="font">
+            <font>
+             <pointsize>10</pointsize>
+            </font>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+           <property name="channel">
+            <string>ca://${P}:MMS:STATE:DONE_RBV</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="3">
+          <widget class="QLabel" name="erridLabel">
+           <property name="font">
+            <font>
+             <pointsize>10</pointsize>
+            </font>
+           </property>
+           <property name="text">
+            <string>Error ID</string>
+           </property>
+          </widget>
+         </item>
          <item row="0" column="0">
           <widget class="QLabel" name="busyLabel">
            <property name="font">
@@ -209,6 +238,24 @@
            </property>
            <property name="text">
             <string>Busy</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="1" colspan="4">
+          <widget class="PyDMLabel" name="PyDMLabel_errmsg">
+           <property name="font">
+            <font>
+             <pointsize>10</pointsize>
+            </font>
+           </property>
+           <property name="alarmSensitiveContent">
+            <bool>true</bool>
+           </property>
+           <property name="channel">
+            <string>ca://${P}:MMS:STATE:ERRMSG_RBV</string>
+           </property>
+           <property name="displayFormat">
+            <enum>PyDMLabel::String</enum>
            </property>
           </widget>
          </item>
@@ -222,92 +269,8 @@
            <property name="alignment">
             <set>Qt::AlignCenter</set>
            </property>
-           <property name="channel" stdset="0">
+           <property name="channel">
             <string>ca://${P}:MMS:STATE:BUSY_RBV</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="2">
-          <widget class="QLabel" name="doneLabel">
-           <property name="font">
-            <font>
-             <pointsize>10</pointsize>
-            </font>
-           </property>
-           <property name="text">
-            <string>Done</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="3">
-          <widget class="PyDMLabel" name="PyDMLabel_done">
-           <property name="font">
-            <font>
-             <pointsize>10</pointsize>
-            </font>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignCenter</set>
-           </property>
-           <property name="channel" stdset="0">
-            <string>ca://${P}:MMS:STATE:DONE_RBV</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="0">
-          <widget class="QLabel" name="errLabel">
-           <property name="font">
-            <font>
-             <pointsize>10</pointsize>
-            </font>
-           </property>
-           <property name="text">
-            <string>Error</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="1">
-          <widget class="PyDMLabel" name="PyDMLabel_err">
-           <property name="font">
-            <font>
-             <pointsize>10</pointsize>
-            </font>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignCenter</set>
-           </property>
-           <property name="alarmSensitiveContent" stdset="0">
-            <bool>true</bool>
-           </property>
-           <property name="channel" stdset="0">
-            <string>ca://${P}:MMS:STATE:ERR_RBV</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="2">
-          <widget class="QLabel" name="erridLabel">
-           <property name="font">
-            <font>
-             <pointsize>10</pointsize>
-            </font>
-           </property>
-           <property name="text">
-            <string>Error ID</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="3">
-          <widget class="PyDMLabel" name="PyDMLabel_errid">
-           <property name="font">
-            <font>
-             <pointsize>10</pointsize>
-            </font>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignCenter</set>
-           </property>
-           <property name="channel" stdset="0">
-            <string>ca://${P}:MMS:STATE:ERRID_RBV</string>
            </property>
           </widget>
          </item>
@@ -323,21 +286,58 @@
            </property>
           </widget>
          </item>
-         <item row="2" column="1" colspan="3">
-          <widget class="PyDMLabel" name="PyDMLabel_errmsg">
+         <item row="0" column="3">
+          <widget class="QLabel" name="doneLabel">
            <property name="font">
             <font>
              <pointsize>10</pointsize>
             </font>
            </property>
-           <property name="alarmSensitiveContent" stdset="0">
-            <bool>true</bool>
+           <property name="text">
+            <string>Done</string>
            </property>
-           <property name="channel" stdset="0">
-            <string>ca://${P}:MMS:STATE:ERRMSG_RBV</string>
+          </widget>
+         </item>
+         <item row="1" column="4">
+          <widget class="PyDMLabel" name="PyDMLabel_errid">
+           <property name="font">
+            <font>
+             <pointsize>10</pointsize>
+            </font>
            </property>
-           <property name="displayFormat" stdset="0">
-            <enum>PyDMLabel::String</enum>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+           <property name="channel">
+            <string>ca://${P}:MMS:STATE:ERRID_RBV</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="0">
+          <widget class="QLabel" name="errLabel">
+           <property name="font">
+            <font>
+             <pointsize>10</pointsize>
+            </font>
+           </property>
+           <property name="text">
+            <string>Error</string>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="0">
+          <widget class="PyDMPushButton" name="PyDMPushButton_reset">
+           <property name="toolTip">
+            <string>Reset state-positioner error.</string>
+           </property>
+           <property name="text">
+            <string>Clear Error</string>
+           </property>
+           <property name="channel">
+            <string>ca://${P}:MMS:STATE:RESET</string>
+           </property>
+           <property name="pressValue">
+            <string>1</string>
            </property>
           </widget>
          </item>
@@ -447,23 +447,23 @@
              <pointsize>10</pointsize>
             </font>
            </property>
-           <property name="channel" stdset="0">
+           <property name="channel">
             <string>ca://${P}:MMS:STATE:01:NAME_RBV</string>
            </property>
-           <property name="displayFormat" stdset="0">
+           <property name="displayFormat">
             <enum>PyDMLabel::String</enum>
            </property>
           </widget>
          </item>
          <item row="1" column="1">
           <widget class="PyDMLineEdit" name="PyDMLineEdit_set01">
-           <property name="precision" stdset="0">
+           <property name="precision">
             <number>4</number>
            </property>
-           <property name="precisionFromPV" stdset="0">
+           <property name="precisionFromPV">
             <bool>false</bool>
            </property>
-           <property name="channel" stdset="0">
+           <property name="channel">
             <string>ca://${P}:MMS:STATE:01:SETPOINT</string>
            </property>
           </widget>
@@ -473,26 +473,26 @@
            <property name="alignment">
             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
            </property>
-           <property name="precision" stdset="0">
+           <property name="precision">
             <number>4</number>
            </property>
-           <property name="precisionFromPV" stdset="0">
+           <property name="precisionFromPV">
             <bool>false</bool>
            </property>
-           <property name="channel" stdset="0">
+           <property name="channel">
             <string>ca://${P}:MMS:STATE:01:SETPOINT_RBV</string>
            </property>
           </widget>
          </item>
          <item row="1" column="3">
           <widget class="PyDMLineEdit" name="PyDMLineEdit_velo01">
-           <property name="precision" stdset="0">
+           <property name="precision">
             <number>3</number>
            </property>
-           <property name="precisionFromPV" stdset="0">
+           <property name="precisionFromPV">
             <bool>false</bool>
            </property>
-           <property name="channel" stdset="0">
+           <property name="channel">
             <string>ca://${P}:MMS:STATE:01:VELO</string>
            </property>
           </widget>
@@ -504,23 +504,23 @@
              <pointsize>10</pointsize>
             </font>
            </property>
-           <property name="channel" stdset="0">
+           <property name="channel">
             <string>ca://${P}:MMS:STATE:02:NAME_RBV</string>
            </property>
-           <property name="displayFormat" stdset="0">
+           <property name="displayFormat">
             <enum>PyDMLabel::String</enum>
            </property>
           </widget>
          </item>
          <item row="2" column="1">
           <widget class="PyDMLineEdit" name="PyDMLineEdit_set02">
-           <property name="precision" stdset="0">
+           <property name="precision">
             <number>4</number>
            </property>
-           <property name="precisionFromPV" stdset="0">
+           <property name="precisionFromPV">
             <bool>false</bool>
            </property>
-           <property name="channel" stdset="0">
+           <property name="channel">
             <string>ca://${P}:MMS:STATE:02:SETPOINT</string>
            </property>
           </widget>
@@ -530,26 +530,26 @@
            <property name="alignment">
             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
            </property>
-           <property name="precision" stdset="0">
+           <property name="precision">
             <number>4</number>
            </property>
-           <property name="precisionFromPV" stdset="0">
+           <property name="precisionFromPV">
             <bool>false</bool>
            </property>
-           <property name="channel" stdset="0">
+           <property name="channel">
             <string>ca://${P}:MMS:STATE:02:SETPOINT_RBV</string>
            </property>
           </widget>
          </item>
          <item row="2" column="3">
           <widget class="PyDMLineEdit" name="PyDMLineEdit_velo02">
-           <property name="precision" stdset="0">
+           <property name="precision">
             <number>3</number>
            </property>
-           <property name="precisionFromPV" stdset="0">
+           <property name="precisionFromPV">
             <bool>false</bool>
            </property>
-           <property name="channel" stdset="0">
+           <property name="channel">
             <string>ca://${P}:MMS:STATE:02:VELO</string>
            </property>
           </widget>
@@ -561,23 +561,23 @@
              <pointsize>10</pointsize>
             </font>
            </property>
-           <property name="channel" stdset="0">
+           <property name="channel">
             <string>ca://${P}:MMS:STATE:03:NAME_RBV</string>
            </property>
-           <property name="displayFormat" stdset="0">
+           <property name="displayFormat">
             <enum>PyDMLabel::String</enum>
            </property>
           </widget>
          </item>
          <item row="3" column="1">
           <widget class="PyDMLineEdit" name="PyDMLineEdit_set03">
-           <property name="precision" stdset="0">
+           <property name="precision">
             <number>4</number>
            </property>
-           <property name="precisionFromPV" stdset="0">
+           <property name="precisionFromPV">
             <bool>false</bool>
            </property>
-           <property name="channel" stdset="0">
+           <property name="channel">
             <string>ca://${P}:MMS:STATE:03:SETPOINT</string>
            </property>
           </widget>
@@ -587,26 +587,26 @@
            <property name="alignment">
             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
            </property>
-           <property name="precision" stdset="0">
+           <property name="precision">
             <number>4</number>
            </property>
-           <property name="precisionFromPV" stdset="0">
+           <property name="precisionFromPV">
             <bool>false</bool>
            </property>
-           <property name="channel" stdset="0">
+           <property name="channel">
             <string>ca://${P}:MMS:STATE:03:SETPOINT_RBV</string>
            </property>
           </widget>
          </item>
          <item row="3" column="3">
           <widget class="PyDMLineEdit" name="PyDMLineEdit_velo03">
-           <property name="precision" stdset="0">
+           <property name="precision">
             <number>3</number>
            </property>
-           <property name="precisionFromPV" stdset="0">
+           <property name="precisionFromPV">
             <bool>false</bool>
            </property>
-           <property name="channel" stdset="0">
+           <property name="channel">
             <string>ca://${P}:MMS:STATE:03:VELO</string>
            </property>
           </widget>
@@ -618,23 +618,23 @@
              <pointsize>10</pointsize>
             </font>
            </property>
-           <property name="channel" stdset="0">
+           <property name="channel">
             <string>ca://${P}:MMS:STATE:04:NAME_RBV</string>
            </property>
-           <property name="displayFormat" stdset="0">
+           <property name="displayFormat">
             <enum>PyDMLabel::String</enum>
            </property>
           </widget>
          </item>
          <item row="4" column="1">
           <widget class="PyDMLineEdit" name="PyDMLineEdit_set04">
-           <property name="precision" stdset="0">
+           <property name="precision">
             <number>4</number>
            </property>
-           <property name="precisionFromPV" stdset="0">
+           <property name="precisionFromPV">
             <bool>false</bool>
            </property>
-           <property name="channel" stdset="0">
+           <property name="channel">
             <string>ca://${P}:MMS:STATE:04:SETPOINT</string>
            </property>
           </widget>
@@ -644,26 +644,26 @@
            <property name="alignment">
             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
            </property>
-           <property name="precision" stdset="0">
+           <property name="precision">
             <number>4</number>
            </property>
-           <property name="precisionFromPV" stdset="0">
+           <property name="precisionFromPV">
             <bool>false</bool>
            </property>
-           <property name="channel" stdset="0">
+           <property name="channel">
             <string>ca://${P}:MMS:STATE:04:SETPOINT_RBV</string>
            </property>
           </widget>
          </item>
          <item row="4" column="3">
           <widget class="PyDMLineEdit" name="PyDMLineEdit_velo04">
-           <property name="precision" stdset="0">
+           <property name="precision">
             <number>3</number>
            </property>
-           <property name="precisionFromPV" stdset="0">
+           <property name="precisionFromPV">
             <bool>false</bool>
            </property>
-           <property name="channel" stdset="0">
+           <property name="channel">
             <string>ca://${P}:MMS:STATE:04:VELO</string>
            </property>
           </widget>
@@ -675,23 +675,23 @@
              <pointsize>10</pointsize>
             </font>
            </property>
-           <property name="channel" stdset="0">
+           <property name="channel">
             <string>ca://${P}:MMS:STATE:05:NAME_RBV</string>
            </property>
-           <property name="displayFormat" stdset="0">
+           <property name="displayFormat">
             <enum>PyDMLabel::String</enum>
            </property>
           </widget>
          </item>
          <item row="5" column="1">
           <widget class="PyDMLineEdit" name="PyDMLineEdit_set05">
-           <property name="precision" stdset="0">
+           <property name="precision">
             <number>4</number>
            </property>
-           <property name="precisionFromPV" stdset="0">
+           <property name="precisionFromPV">
             <bool>false</bool>
            </property>
-           <property name="channel" stdset="0">
+           <property name="channel">
             <string>ca://${P}:MMS:STATE:05:SETPOINT</string>
            </property>
           </widget>
@@ -701,26 +701,26 @@
            <property name="alignment">
             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
            </property>
-           <property name="precision" stdset="0">
+           <property name="precision">
             <number>4</number>
            </property>
-           <property name="precisionFromPV" stdset="0">
+           <property name="precisionFromPV">
             <bool>false</bool>
            </property>
-           <property name="channel" stdset="0">
+           <property name="channel">
             <string>ca://${P}:MMS:STATE:05:SETPOINT_RBV</string>
            </property>
           </widget>
          </item>
          <item row="5" column="3">
           <widget class="PyDMLineEdit" name="PyDMLineEdit_velo05">
-           <property name="precision" stdset="0">
+           <property name="precision">
             <number>3</number>
            </property>
-           <property name="precisionFromPV" stdset="0">
+           <property name="precisionFromPV">
             <bool>false</bool>
            </property>
-           <property name="channel" stdset="0">
+           <property name="channel">
             <string>ca://${P}:MMS:STATE:05:VELO</string>
            </property>
           </widget>

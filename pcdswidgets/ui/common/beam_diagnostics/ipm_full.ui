@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>755</width>
-    <height>179</height>
+    <width>944</width>
+    <height>171</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -76,74 +76,113 @@
          <number>12</number>
         </property>
         <item>
-         <widget class="QGroupBox" name="targetBox">
-          <property name="font">
-           <font>
-            <pointsize>12</pointsize>
-            <weight>75</weight>
-            <bold>true</bold>
-           </font>
-          </property>
-          <property name="title">
-           <string>Target</string>
-          </property>
-          <layout class="QGridLayout" name="targetGrid">
-           <item row="1" column="2">
-            <widget class="PyDMEnumComboBox" name="PyDMEnumComboBox_state">
-             <property name="minimumSize">
-              <size>
-               <width>120</width>
-               <height>0</height>
-              </size>
-             </property>
-             <property name="toolTip">
-              <string>Insert target: select OUT / TARGET1-4 to drive the state positioner.</string>
-             </property>
-             <property name="channel">
-              <string>ca://${P}:MMS:STATE:SET</string>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="0">
-            <widget class="QLabel" name="stateLabel">
-             <property name="font">
-              <font>
-               <pointsize>11</pointsize>
-              </font>
-             </property>
-             <property name="text">
-              <string>State</string>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="1">
-            <widget class="PyDMLabel" name="PyDMLabel_readback">
-             <property name="font">
-              <font>
-               <pointsize>11</pointsize>
-              </font>
-             </property>
-             <property name="toolTip">
-              <string/>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignCenter</set>
-             </property>
-             <property name="alarmSensitiveContent">
-              <bool>true</bool>
-             </property>
-             <property name="channel">
-              <string>ca://${P}:MMS:STATE:GET_RBV</string>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="3">
-            <widget class="PyDMShellCommand" name="ExpertButton">
-             <property name="toolTip">
-              <string>Open the target state-positioner expert screen.</string>
-             </property>
-             <property name="styleSheet">
-              <string notr="true">PyDMShellCommand {
+         <layout class="QVBoxLayout" name="targetColumn">
+          <item>
+           <layout class="QHBoxLayout" name="targetHeader">
+            <item>
+             <widget class="QLabel" name="targetTitle">
+              <property name="font">
+               <font>
+                <pointsize>12</pointsize>
+                <weight>75</weight>
+                <bold>true</bold>
+               </font>
+              </property>
+              <property name="text">
+               <string>Target</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="targetHeaderSpacer">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <widget class="QGroupBox" name="targetBox">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="font">
+             <font>
+              <pointsize>12</pointsize>
+              <weight>75</weight>
+              <bold>true</bold>
+             </font>
+            </property>
+            <property name="title">
+             <string/>
+            </property>
+            <layout class="QGridLayout" name="targetGrid">
+             <item row="1" column="2">
+              <widget class="PyDMEnumComboBox" name="PyDMEnumComboBox_state">
+               <property name="minimumSize">
+                <size>
+                 <width>120</width>
+                 <height>0</height>
+                </size>
+               </property>
+               <property name="toolTip">
+                <string>Insert target: select OUT / TARGET1-4 to drive the state positioner.</string>
+               </property>
+               <property name="channel">
+                <string>ca://${P}:MMS:STATE:SET</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="0">
+              <widget class="QLabel" name="stateLabel">
+               <property name="font">
+                <font>
+                 <pointsize>11</pointsize>
+                </font>
+               </property>
+               <property name="text">
+                <string>State</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="1">
+              <widget class="PyDMLabel" name="PyDMLabel_readback">
+               <property name="font">
+                <font>
+                 <pointsize>11</pointsize>
+                </font>
+               </property>
+               <property name="toolTip">
+                <string/>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+               <property name="alarmSensitiveContent">
+                <bool>true</bool>
+               </property>
+               <property name="channel">
+                <string>ca://${P}:MMS:STATE:GET_RBV</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="3">
+              <widget class="PyDMShellCommand" name="ExpertButton">
+               <property name="toolTip">
+                <string>Open the target state-positioner expert screen.</string>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">PyDMShellCommand {
 	background-color: palette(button);
 	color: palette(button-text);
 	border: 1px solid palette(mid);
@@ -156,164 +195,331 @@ PyDMShellCommand:hover {
 PyDMShellCommand:pressed {
 	background-color: palette(dark);
 }</string>
-             </property>
-             <property name="text">
-              <string/>
-             </property>
-             <property name="PyDMIcon">
-              <string>cog</string>
-             </property>
-             <property name="showIcon">
-              <bool>true</bool>
-             </property>
-             <property name="commands">
-              <stringlist>
-               <string>pcdswidgets-show IPM_target_expert --P ${P}</string>
-              </stringlist>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </widget>
+               </property>
+               <property name="text">
+                <string/>
+               </property>
+               <property name="PyDMIcon">
+                <string>cog</string>
+               </property>
+               <property name="showIcon">
+                <bool>true</bool>
+               </property>
+               <property name="commands">
+                <stringlist>
+                 <string>pcdswidgets-show IPM_target_expert --P ${P}</string>
+                </stringlist>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+         </layout>
         </item>
         <item>
-         <widget class="QGroupBox" name="diodeBox">
-          <property name="font">
-           <font>
-            <pointsize>12</pointsize>
-            <weight>75</weight>
-            <bold>true</bold>
-           </font>
-          </property>
-          <property name="title">
-           <string>Wave8 Diodes</string>
-          </property>
-          <layout class="QGridLayout" name="diodeGrid">
-           <item row="0" column="0">
-            <widget class="QLabel" name="sumLabel">
-             <property name="font">
-              <font>
-               <pointsize>11</pointsize>
-              </font>
-             </property>
-             <property name="text">
-              <string>Sum</string>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="1">
-            <widget class="ThrottledPyDMLabel" name="PyDMLabel_sum">
-             <property name="minimumSize">
-              <size>
-               <width>110</width>
-               <height>0</height>
-              </size>
-             </property>
-             <property name="font">
-              <font>
-               <pointsize>11</pointsize>
-              </font>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-             </property>
-             <property name="precision">
-              <number>2</number>
-             </property>
-             <property name="precisionFromPV">
-              <bool>false</bool>
-             </property>
-             <property name="alarmSensitiveContent">
-              <bool>true</bool>
-             </property>
-             <property name="channel">
-              <string>ca://${W8}:SUM</string>
-             </property>
-             <property name="throttleRate" stdset="0">
-              <double>5.000000000000000</double>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="0">
-            <widget class="QLabel" name="xposLabel">
-             <property name="font">
-              <font>
-               <pointsize>11</pointsize>
-              </font>
-             </property>
-             <property name="text">
-              <string>X Pos</string>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="1">
-            <widget class="ThrottledPyDMLabel" name="PyDMLabel_xpos">
-             <property name="font">
-              <font>
-               <pointsize>11</pointsize>
-              </font>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-             </property>
-             <property name="precision">
-              <number>4</number>
-             </property>
-             <property name="precisionFromPV">
-              <bool>false</bool>
-             </property>
-             <property name="alarmSensitiveContent">
-              <bool>true</bool>
-             </property>
-             <property name="channel">
-              <string>ca://${W8}:XPOS</string>
-             </property>
-             <property name="throttleRate" stdset="0">
-              <double>5.000000000000000</double>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="0">
-            <widget class="QLabel" name="yposLabel">
-             <property name="font">
-              <font>
-               <pointsize>11</pointsize>
-              </font>
-             </property>
-             <property name="text">
-              <string>Y Pos</string>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="1">
-            <widget class="ThrottledPyDMLabel" name="PyDMLabel_ypos">
-             <property name="font">
-              <font>
-               <pointsize>11</pointsize>
-              </font>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-             </property>
-             <property name="precision">
-              <number>4</number>
-             </property>
-             <property name="precisionFromPV">
-              <bool>false</bool>
-             </property>
-             <property name="alarmSensitiveContent">
-              <bool>true</bool>
-             </property>
-             <property name="channel">
-              <string>ca://${W8}:YPOS</string>
-             </property>
-             <property name="throttleRate" stdset="0">
-              <double>5.000000000000000</double>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </widget>
+         <layout class="QVBoxLayout" name="diodeColumn">
+          <item>
+           <layout class="QHBoxLayout" name="diodeHeader">
+            <item>
+             <widget class="QLabel" name="diodeTitle">
+              <property name="font">
+               <font>
+                <pointsize>12</pointsize>
+                <weight>75</weight>
+                <bold>true</bold>
+               </font>
+              </property>
+              <property name="text">
+               <string>Wave8 Diodes</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="diodeHeaderSpacer">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <widget class="QGroupBox" name="diodeBox">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="font">
+             <font>
+              <pointsize>12</pointsize>
+              <weight>75</weight>
+              <bold>true</bold>
+             </font>
+            </property>
+            <property name="title">
+             <string/>
+            </property>
+            <layout class="QGridLayout" name="diodeGrid">
+             <item row="1" column="2">
+              <widget class="QLabel" name="yposLabel">
+               <property name="font">
+                <font>
+                 <pointsize>11</pointsize>
+                </font>
+               </property>
+               <property name="text">
+                <string>Y Pos</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="0">
+              <widget class="ThrottledPyDMLabel" name="PyDMLabel_sum">
+               <property name="minimumSize">
+                <size>
+                 <width>110</width>
+                 <height>0</height>
+                </size>
+               </property>
+               <property name="font">
+                <font>
+                 <pointsize>11</pointsize>
+                </font>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+               <property name="precision">
+                <number>2</number>
+               </property>
+               <property name="precisionFromPV">
+                <bool>false</bool>
+               </property>
+               <property name="alarmSensitiveContent">
+                <bool>true</bool>
+               </property>
+               <property name="channel">
+                <string>ca://${W8}:SUM</string>
+               </property>
+               <property name="throttleRate" stdset="0">
+                <double>5.000000000000000</double>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="4">
+              <widget class="PyDMShellCommand" name="PyDMShellCommand">
+               <property name="toolTip">
+                <string/>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">PyDMShellCommand {
+	background-color: palette(button);
+	color: palette(button-text);
+	border: 1px solid palette(mid);
+	border-radius: 2px;
+	padding: 3px 8px;
+}
+PyDMShellCommand:hover {
+	background-color: palette(light);
+}
+PyDMShellCommand:pressed {
+	background-color: palette(dark);
+}</string>
+               </property>
+               <property name="text">
+                <string/>
+               </property>
+               <property name="alarmSensitiveContent">
+                <bool>false</bool>
+               </property>
+               <property name="alarmSensitiveBorder">
+                <bool>true</bool>
+               </property>
+               <property name="PyDMToolTip">
+                <string/>
+               </property>
+               <property name="channel">
+                <string/>
+               </property>
+               <property name="PyDMIcon">
+                <string>cog</string>
+               </property>
+               <property name="showConfirmDialog">
+                <bool>false</bool>
+               </property>
+               <property name="runCommandsInFullShell">
+                <bool>false</bool>
+               </property>
+               <property name="confirmMessage">
+                <string>Are you sure you want to proceed?</string>
+               </property>
+               <property name="environmentVariables">
+                <string/>
+               </property>
+               <property name="showIcon">
+                <bool>true</bool>
+               </property>
+               <property name="allowMultipleExecutions">
+                <bool>false</bool>
+               </property>
+               <property name="titles">
+                <stringlist/>
+               </property>
+               <property name="commands">
+                <stringlist>
+                 <string>ipmConfigEpics -b ${W8_alias}</string>
+                </stringlist>
+               </property>
+               <property name="passwordProtected">
+                <bool>false</bool>
+               </property>
+               <property name="password">
+                <string/>
+               </property>
+               <property name="protectedPassword">
+                <string/>
+               </property>
+               <property name="showCurrentlyRunningIndication">
+                <bool>false</bool>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="1">
+              <widget class="QLabel" name="xposLabel">
+               <property name="font">
+                <font>
+                 <pointsize>11</pointsize>
+                </font>
+               </property>
+               <property name="text">
+                <string>X Pos</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="1">
+              <widget class="ThrottledPyDMLabel" name="PyDMLabel_xpos">
+               <property name="minimumSize">
+                <size>
+                 <width>110</width>
+                 <height>0</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>110</width>
+                 <height>16777215</height>
+                </size>
+               </property>
+               <property name="font">
+                <font>
+                 <pointsize>11</pointsize>
+                </font>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+               <property name="precision">
+                <number>4</number>
+               </property>
+               <property name="precisionFromPV">
+                <bool>false</bool>
+               </property>
+               <property name="alarmSensitiveContent">
+                <bool>true</bool>
+               </property>
+               <property name="channel">
+                <string>ca://${W8}:XPOS</string>
+               </property>
+               <property name="throttleRate" stdset="0">
+                <double>5.000000000000000</double>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="2">
+              <widget class="ThrottledPyDMLabel" name="PyDMLabel_ypos">
+               <property name="minimumSize">
+                <size>
+                 <width>110</width>
+                 <height>0</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>110</width>
+                 <height>16777215</height>
+                </size>
+               </property>
+               <property name="font">
+                <font>
+                 <pointsize>11</pointsize>
+                </font>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+               <property name="precision">
+                <number>4</number>
+               </property>
+               <property name="precisionFromPV">
+                <bool>false</bool>
+               </property>
+               <property name="alarmSensitiveContent">
+                <bool>true</bool>
+               </property>
+               <property name="channel">
+                <string>ca://${W8}:YPOS</string>
+               </property>
+               <property name="throttleRate" stdset="0">
+                <double>5.000000000000000</double>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="0">
+              <widget class="QLabel" name="sumLabel">
+               <property name="font">
+                <font>
+                 <pointsize>11</pointsize>
+                </font>
+               </property>
+               <property name="text">
+                <string>Sum</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="3">
+              <spacer name="horizontalSpacer">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>5</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+            </layout>
+           </widget>
+          </item>
+         </layout>
         </item>
        </layout>
       </item>
