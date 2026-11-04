@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>470</width>
-    <height>432</height>
+    <width>339</width>
+    <height>401</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -85,7 +85,7 @@
         <property name="title">
          <string>State Control</string>
         </property>
-        <layout class="QGridLayout" name="controlGrid">
+        <layout class="QGridLayout" name="controlGrid" columnstretch="1,1,1">
          <property name="leftMargin">
           <number>6</number>
          </property>
@@ -104,18 +104,6 @@
          <property name="verticalSpacing">
           <number>2</number>
          </property>
-         <item row="0" column="0">
-          <widget class="QLabel" name="stateLabel">
-           <property name="font">
-            <font>
-             <pointsize>10</pointsize>
-            </font>
-           </property>
-           <property name="text">
-            <string>State</string>
-           </property>
-          </widget>
-         </item>
          <item row="0" column="1">
           <widget class="PyDMLabel" name="PyDMLabel_rbv">
            <property name="font">
@@ -131,6 +119,21 @@
            </property>
            <property name="channel">
             <string>ca://${P}:MMS:STATE:GET_RBV</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="0">
+          <widget class="QLabel" name="stateLabel">
+           <property name="font">
+            <font>
+             <pointsize>10</pointsize>
+            </font>
+           </property>
+           <property name="text">
+            <string>State</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
            </property>
           </widget>
          </item>
@@ -165,7 +168,7 @@
         <property name="title">
          <string>Status</string>
         </property>
-        <layout class="QGridLayout" name="statusGrid">
+        <layout class="QGridLayout" name="statusGrid" columnstretch="0,1,1,0,1">
          <property name="leftMargin">
           <number>6</number>
          </property>
@@ -341,6 +344,19 @@
            </property>
           </widget>
          </item>
+         <item row="0" column="2">
+          <spacer name="horizontalSpacer">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>10</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
         </layout>
        </widget>
       </item>
@@ -356,7 +372,7 @@
         <property name="title">
          <string>Configured Positions</string>
         </property>
-        <layout class="QGridLayout" name="configGrid">
+        <layout class="QGridLayout" name="configGrid" columnstretch="0,1,1,1">
          <property name="leftMargin">
           <number>6</number>
          </property>
@@ -457,6 +473,12 @@
          </item>
          <item row="1" column="1">
           <widget class="PyDMLineEdit" name="PyDMLineEdit_set01">
+           <property name="maximumSize">
+            <size>
+             <width>75</width>
+             <height>16777215</height>
+            </size>
+           </property>
            <property name="precision">
             <number>4</number>
            </property>
@@ -473,6 +495,12 @@
            <property name="alignment">
             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
            </property>
+           <property name="maximumSize">
+            <size>
+             <width>75</width>
+             <height>16777215</height>
+            </size>
+           </property>
            <property name="precision">
             <number>4</number>
            </property>
@@ -486,6 +514,12 @@
          </item>
          <item row="1" column="3">
           <widget class="PyDMLineEdit" name="PyDMLineEdit_velo01">
+           <property name="maximumSize">
+            <size>
+             <width>75</width>
+             <height>16777215</height>
+            </size>
+           </property>
            <property name="precision">
             <number>3</number>
            </property>
@@ -514,6 +548,12 @@
          </item>
          <item row="2" column="1">
           <widget class="PyDMLineEdit" name="PyDMLineEdit_set02">
+           <property name="maximumSize">
+            <size>
+             <width>75</width>
+             <height>16777215</height>
+            </size>
+           </property>
            <property name="precision">
             <number>4</number>
            </property>
@@ -530,6 +570,12 @@
            <property name="alignment">
             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
            </property>
+           <property name="maximumSize">
+            <size>
+             <width>75</width>
+             <height>16777215</height>
+            </size>
+           </property>
            <property name="precision">
             <number>4</number>
            </property>
@@ -543,6 +589,12 @@
          </item>
          <item row="2" column="3">
           <widget class="PyDMLineEdit" name="PyDMLineEdit_velo02">
+           <property name="maximumSize">
+            <size>
+             <width>75</width>
+             <height>16777215</height>
+            </size>
+           </property>
            <property name="precision">
             <number>3</number>
            </property>
@@ -571,6 +623,12 @@
          </item>
          <item row="3" column="1">
           <widget class="PyDMLineEdit" name="PyDMLineEdit_set03">
+           <property name="maximumSize">
+            <size>
+             <width>75</width>
+             <height>16777215</height>
+            </size>
+           </property>
            <property name="precision">
             <number>4</number>
            </property>
@@ -587,6 +645,12 @@
            <property name="alignment">
             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
            </property>
+           <property name="maximumSize">
+            <size>
+             <width>75</width>
+             <height>16777215</height>
+            </size>
+           </property>
            <property name="precision">
             <number>4</number>
            </property>
@@ -600,6 +664,12 @@
          </item>
          <item row="3" column="3">
           <widget class="PyDMLineEdit" name="PyDMLineEdit_velo03">
+           <property name="maximumSize">
+            <size>
+             <width>75</width>
+             <height>16777215</height>
+            </size>
+           </property>
            <property name="precision">
             <number>3</number>
            </property>
@@ -628,6 +698,12 @@
          </item>
          <item row="4" column="1">
           <widget class="PyDMLineEdit" name="PyDMLineEdit_set04">
+           <property name="maximumSize">
+            <size>
+             <width>75</width>
+             <height>16777215</height>
+            </size>
+           </property>
            <property name="precision">
             <number>4</number>
            </property>
@@ -644,6 +720,12 @@
            <property name="alignment">
             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
            </property>
+           <property name="maximumSize">
+            <size>
+             <width>75</width>
+             <height>16777215</height>
+            </size>
+           </property>
            <property name="precision">
             <number>4</number>
            </property>
@@ -657,6 +739,12 @@
          </item>
          <item row="4" column="3">
           <widget class="PyDMLineEdit" name="PyDMLineEdit_velo04">
+           <property name="maximumSize">
+            <size>
+             <width>75</width>
+             <height>16777215</height>
+            </size>
+           </property>
            <property name="precision">
             <number>3</number>
            </property>
@@ -685,6 +773,12 @@
          </item>
          <item row="5" column="1">
           <widget class="PyDMLineEdit" name="PyDMLineEdit_set05">
+           <property name="maximumSize">
+            <size>
+             <width>75</width>
+             <height>16777215</height>
+            </size>
+           </property>
            <property name="precision">
             <number>4</number>
            </property>
@@ -701,6 +795,12 @@
            <property name="alignment">
             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
            </property>
+           <property name="maximumSize">
+            <size>
+             <width>75</width>
+             <height>16777215</height>
+            </size>
+           </property>
            <property name="precision">
             <number>4</number>
            </property>
@@ -714,6 +814,12 @@
          </item>
          <item row="5" column="3">
           <widget class="PyDMLineEdit" name="PyDMLineEdit_velo05">
+           <property name="maximumSize">
+            <size>
+             <width>75</width>
+             <height>16777215</height>
+            </size>
+           </property>
            <property name="precision">
             <number>3</number>
            </property>

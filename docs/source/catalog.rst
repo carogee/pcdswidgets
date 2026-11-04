@@ -186,6 +186,26 @@ Tools: pcdswidgets/common/tools
        | NOTE: widget is invisible at runtime (border goes away).
      - .. image:: /_static/catalog/view_saver.png
 
+Beam Diagnostics: pcdswidgets/common/beam_diagnostics
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. list-table::
+
+   * - Widget
+     - Function
+     - Example
+   * - :any:`IpmFull`
+     - | Full intensity-position-monitor (IPM) panel: target state mover
+       | alongside live Wave8 diode Sum / X Pos / Y Pos readouts, with a
+       | cog button to open the target state-positioner expert screen.
+     - .. image:: /_static/catalog/ipm_full.png
+   * - ``IPM_target_expert``
+     - | Expert screen for the IPM target state positioner (opened from the
+       | IpmFull cog, or via ``pcdswidgets-show IPM_target_expert``):
+       | state control, status/error readouts with a Clear Error button,
+       | and the configured target positions with editable setpoints.
+     - .. image:: /_static/catalog/ipm_target_expert.png
+
 **Imaging**
 -----------
 

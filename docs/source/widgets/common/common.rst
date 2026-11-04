@@ -12,3 +12,4 @@ Widgets in these categories are sorted under "Common" in the designer widget box
     dock/dock.rst
     toolbar/toolbar.rst
     tools/tools.rst
+    beam_diagnostics/beam_diagnostics.rst
