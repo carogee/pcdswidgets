@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>118</height>
+    <width>806</width>
+    <height>116</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -45,7 +45,7 @@
      <rect>
       <x>10</x>
       <y>0</y>
-      <width>781</width>
+      <width>806</width>
       <height>109</height>
      </rect>
     </property>
@@ -56,8 +56,47 @@
      <property name="verticalSpacing">
       <number>10</number>
      </property>
-     <item row="2" column="5">
-      <widget class="PyDMByteIndicator" name="ByteIndicatorGap2Move">
+     <item row="2" column="0">
+      <widget class="QLabel" name="GapLabel1">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>120</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>120</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>11</pointsize>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">color: rgb(43,43,43);</string>
+       </property>
+       <property name="text">
+        <string>Gap (mm)</string>
+       </property>
+       <property name="margin">
+        <number>0</number>
+       </property>
+       <property name="indent">
+        <number>5</number>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="6">
+      <widget class="PyDMByteIndicator" name="ByteIndicatorCenter2Move">
        <property name="enabled">
         <bool>false</bool>
        </property>
@@ -92,7 +131,7 @@
         <string/>
        </property>
        <property name="channel">
-        <string>ca://${prefix}:ACTUAL_YWIDTH_RBV.MOVN</string>
+        <string>ca://${prefix}:ACTUAL_YCENTER_RBV.MOVN</string>
        </property>
        <property name="blinkOnChange">
         <bool>false</bool>
@@ -122,45 +161,6 @@
         <stringlist>
          <string>Bit 0</string>
         </stringlist>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="4">
-      <widget class="QLabel" name="Center">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="minimumSize">
-        <size>
-         <width>120</width>
-         <height>0</height>
-        </size>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>130</width>
-         <height>16777215</height>
-        </size>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>11</pointsize>
-        </font>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">color: rgb(43, 43, 43);</string>
-       </property>
-       <property name="text">
-        <string>Center (mm)</string>
-       </property>
-       <property name="margin">
-        <number>0</number>
-       </property>
-       <property name="indent">
-        <number>5</number>
        </property>
       </widget>
      </item>
@@ -233,7 +233,7 @@
        </property>
       </widget>
      </item>
-     <item row="2" column="7">
+     <item row="2" column="8">
       <widget class="PyDMLineEdit" name="GapSet2">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
@@ -279,10 +279,234 @@ background-color: rgb(250, 250, 250);</string>
        </property>
       </widget>
      </item>
-     <item row="1" column="0">
-      <widget class="QLabel" name="CenterLabel1">
+     <item row="2" column="1">
+      <widget class="PyDMByteIndicator" name="ByteIndicatorGap1Move">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
        <property name="sizePolicy">
         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>25</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>25</width>
+         <height>25</height>
+        </size>
+       </property>
+       <property name="toolTip">
+        <string/>
+       </property>
+       <property name="alarmSensitiveContent">
+        <bool>false</bool>
+       </property>
+       <property name="alarmSensitiveBorder">
+        <bool>false</bool>
+       </property>
+       <property name="PyDMToolTip">
+        <string/>
+       </property>
+       <property name="channel">
+        <string>ca://${prefix}:ACTUAL_XWIDTH_RBV.MOVN</string>
+       </property>
+       <property name="blinkOnChange">
+        <bool>false</bool>
+       </property>
+       <property name="toggleMode">
+        <bool>false</bool>
+       </property>
+       <property name="blinkInterval">
+        <number>99</number>
+       </property>
+       <property name="showLabels">
+        <bool>false</bool>
+       </property>
+       <property name="bigEndian">
+        <bool>false</bool>
+       </property>
+       <property name="circles">
+        <bool>true</bool>
+       </property>
+       <property name="numBits">
+        <number>1</number>
+       </property>
+       <property name="shift">
+        <number>0</number>
+       </property>
+       <property name="labels">
+        <stringlist>
+         <string>Bit 0</string>
+        </stringlist>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="8">
+      <widget class="PyDMLineEdit" name="CenterSet2">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>75</width>
+         <height>32</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>75</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>11</pointsize>
+        </font>
+       </property>
+       <property name="toolTip">
+        <string/>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">color: rgb(43,43,43);
+background-color: rgb(250, 250, 250);</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+       <property name="precision">
+        <number>3</number>
+       </property>
+       <property name="precisionFromPV">
+        <bool>false</bool>
+       </property>
+       <property name="channel">
+        <string>ca://${prefix}:YCEN_REQ</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="3">
+      <widget class="PyDMLineEdit" name="GapSet1">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>75</width>
+         <height>32</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>75</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>11</pointsize>
+        </font>
+       </property>
+       <property name="toolTip">
+        <string/>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">color: rgb(43,43,43);
+background-color: rgb(250, 250, 250);</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+       <property name="precision">
+        <number>3</number>
+       </property>
+       <property name="precisionFromPV">
+        <bool>false</bool>
+       </property>
+       <property name="channel">
+        <string>ca://${prefix}:XWID_REQ</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="2">
+      <widget class="PyDMLabel" name="GapRBV1">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>75</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>75</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>11</pointsize>
+        </font>
+       </property>
+       <property name="toolTip">
+        <string/>
+       </property>
+       <property name="whatsThis">
+        <string/>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">color: rgb(34, 34, 34);</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+       <property name="precision">
+        <number>0</number>
+       </property>
+       <property name="showUnits">
+        <bool>false</bool>
+       </property>
+       <property name="precisionFromPV">
+        <bool>true</bool>
+       </property>
+       <property name="alarmSensitiveContent">
+        <bool>false</bool>
+       </property>
+       <property name="alarmSensitiveBorder">
+        <bool>true</bool>
+       </property>
+       <property name="PyDMToolTip">
+        <string/>
+       </property>
+       <property name="channel">
+        <string>ca://${prefix}:ACTUAL_XWIDTH_RBV</string>
+       </property>
+       <property name="enableRichText">
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="5">
+      <widget class="QLabel" name="GapLabel2">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
@@ -295,8 +519,14 @@ background-color: rgb(250, 250, 250);</string>
        </property>
        <property name="maximumSize">
         <size>
-         <width>130</width>
+         <width>16777</width>
          <height>16777215</height>
+        </size>
+       </property>
+       <property name="sizeIncrement">
+        <size>
+         <width>0</width>
+         <height>0</height>
         </size>
        </property>
        <property name="font">
@@ -308,7 +538,7 @@ background-color: rgb(250, 250, 250);</string>
         <string notr="true">color: rgb(43, 43, 43);</string>
        </property>
        <property name="text">
-        <string>Center (mm)</string>
+        <string>Gap (mm)</string>
        </property>
        <property name="margin">
         <number>0</number>
@@ -318,7 +548,21 @@ background-color: rgb(250, 250, 250);</string>
        </property>
       </widget>
      </item>
-     <item row="1" column="6">
+     <item row="0" column="5" colspan="4">
+      <widget class="QLabel" name="VerticalLabel">
+       <property name="font">
+        <font>
+         <pointsize>11</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>Vertical</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="7">
       <widget class="PyDMLabel" name="CenterRBV2">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
@@ -378,6 +622,145 @@ background-color: rgb(250, 250, 250);</string>
        </property>
        <property name="enableRichText">
         <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="7">
+      <widget class="PyDMLabel" name="GapRBV2">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>75</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>75</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>11</pointsize>
+        </font>
+       </property>
+       <property name="toolTip">
+        <string/>
+       </property>
+       <property name="whatsThis">
+        <string/>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">color: rgb(43, 43, 43);</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+       <property name="precision">
+        <number>0</number>
+       </property>
+       <property name="showUnits">
+        <bool>false</bool>
+       </property>
+       <property name="precisionFromPV">
+        <bool>true</bool>
+       </property>
+       <property name="alarmSensitiveContent">
+        <bool>false</bool>
+       </property>
+       <property name="alarmSensitiveBorder">
+        <bool>true</bool>
+       </property>
+       <property name="PyDMToolTip">
+        <string/>
+       </property>
+       <property name="channel">
+        <string>ca://${prefix}:ACTUAL_YWIDTH_RBV</string>
+       </property>
+       <property name="enableRichText">
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="4">
+      <widget class="QPushButton" name="pushButton_2">
+       <property name="text">
+        <string>Zero Offset</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="6">
+      <widget class="PyDMByteIndicator" name="ByteIndicatorGap2Move">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>25</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>25</width>
+         <height>25</height>
+        </size>
+       </property>
+       <property name="toolTip">
+        <string/>
+       </property>
+       <property name="alarmSensitiveContent">
+        <bool>false</bool>
+       </property>
+       <property name="alarmSensitiveBorder">
+        <bool>false</bool>
+       </property>
+       <property name="PyDMToolTip">
+        <string/>
+       </property>
+       <property name="channel">
+        <string>ca://${prefix}:ACTUAL_YWIDTH_RBV.MOVN</string>
+       </property>
+       <property name="blinkOnChange">
+        <bool>false</bool>
+       </property>
+       <property name="toggleMode">
+        <bool>false</bool>
+       </property>
+       <property name="blinkInterval">
+        <number>99</number>
+       </property>
+       <property name="showLabels">
+        <bool>false</bool>
+       </property>
+       <property name="bigEndian">
+        <bool>false</bool>
+       </property>
+       <property name="circles">
+        <bool>true</bool>
+       </property>
+       <property name="numBits">
+        <number>1</number>
+       </property>
+       <property name="shift">
+        <number>0</number>
+       </property>
+       <property name="labels">
+        <stringlist>
+         <string>Bit 0</string>
+        </stringlist>
        </property>
       </widget>
      </item>
@@ -493,457 +876,10 @@ background-color: rgb(250, 250, 250);</string>
        </property>
       </widget>
      </item>
-     <item row="2" column="0">
-      <widget class="QLabel" name="GapLabel1">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="minimumSize">
-        <size>
-         <width>120</width>
-         <height>0</height>
-        </size>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>120</width>
-         <height>16777215</height>
-        </size>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>11</pointsize>
-        </font>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">color: rgb(43,43,43);</string>
-       </property>
+     <item row="1" column="4">
+      <widget class="QPushButton" name="pushButton">
        <property name="text">
-        <string>Gap (mm)</string>
-       </property>
-       <property name="margin">
-        <number>0</number>
-       </property>
-       <property name="indent">
-        <number>5</number>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="3">
-      <widget class="PyDMLineEdit" name="GapSet1">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="minimumSize">
-        <size>
-         <width>75</width>
-         <height>32</height>
-        </size>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>75</width>
-         <height>16777215</height>
-        </size>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>11</pointsize>
-        </font>
-       </property>
-       <property name="toolTip">
-        <string/>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">color: rgb(43,43,43);
-background-color: rgb(250, 250, 250);</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignCenter</set>
-       </property>
-       <property name="precision">
-        <number>3</number>
-       </property>
-       <property name="precisionFromPV">
-        <bool>false</bool>
-       </property>
-       <property name="channel">
-        <string>ca://${prefix}:XWID_REQ</string>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="1">
-      <widget class="PyDMByteIndicator" name="ByteIndicatorGap1Move">
-       <property name="enabled">
-        <bool>false</bool>
-       </property>
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="minimumSize">
-        <size>
-         <width>25</width>
-         <height>0</height>
-        </size>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>25</width>
-         <height>25</height>
-        </size>
-       </property>
-       <property name="toolTip">
-        <string/>
-       </property>
-       <property name="alarmSensitiveContent">
-        <bool>false</bool>
-       </property>
-       <property name="alarmSensitiveBorder">
-        <bool>false</bool>
-       </property>
-       <property name="PyDMToolTip">
-        <string/>
-       </property>
-       <property name="channel">
-        <string>ca://${prefix}:ACTUAL_XWIDTH_RBV.MOVN</string>
-       </property>
-       <property name="blinkOnChange">
-        <bool>false</bool>
-       </property>
-       <property name="toggleMode">
-        <bool>false</bool>
-       </property>
-       <property name="blinkInterval">
-        <number>99</number>
-       </property>
-       <property name="showLabels">
-        <bool>false</bool>
-       </property>
-       <property name="bigEndian">
-        <bool>false</bool>
-       </property>
-       <property name="circles">
-        <bool>true</bool>
-       </property>
-       <property name="numBits">
-        <number>1</number>
-       </property>
-       <property name="shift">
-        <number>0</number>
-       </property>
-       <property name="labels">
-        <stringlist>
-         <string>Bit 0</string>
-        </stringlist>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="2">
-      <widget class="PyDMLabel" name="GapRBV1">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="minimumSize">
-        <size>
-         <width>75</width>
-         <height>0</height>
-        </size>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>75</width>
-         <height>16777215</height>
-        </size>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>11</pointsize>
-        </font>
-       </property>
-       <property name="toolTip">
-        <string/>
-       </property>
-       <property name="whatsThis">
-        <string/>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">color: rgb(34, 34, 34);</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignCenter</set>
-       </property>
-       <property name="precision">
-        <number>0</number>
-       </property>
-       <property name="showUnits">
-        <bool>false</bool>
-       </property>
-       <property name="precisionFromPV">
-        <bool>true</bool>
-       </property>
-       <property name="alarmSensitiveContent">
-        <bool>false</bool>
-       </property>
-       <property name="alarmSensitiveBorder">
-        <bool>true</bool>
-       </property>
-       <property name="PyDMToolTip">
-        <string/>
-       </property>
-       <property name="channel">
-        <string>ca://${prefix}:ACTUAL_XWIDTH_RBV</string>
-       </property>
-       <property name="enableRichText">
-        <bool>false</bool>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="5">
-      <widget class="PyDMByteIndicator" name="ByteIndicatorCenter2Move">
-       <property name="enabled">
-        <bool>false</bool>
-       </property>
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="minimumSize">
-        <size>
-         <width>25</width>
-         <height>0</height>
-        </size>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>25</width>
-         <height>25</height>
-        </size>
-       </property>
-       <property name="toolTip">
-        <string/>
-       </property>
-       <property name="alarmSensitiveContent">
-        <bool>false</bool>
-       </property>
-       <property name="alarmSensitiveBorder">
-        <bool>false</bool>
-       </property>
-       <property name="PyDMToolTip">
-        <string/>
-       </property>
-       <property name="channel">
-        <string>ca://${prefix}:ACTUAL_YCENTER_RBV.MOVN</string>
-       </property>
-       <property name="blinkOnChange">
-        <bool>false</bool>
-       </property>
-       <property name="toggleMode">
-        <bool>false</bool>
-       </property>
-       <property name="blinkInterval">
-        <number>99</number>
-       </property>
-       <property name="showLabels">
-        <bool>false</bool>
-       </property>
-       <property name="bigEndian">
-        <bool>false</bool>
-       </property>
-       <property name="circles">
-        <bool>true</bool>
-       </property>
-       <property name="numBits">
-        <number>1</number>
-       </property>
-       <property name="shift">
-        <number>0</number>
-       </property>
-       <property name="labels">
-        <stringlist>
-         <string>Bit 0</string>
-        </stringlist>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="4">
-      <widget class="QLabel" name="GapLabel2">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="minimumSize">
-        <size>
-         <width>120</width>
-         <height>0</height>
-        </size>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>16777</width>
-         <height>16777215</height>
-        </size>
-       </property>
-       <property name="sizeIncrement">
-        <size>
-         <width>0</width>
-         <height>0</height>
-        </size>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>11</pointsize>
-        </font>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">color: rgb(43, 43, 43);</string>
-       </property>
-       <property name="text">
-        <string>Gap (mm)</string>
-       </property>
-       <property name="margin">
-        <number>0</number>
-       </property>
-       <property name="indent">
-        <number>5</number>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="6">
-      <widget class="PyDMLabel" name="GapRBV2">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="minimumSize">
-        <size>
-         <width>75</width>
-         <height>0</height>
-        </size>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>75</width>
-         <height>16777215</height>
-        </size>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>11</pointsize>
-        </font>
-       </property>
-       <property name="toolTip">
-        <string/>
-       </property>
-       <property name="whatsThis">
-        <string/>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">color: rgb(43, 43, 43);</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignCenter</set>
-       </property>
-       <property name="precision">
-        <number>0</number>
-       </property>
-       <property name="showUnits">
-        <bool>false</bool>
-       </property>
-       <property name="precisionFromPV">
-        <bool>true</bool>
-       </property>
-       <property name="alarmSensitiveContent">
-        <bool>false</bool>
-       </property>
-       <property name="alarmSensitiveBorder">
-        <bool>true</bool>
-       </property>
-       <property name="PyDMToolTip">
-        <string/>
-       </property>
-       <property name="channel">
-        <string>ca://${prefix}:ACTUAL_YWIDTH_RBV</string>
-       </property>
-       <property name="enableRichText">
-        <bool>false</bool>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="7">
-      <widget class="PyDMLineEdit" name="CenterSet2">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="minimumSize">
-        <size>
-         <width>75</width>
-         <height>32</height>
-        </size>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>75</width>
-         <height>16777215</height>
-        </size>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>11</pointsize>
-        </font>
-       </property>
-       <property name="toolTip">
-        <string/>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">color: rgb(43,43,43);
-background-color: rgb(250, 250, 250);</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignCenter</set>
-       </property>
-       <property name="precision">
-        <number>3</number>
-       </property>
-       <property name="precisionFromPV">
-        <bool>false</bool>
-       </property>
-       <property name="channel">
-        <string>ca://${prefix}:YCEN_REQ</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="4" colspan="4">
-      <widget class="QLabel" name="VerticalLabel">
-       <property name="font">
-        <font>
-         <pointsize>11</pointsize>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>Vertical</string>
+        <string>Zero Offset</string>
        </property>
       </widget>
      </item>
@@ -961,15 +897,107 @@ background-color: rgb(250, 250, 250);</string>
        </property>
       </widget>
      </item>
+     <item row="1" column="5">
+      <widget class="QLabel" name="Center">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>120</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>130</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>11</pointsize>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">color: rgb(43, 43, 43);</string>
+       </property>
+       <property name="text">
+        <string>Center (mm)</string>
+       </property>
+       <property name="margin">
+        <number>0</number>
+       </property>
+       <property name="indent">
+        <number>5</number>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="CenterLabel1">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>120</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>130</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>11</pointsize>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">color: rgb(43, 43, 43);</string>
+       </property>
+       <property name="text">
+        <string>Center (mm)</string>
+       </property>
+       <property name="margin">
+        <number>0</number>
+       </property>
+       <property name="indent">
+        <number>5</number>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="9">
+      <widget class="QPushButton" name="pushButton_3">
+       <property name="text">
+        <string>Zero Offset</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="9">
+      <widget class="QPushButton" name="pushButton_4">
+       <property name="text">
+        <string>Zero Offset</string>
+       </property>
+      </widget>
+     </item>
     </layout>
    </widget>
   </widget>
  </widget>
  <customwidgets>
   <customwidget>
-   <class>PyDMLabel</class>
-   <extends>QLabel</extends>
-   <header>pydm.widgets.label</header>
+   <class>PyDMLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>pydm.widgets.line_edit</header>
   </customwidget>
   <customwidget>
    <class>PyDMByteIndicator</class>
@@ -977,9 +1005,9 @@ background-color: rgb(250, 250, 250);</string>
    <header>pydm.widgets.byte</header>
   </customwidget>
   <customwidget>
-   <class>PyDMLineEdit</class>
-   <extends>QLineEdit</extends>
-   <header>pydm.widgets.line_edit</header>
+   <class>PyDMLabel</class>
+   <extends>QLabel</extends>
+   <header>pydm.widgets.label</header>
   </customwidget>
  </customwidgets>
  <resources/>

@@ -50,22 +50,26 @@ class MotorBeckhoffSlitsBase(DesignerWidget):
     VerticalLabel: "QtWidgets.QLabel"
     frame: "QtWidgets.QFrame"
     layoutWidget: "QtWidgets.QWidget"
+    pushButton: "QtWidgets.QPushButton"
+    pushButton_2: "QtWidgets.QPushButton"
+    pushButton_3: "QtWidgets.QPushButton"
+    pushButton_4: "QtWidgets.QPushButton"
 
     ui_form = Ui_Form
     _macro_to_widget = {
         "prefix": [
-            "ByteIndicatorGap2Move",
+            "ByteIndicatorCenter2Move",
             "ByteIndicatorCenter1Move",
             "GapSet2",
+            "ByteIndicatorGap1Move",
+            "CenterSet2",
+            "GapSet1",
+            "GapRBV1",
             "CenterRBV2",
+            "GapRBV2",
+            "ByteIndicatorGap2Move",
             "CenterSet1",
             "CenterRBV1",
-            "GapSet1",
-            "ByteIndicatorGap1Move",
-            "GapRBV1",
-            "ByteIndicatorCenter2Move",
-            "GapRBV2",
-            "CenterSet2",
         ],
     }
     _widget_to_macro = {
