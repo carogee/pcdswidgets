@@ -37,10 +37,11 @@ CONFIG = textwrap.dedent(
 def test_level_word_labels():
     from pcdswidgets.common.device_grid.device_grid import _LEVEL_TEXT
 
-    assert _LEVEL_TEXT[StatusLevel.OK] == "OK"
-    assert _LEVEL_TEXT[StatusLevel.WARN] == "Warning"
-    assert _LEVEL_TEXT[StatusLevel.FAULT] == "Error"
-    assert _LEVEL_TEXT[StatusLevel.NONE] == "Disconnected"
+    assert _LEVEL_TEXT[StatusLevel.NO_ALARM] == "OK"
+    assert _LEVEL_TEXT[StatusLevel.MINOR] == "Warning"
+    assert _LEVEL_TEXT[StatusLevel.MAJOR] == "Error"
+    assert _LEVEL_TEXT[StatusLevel.INVALID] == "Invalid"
+    assert _LEVEL_TEXT[StatusLevel.DISCONNECTED] == "Disconnected"
 
 
 def test_cell_aggregate_marks_empty(grid):
@@ -53,24 +54,26 @@ def test_cell_aggregate_marks_empty(grid):
 
 # -- StatusLevel: pure logic (no Qt) --------------------------------------
 def test_from_severity_connected():
-    assert StatusLevel.from_severity(0, True) is StatusLevel.OK
-    assert StatusLevel.from_severity(1, True) is StatusLevel.WARN
-    assert StatusLevel.from_severity(2, True) is StatusLevel.FAULT
-    assert StatusLevel.from_severity(3, True) is StatusLevel.FAULT
+    assert StatusLevel.from_severity(0, True) is StatusLevel.NO_ALARM
+    assert StatusLevel.from_severity(1, True) is StatusLevel.MINOR
+    assert StatusLevel.from_severity(2, True) is StatusLevel.MAJOR
+    assert StatusLevel.from_severity(3, True) is StatusLevel.INVALID
 
 
 def test_from_severity_disconnected_or_unknown():
-    assert StatusLevel.from_severity(0, False) is StatusLevel.NONE
-    assert StatusLevel.from_severity(2, False) is StatusLevel.NONE
-    assert StatusLevel.from_severity(None, True) is StatusLevel.NONE
+    assert StatusLevel.from_severity(0, False) is StatusLevel.DISCONNECTED
+    assert StatusLevel.from_severity(2, False) is StatusLevel.DISCONNECTED
+    assert StatusLevel.from_severity(None, True) is StatusLevel.DISCONNECTED
 
 
 def test_worst():
-    assert StatusLevel.worst([]) is StatusLevel.NONE
-    assert StatusLevel.worst([StatusLevel.OK, StatusLevel.OK]) is StatusLevel.OK
-    assert StatusLevel.worst([StatusLevel.OK, StatusLevel.WARN]) is StatusLevel.WARN
-    assert StatusLevel.worst([StatusLevel.WARN, StatusLevel.FAULT, StatusLevel.OK]) is StatusLevel.FAULT
-    assert StatusLevel.worst([StatusLevel.NONE, StatusLevel.OK]) is StatusLevel.OK
+    assert StatusLevel.worst([]) is StatusLevel.NO_ALARM
+    assert StatusLevel.worst([StatusLevel.NO_ALARM, StatusLevel.NO_ALARM]) is StatusLevel.NO_ALARM
+    assert StatusLevel.worst([StatusLevel.NO_ALARM, StatusLevel.MINOR]) is StatusLevel.MINOR
+    assert StatusLevel.worst([StatusLevel.MINOR, StatusLevel.MAJOR, StatusLevel.NO_ALARM]) is StatusLevel.MAJOR
+    assert StatusLevel.worst([StatusLevel.MAJOR, StatusLevel.INVALID]) is StatusLevel.INVALID
+    # Disconnected ranks highest (as in typhos).
+    assert StatusLevel.worst([StatusLevel.INVALID, StatusLevel.DISCONNECTED]) is StatusLevel.DISCONNECTED
 
 
 # -- Cell aggregation -----------------------------------------------------
@@ -87,32 +90,37 @@ def _add(cell: DeviceGridCell, name: str) -> DeviceStatus:
     return device
 
 
-def test_empty_cell_is_none(cell):
+def test_empty_cell_is_blank(cell):
+    # No devices: the box is marked empty (renders blank regardless of level).
     cell.update_aggregate()
-    assert cell.aggregate.get_level() is StatusLevel.NONE
+    assert cell.aggregate._empty is True
 
 
 def test_aggregate_updates_with_child_severity(cell):
     d1 = _add(cell, "d1")
     d2 = _add(cell, "d2")
 
-    # Both connected + ok -> OK
+    # Both connected + ok -> NO_ALARM
     d1.set_status(0, True)
     d2.set_status(0, True)
-    assert cell.aggregate.get_level() is StatusLevel.OK
+    assert cell.aggregate.get_level() is StatusLevel.NO_ALARM
 
-    # One goes MINOR -> WARN
+    # One goes MINOR -> MINOR
     d2.set_status(1, True)
-    assert cell.aggregate.get_level() is StatusLevel.WARN
+    assert cell.aggregate.get_level() is StatusLevel.MINOR
 
-    # One goes MAJOR -> FAULT
+    # One goes MAJOR -> MAJOR
     d1.set_status(2, True)
-    assert cell.aggregate.get_level() is StatusLevel.FAULT
+    assert cell.aggregate.get_level() is StatusLevel.MAJOR
 
-    # Disconnect everything -> NONE (blank)
+    # One goes INVALID -> INVALID (distinct from MAJOR now)
+    d2.set_status(3, True)
+    assert cell.aggregate.get_level() is StatusLevel.INVALID
+
+    # Disconnect everything -> DISCONNECTED
     d1.set_status(0, False)
     d2.set_status(0, False)
-    assert cell.aggregate.get_level() is StatusLevel.NONE
+    assert cell.aggregate.get_level() is StatusLevel.DISCONNECTED
 
 
 def test_multi_channel_device_is_worst(qtbot):
@@ -123,9 +131,9 @@ def test_multi_channel_device_is_worst(qtbot):
     )
     for addr in device.addresses:
         device.set_status(0, True, address=addr)
-    assert device.level is StatusLevel.OK
+    assert device.level is StatusLevel.NO_ALARM
     device.set_status(2, True, address=device.addresses[1])  # BOTTOM faults
-    assert device.level is StatusLevel.FAULT
+    assert device.level is StatusLevel.MAJOR
 
 
 # -- Full grid ------------------------------------------------------------
@@ -153,7 +161,7 @@ def test_grid_cell_device_counts(grid):
     mirrors_ebd, mirrors_fee = grid._row_cells["Mirrors"]
     assert len(mirrors_ebd.devices) == 0  # EBD empty
     assert len(mirrors_fee.devices) == 2  # MR1L0, MR2L0
-    assert mirrors_ebd.aggregate.get_level() is StatusLevel.NONE
+    assert mirrors_ebd.aggregate._empty is True  # empty cell renders blank
 
 
 def test_grid_channels_registered(grid):

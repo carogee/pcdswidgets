@@ -65,18 +65,19 @@ logger = logging.getLogger(__name__)
 
 class StatusLevel(enum.IntEnum):
     """
-    Aggregate device-status level, ordered by increasing severity.
+    Device alarm state, mirroring PyDM / typhos severity levels.
 
-    The integer ordering is used by :meth:`worst` to pick the most severe
-    level among a device's children.  ``NONE`` is the least severe (used for
-    disconnected / unknown / empty cells) and sorts below ``OK`` so that a
-    single connected-and-ok device still "wins" over a blank one.
+    Values match PyDM's ``ALARM_*`` constants and typhos' ``AlarmLevel``:
+    ``NO_ALARM=0, MINOR=1, MAJOR=2, INVALID=3, DISCONNECTED=4``.  The integer
+    ordering is the "badness" order used by :meth:`worst` (DISCONNECTED ranks
+    highest, as in typhos).
     """
 
-    NONE = 0
-    OK = 1
-    WARN = 2
-    FAULT = 3
+    NO_ALARM = 0
+    MINOR = 1
+    MAJOR = 2
+    INVALID = 3
+    DISCONNECTED = 4
 
     @classmethod
     def from_severity(cls, severity: int | None, connected: bool = True) -> "StatusLevel":
@@ -87,52 +88,48 @@ class StatusLevel(enum.IntEnum):
         ----------
         severity : int or None
             The EPICS alarm severity: 0 = NO_ALARM, 1 = MINOR, 2 = MAJOR,
-            3 = INVALID.  ``None`` is treated as unknown.
+            3 = INVALID.  ``None`` (no value yet) maps to ``DISCONNECTED``.
         connected : bool
-            Whether the channel is connected.  A disconnected channel is
-            always ``NONE`` (blank) regardless of its last-known severity.
+            Whether the channel is connected.  A disconnected channel is always
+            ``DISCONNECTED`` regardless of its last-known severity.
         """
         if not connected or severity is None:
-            return cls.NONE
-        if severity == 0:
-            return cls.OK
-        if severity == 1:
-            return cls.WARN
-        if severity >= 2:
-            # MAJOR and INVALID both render as a fault.
-            return cls.FAULT
-        return cls.NONE
+            return cls.DISCONNECTED
+        return cls(min(int(severity), int(cls.INVALID)))
 
     @classmethod
     def worst(cls, levels: "list[StatusLevel]") -> "StatusLevel":
-        """Return the most severe level in ``levels`` (``NONE`` if empty)."""
+        """Return the most severe level in ``levels`` (``NO_ALARM`` if empty)."""
         if not levels:
-            return cls.NONE
+            return cls.NO_ALARM
         return max(levels)
 
 
-# Carbon Gray 10 status tokens: (fill, glyph, border).
-# NONE renders as a blank box using the page/border surface tokens.
-_LEVEL_STYLE: dict[StatusLevel, tuple[str, str, str]] = {
-    StatusLevel.OK: ("#24a148", "✓", "#24a148"),     # check mark
-    StatusLevel.WARN: ("#f1c21b", "!", "#f1c21b"),
-    StatusLevel.FAULT: ("#da1e28", "✗", "#da1e28"),  # ballot x
-    StatusLevel.NONE: ("#f4f4f4", "—", "#e0e0e0"),   # em dash
+# PyDM alarm palette (from pydm/default_stylesheet.qss): (fill, glyph, border,
+# text_color).  Matches PyDM's 5-state alarm coloring.  DISCONNECTED uses a gray
+# border so the white fill stays legible on the light carbon_gray10 page.
+_LEVEL_STYLE: dict[StatusLevel, tuple[str, str, str, str]] = {
+    StatusLevel.NO_ALARM: ("#00EB00", "✓", "#00EB00", "#000000"),      # green
+    StatusLevel.MINOR: ("#EBEB00", "!", "#EBEB00", "#000000"),         # yellow
+    StatusLevel.MAJOR: ("#FF0000", "✗", "#FF0000", "#FFFFFF"),         # red
+    StatusLevel.INVALID: ("#EB00EB", "?", "#EB00EB", "#FFFFFF"),       # magenta
+    StatusLevel.DISCONNECTED: ("#FFFFFF", "—", "#9aa0a5", "#55606a"),  # white
 }
 
 # Word labels shown in the large aggregate cell box (the small dropdown-menu
 # icons keep the glyphs from _LEVEL_STYLE above).
 _LEVEL_TEXT: dict[StatusLevel, str] = {
-    StatusLevel.OK: "OK",
-    StatusLevel.WARN: "Warning",
-    StatusLevel.FAULT: "Error",
-    StatusLevel.NONE: "Disconnected",
+    StatusLevel.NO_ALARM: "OK",
+    StatusLevel.MINOR: "Warning",
+    StatusLevel.MAJOR: "Error",
+    StatusLevel.INVALID: "Invalid",
+    StatusLevel.DISCONNECTED: "Disconnected",
 }
 
 
 def status_icon(level: "StatusLevel", size: int = 16) -> QIcon:
     """Build a circular status-colored :class:`QIcon` for a menu entry."""
-    fill, glyph, border = _LEVEL_STYLE[level]
+    fill, glyph, border, text_color = _LEVEL_STYLE[level]
     pixmap = QPixmap(size, size)
     pixmap.fill(Qt.transparent)
     painter = QPainter(pixmap)
@@ -141,7 +138,6 @@ def status_icon(level: "StatusLevel", size: int = 16) -> QIcon:
     painter.setBrush(QColor(fill))
     painter.setPen(QPen(QColor(border), 1))
     painter.drawEllipse(rect)
-    text_color = "#525252" if level == StatusLevel.NONE else "#ffffff"
     painter.setPen(QColor(text_color))
     font = painter.font()
     font.setBold(True)
@@ -166,7 +162,7 @@ class StatusIndicator(QWidget):
 
     def __init__(self, parent: QWidget | None = None, *, size: int = 18, stretch: bool = False):
         super().__init__(parent)
-        self._level = StatusLevel.NONE
+        self._level = StatusLevel.NO_ALARM
         self._empty = False
         self._size = size
         if stretch:
@@ -175,7 +171,7 @@ class StatusIndicator(QWidget):
             self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
             # Wide enough that the longest status word ("Disconnected") fits.
             self.setMinimumWidth(
-                QFontMetrics(self._label_font()).horizontalAdvance(_LEVEL_TEXT[StatusLevel.NONE]) + 16
+                QFontMetrics(self._label_font()).horizontalAdvance(_LEVEL_TEXT[StatusLevel.DISCONNECTED]) + 16
             )
         else:
             self.setFixedSize(size, size)
@@ -216,20 +212,26 @@ class StatusIndicator(QWidget):
             self.update()
 
     def paintEvent(self, event):
-        fill, _glyph, border = _LEVEL_STYLE[self._level]
         painter = QPainter(self)
         painter.setRenderHint(QPainter.Antialiasing, False)
         rect = self.rect().adjusted(1, 1, -1, -1)
+
+        if self._empty:
+            # No devices configured: a neutral blank box, no word.
+            painter.setBrush(QColor("#f4f4f4"))
+            painter.setPen(QPen(QColor("#e0e0e0"), 1))
+            painter.drawRect(rect)
+            painter.end()
+            return
+
+        fill, _glyph, border, text_color = _LEVEL_STYLE[self._level]
         painter.setBrush(QColor(fill))
         painter.setPen(QPen(QColor(border), 1))
         painter.drawRect(rect)
 
-        # Empty cells (no devices) stay blank; otherwise show the status word.
-        if not self._empty:
-            text_color = "#525252" if self._level == StatusLevel.NONE else "#ffffff"
-            painter.setPen(QColor(text_color))
-            painter.setFont(self._label_font())
-            painter.drawText(rect, Qt.AlignCenter, _LEVEL_TEXT[self._level])
+        painter.setPen(QColor(text_color))
+        painter.setFont(self._label_font())
+        painter.drawText(rect, Qt.AlignCenter, _LEVEL_TEXT[self._level])
         painter.end()
 
 
