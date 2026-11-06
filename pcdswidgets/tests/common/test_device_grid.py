@@ -176,6 +176,42 @@ def test_menu_lists_devices_with_location(grid):
     assert entries == [("MR1L0", "FEE"), ("MR2L0", "FEE")]
 
 
+def test_typhos_key_sets_device_name(qtbot, tmp_path):
+    # A device with a `typhos:` key records the happi name and still builds /
+    # triggers safely (open_detail is a logged no-op when typhos is absent).
+    config_file = tmp_path / "typhos.yaml"
+    config_file.write_text(
+        textwrap.dedent(
+            """
+            columns: [FEE]
+            rows:
+              - category: Mirrors
+                cells:
+                  FEE:
+                    - name: MR1K1
+                      channels:
+                        - "ca://MR1K1:BEND:MMS:PITCH"
+                        - "ca://MR1K1:BEND:MMS:US"
+                      typhos: mr1k1_bend
+            """
+        )
+    )
+    grid = DeviceGrid()
+    qtbot.addWidget(grid)
+    grid.configFile = str(config_file)
+
+    device = grid._row_cells["Mirrors"][0].devices[0]
+    assert device.name == "MR1K1"
+    assert device.typhos_name == "mr1k1_bend"
+    assert device.detail is None
+    assert len(device.addresses) == 2
+    # Triggering the menu action must not raise even without happi/typhos.
+    menu = grid._row_menus["Mirrors"]
+    for a in menu.actions():
+        if isinstance(a.data(), DeviceStatus):
+            a.trigger()
+
+
 def test_menu_entry_triggers_open_detail(grid):
     menu = grid._row_menus["Mirrors"]
     device_actions = [a for a in menu.actions() if isinstance(a.data(), DeviceStatus)]

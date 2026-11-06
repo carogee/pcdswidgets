@@ -229,6 +229,7 @@ class DeviceStatus(QObject):
         *,
         detail: str | None = None,
         macros: dict[str, Any] | None = None,
+        typhos_name: str | None = None,
         location: str = "",
         parent: QObject | None = None,
     ):
@@ -241,6 +242,7 @@ class DeviceStatus(QObject):
             self.addresses = [c for c in channels if c]
         self.detail = detail
         self.macros = macros or {}
+        self.typhos_name = typhos_name
         self.location = location
 
         # Per-address (severity, connected) state, keyed by address.
@@ -305,13 +307,49 @@ class DeviceStatus(QObject):
         self.changed.emit()
 
     def open_detail(self) -> None:
-        """Open (or raise) this device's detailed PyDM screen."""
-        if not self.detail:
-            return
+        """
+        Open (or raise) this device's detail screen.
+
+        A ``detail`` PyDM ``.ui`` (opened with macro substitution) takes
+        precedence; if none is configured, fall back to the Typhos device
+        display named by ``typhos_name`` (a happi device name).  Does nothing
+        if neither is configured.
+        """
         if self._display is not None:
             self._display.show()
             self._display.raise_()
             return
+        if self.detail:
+            self._open_ui()
+        elif self.typhos_name:
+            self._open_typhos()
+
+    def _open_typhos(self) -> None:
+        """Open a Typhos device display, loaded from happi by name."""
+        # happi/typhos are optional runtime deps; reuse the IndicatorGrid
+        # helpers so we get the same client caching and display construction.
+        try:
+            from pcdswidgets.common.dock.indicator_grid import display_for_device, get_happi_client
+        except ImportError:
+            logger.error("Cannot open Typhos screen for %s: happi/typhos not available", self.name)
+            return
+        try:
+            results = get_happi_client().search(name=self.typhos_name)
+            if not results:
+                logger.error("No happi device named %r for %s", self.typhos_name, self.name)
+                return
+            device = results[0].get()
+            display = display_for_device(device)
+        except Exception:
+            logger.exception("Failed to open Typhos screen for %s (%s)", self.name, self.typhos_name)
+            return
+        display.setWindowTitle(self.name)
+        self._display = display
+        display.show()
+        display.raise_()
+
+    def _open_ui(self) -> None:
+        """Open the configured PyDM ``.ui`` detail screen with macros."""
         display = PyDMEmbeddedDisplay()
         macros = self.macros
         if isinstance(macros, dict):
@@ -678,6 +716,7 @@ class DeviceGrid(QWidget):
             channels=channels,
             detail=detail,
             macros=cfg.get("macros"),
+            typhos_name=cfg.get("typhos"),
             location=location,
             parent=self,
         )

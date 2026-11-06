@@ -17,19 +17,35 @@ rows:
   - category: Mirrors
     cells:
       FEE:
-        - {name: MR1L0, channel: "loc://mr1l0?type=int&init=0"}
-        - {name: MR2L0, channel: "loc://mr2l0?type=int&init=0"}
+        # A device may watch several PVs via `channels`; its status is the worst
+        # across all of them, shown as ONE combined menu entry.  The `typhos`
+        # key opens that happi device's Typhos screen on click (needs happi +
+        # typhos at runtime; the live status via ca:// works regardless).
+        - name: MR1K1
+          channels:
+            - "ca://MR1K1:BEND:MMS:PITCH"
+            - "ca://MR1K1:BEND:MMS:US"
+            - "ca://MR1K1:BEND:MMS:DS"
+            - "ca://MR1K1:BEND:MMS:YUP"
+            - "ca://MR1K1:BEND:MMS:YDWN"
+            - "ca://MR1K1:BEND:MMS:XUP"
+            - "ca://MR1K1:BEND:MMS:XDWN"
+          typhos: mr1k1_bend
+        - name: MR1K2
+          channels:
+            - "ca://MR1K2:SWITCH:MMS:PITCH"
+            - "ca://MR1K2:SWITCH:MMS:YLEFT"
+            - "ca://MR1K2:SWITCH:MMS:YRIGHT"
+            - "ca://MR1K2:SWITCH:MMS:XUP"
+            - "ca://MR1K2:SWITCH:MMS:XDWN"
+          typhos: mr1k2_switch
   - category: Slits
     cells:
+      # SL1K0/SL2K0 are PowerSlits with four blade motors and no device-level
+      # summary PV, so each lists its four blades and shows as ONE combined
+      # entry whose color aggregates TOP/BOTTOM/NORTH/SOUTH.  `detail` opens the
+      # macro-driven slit.ui; `macros` fills its ${prefix} placeholder.
       EBD:
-        # SL1K0 is one slit with four blade motors and no device-level summary
-        # PV.  A single device entry can watch multiple PVs via `channels`; its
-        # status is the worst across all of them.  So SL1K0 shows up as ONE menu
-        # entry whose color aggregates TOP/BOTTOM/NORTH/SOUTH.
-        #
-        # `detail` is the .ui opened when the entry is clicked (any .ui you like
-        # -- here the Beckhoff slit screen), and `macros` fills its ${...}
-        # placeholders.  The path is relative to this config file, or absolute.
         - name: SL1K0
           channels:
             - "ca://SL1K0:POWER:MMS:TOP"
@@ -38,6 +54,15 @@ rows:
             - "ca://SL1K0:POWER:MMS:SOUTH"
           detail: "slit.ui"
           macros: {prefix: "SL1K0:POWER"}
+      FEE:
+        - name: SL2K0
+          channels:
+            - "ca://SL2K0:POWER:MMS:TOP"
+            - "ca://SL2K0:POWER:MMS:BOTTOM"
+            - "ca://SL2K0:POWER:MMS:NORTH"
+            - "ca://SL2K0:POWER:MMS:SOUTH"
+          detail: "slit.ui"
+          macros: {prefix: "SL2K0:POWER"}
   - category: Attenuators
     cells:
       FEE:
