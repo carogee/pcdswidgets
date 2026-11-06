@@ -48,7 +48,7 @@ from pydm.utilities import find_file, is_qt_designer
 from pydm.widgets import PyDMEmbeddedDisplay
 from pydm.widgets.channel import PyDMChannel
 from qtpy.QtCore import Property, QObject, QSize, Qt, Signal
-from qtpy.QtGui import QColor, QFont, QIcon, QPainter, QPen, QPixmap
+from qtpy.QtGui import QColor, QFont, QFontMetrics, QIcon, QPainter, QPen, QPixmap
 from qtpy.QtWidgets import (
     QGridLayout,
     QHBoxLayout,
@@ -120,6 +120,15 @@ _LEVEL_STYLE: dict[StatusLevel, tuple[str, str, str]] = {
     StatusLevel.NONE: ("#f4f4f4", "—", "#e0e0e0"),   # em dash
 }
 
+# Word labels shown in the large aggregate cell box (the small dropdown-menu
+# icons keep the glyphs from _LEVEL_STYLE above).
+_LEVEL_TEXT: dict[StatusLevel, str] = {
+    StatusLevel.OK: "OK",
+    StatusLevel.WARN: "Warning",
+    StatusLevel.FAULT: "Error",
+    StatusLevel.NONE: "Disconnected",
+}
+
 
 def status_icon(level: "StatusLevel", size: int = 16) -> QIcon:
     """Build a circular status-colored :class:`QIcon` for a menu entry."""
@@ -145,11 +154,12 @@ def status_icon(level: "StatusLevel", size: int = 16) -> QIcon:
 
 class StatusIndicator(QWidget):
     """
-    A small painted square showing a single :class:`StatusLevel`.
+    The large aggregate status box for a grid cell.
 
-    Drawn with square corners (no border radius) to match the Carbon theme.
-    Used for the aggregate box in each grid cell.  The ``level`` property drives
-    a repaint.  Emits :attr:`clicked` on a left mouse press.
+    Drawn with square corners (no border radius) to match the Carbon theme and
+    labelled with the status word ("OK" / "Warning" / "Error" / "Disconnected").
+    A cell with no configured devices renders as an empty box (no word).  The
+    ``level`` property drives a repaint; emits :attr:`clicked` on a left press.
     """
 
     clicked = Signal()
@@ -157,13 +167,24 @@ class StatusIndicator(QWidget):
     def __init__(self, parent: QWidget | None = None, *, size: int = 18, stretch: bool = False):
         super().__init__(parent)
         self._level = StatusLevel.NONE
+        self._empty = False
         self._size = size
         if stretch:
             # Fixed height, free to grow in width (used for the cell aggregate box).
             self.setFixedHeight(size)
             self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
+            # Wide enough that the longest status word ("Disconnected") fits.
+            self.setMinimumWidth(
+                QFontMetrics(self._label_font()).horizontalAdvance(_LEVEL_TEXT[StatusLevel.NONE]) + 16
+            )
         else:
             self.setFixedSize(size, size)
+
+    def _label_font(self) -> QFont:
+        font = QFont()
+        font.setBold(True)
+        font.setPointSize(max(8, int(self._size * 0.5)))
+        return font
 
     def mousePressEvent(self, event):
         super().mousePressEvent(event)
@@ -180,15 +201,22 @@ class StatusIndicator(QWidget):
         level = StatusLevel(level)
         if level != self._level:
             self._level = level
-            self.setToolTip(self._level.name)
+            self.setToolTip("" if self._empty else _LEVEL_TEXT[self._level])
             self.update()
 
     # designable=False: this is a runtime-driven display property, not something
     # to set in Qt Designer.
     level = Property(int, get_level, set_level, designable=False)
 
+    def set_empty(self, empty: bool) -> None:
+        """Mark the box as having no devices, so it renders blank (no word)."""
+        if empty != self._empty:
+            self._empty = empty
+            self.setToolTip("" if self._empty else _LEVEL_TEXT[self._level])
+            self.update()
+
     def paintEvent(self, event):
-        fill, glyph, border = _LEVEL_STYLE[self._level]
+        fill, _glyph, border = _LEVEL_STYLE[self._level]
         painter = QPainter(self)
         painter.setRenderHint(QPainter.Antialiasing, False)
         rect = self.rect().adjusted(1, 1, -1, -1)
@@ -196,14 +224,12 @@ class StatusIndicator(QWidget):
         painter.setPen(QPen(QColor(border), 1))
         painter.drawRect(rect)
 
-        # Glyph: dark text on the blank box, white on colored boxes.
-        text_color = "#525252" if self._level == StatusLevel.NONE else "#ffffff"
-        painter.setPen(QColor(text_color))
-        font = painter.font()
-        font.setBold(True)
-        font.setPointSize(max(8, int(self._size * 0.55)))
-        painter.setFont(font)
-        painter.drawText(rect, Qt.AlignCenter, glyph)
+        # Empty cells (no devices) stay blank; otherwise show the status word.
+        if not self._empty:
+            text_color = "#525252" if self._level == StatusLevel.NONE else "#ffffff"
+            painter.setPen(QColor(text_color))
+            painter.setFont(self._label_font())
+            painter.drawText(rect, Qt.AlignCenter, _LEVEL_TEXT[self._level])
         painter.end()
 
 
@@ -409,6 +435,7 @@ class DeviceGridCell(QWidget):
 
     def update_aggregate(self) -> None:
         """Recompute the aggregate indicator from the children's levels."""
+        self.aggregate.set_empty(not self.devices)
         self.aggregate.set_level(StatusLevel.worst([d.level for d in self.devices]))
 
     def create_channels(self) -> None:

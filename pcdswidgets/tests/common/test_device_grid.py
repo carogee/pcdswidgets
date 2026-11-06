@@ -34,6 +34,23 @@ CONFIG = textwrap.dedent(
 )
 
 
+def test_level_word_labels():
+    from pcdswidgets.common.device_grid.device_grid import _LEVEL_TEXT
+
+    assert _LEVEL_TEXT[StatusLevel.OK] == "OK"
+    assert _LEVEL_TEXT[StatusLevel.WARN] == "Warning"
+    assert _LEVEL_TEXT[StatusLevel.FAULT] == "Error"
+    assert _LEVEL_TEXT[StatusLevel.NONE] == "Disconnected"
+
+
+def test_cell_aggregate_marks_empty(grid):
+    # A cell with no devices renders blank (set_empty True); one with devices
+    # does not.
+    mirrors_ebd, mirrors_fee = grid._row_cells["Mirrors"]
+    assert mirrors_ebd.aggregate._empty is True
+    assert mirrors_fee.aggregate._empty is False
+
+
 # -- StatusLevel: pure logic (no Qt) --------------------------------------
 def test_from_severity_connected():
     assert StatusLevel.from_severity(0, True) is StatusLevel.OK
