@@ -706,10 +706,15 @@ class DeviceGrid(QWidget):
         header_layout.setContentsMargins(8, 1, 4, 1)
         header_layout.setSpacing(4)
 
+        # A filled down-triangle drawn as text so we control its color (the
+        # theme's native QToolButton arrow renders too light to see here).
         arrow = QToolButton(header)
-        arrow.setArrowType(Qt.DownArrow)
+        arrow.setText("▾")  # ▾ black down-pointing small triangle
         arrow.setFocusPolicy(Qt.NoFocus)
-        arrow.setStyleSheet("QToolButton { border: none; background: transparent; }")
+        arrow.setStyleSheet(
+            "QToolButton { border: none; background: transparent; color: #393939; font-size: 14px; }"
+            "QToolButton:hover { color: #0f62fe; }"
+        )
         arrow.setCursor(Qt.PointingHandCursor)
         header_layout.addWidget(arrow)
 
