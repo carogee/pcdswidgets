@@ -95,7 +95,7 @@
   <customwidget>
    <class>AlarmGrid</class>
    <extends>QWidget</extends>
-   <header>pcdswidgets.common.alarm_grid.alarm_grid</header>
+   <header>pcdswidgets.common.dock.alarm_grid</header>
   </customwidget>
   <customwidget>
    <class>TabDock</class>

@@ -33,7 +33,7 @@ write_to = "pcdswidgets/_version.py"
 
 [project.entry-points."pydm.widget"]
 AcquisitionControlFull = "pcdswidgets.imaging.common.acquisition_control_full:AcquisitionControlFull"
-AlarmGrid = "pcdswidgets.common.alarm_grid.alarm_grid:AlarmGrid"
+AlarmGrid = "pcdswidgets.common.dock.alarm_grid:AlarmGrid"
 ApertureValve = "pcdswidgets.vacuum.valves:ApertureValve"
 CameraViewerStretch = "pcdswidgets.imaging.common.camera_viewer_stretch:CameraViewerStretch"
 CapacitanceManometerGauge = "pcdswidgets.vacuum.gauges:CapacitanceManometerGauge"

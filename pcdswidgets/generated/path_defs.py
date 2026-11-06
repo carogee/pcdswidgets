@@ -57,7 +57,7 @@ WIDGET_PATHS = {
     "ControlOnlyValveNC": "pcdswidgets.vacuum.valves:ControlOnlyValveNC",
     "ControlOnlyValveNO": "pcdswidgets.vacuum.valves:ControlOnlyValveNO",
     "ControlValve": "pcdswidgets.vacuum.valves:ControlValve",
-    "AlarmGrid": "pcdswidgets.common.alarm_grid.alarm_grid:AlarmGrid",
+    "AlarmGrid": "pcdswidgets.common.dock.alarm_grid:AlarmGrid",
     "EPSByteIndicator": "pcdswidgets.eps_byteindicator:EPSByteIndicator",
     "EpicsRoiFull": "pcdswidgets.imaging.common.epics_roi_full:EpicsRoiFull",
     "ExposureTimingControlFull": "pcdswidgets.imaging.common.exposure_timing_control_full:ExposureTimingControlFull",

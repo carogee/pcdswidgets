@@ -5,7 +5,7 @@ import textwrap
 import pytest
 from pytestqt.qtbot import QtBot
 
-from pcdswidgets.common.alarm_grid.alarm_grid import (
+from pcdswidgets.common.dock.alarm_grid import (
     AlarmGrid,
     AlarmGridCell,
     DeviceStatus,
@@ -35,7 +35,7 @@ CONFIG = textwrap.dedent(
 
 
 def test_level_word_labels():
-    from pcdswidgets.common.alarm_grid.alarm_grid import _LEVEL_TEXT
+    from pcdswidgets.common.dock.alarm_grid import _LEVEL_TEXT
 
     assert _LEVEL_TEXT[StatusLevel.NO_ALARM] == "OK"
     assert _LEVEL_TEXT[StatusLevel.MINOR] == "Warning"
