@@ -308,48 +308,69 @@ class DeviceStatus(QObject):
 
     def open_detail(self) -> None:
         """
-        Open (or raise) this device's detail screen.
+        Open this device's detail screen, docking it like the KFE/LFE home.
 
         A ``detail`` PyDM ``.ui`` (opened with macro substitution) takes
         precedence; if none is configured, fall back to the Typhos device
         display named by ``typhos_name`` (a happi device name).  Does nothing
         if neither is configured.
-        """
-        if self._display is not None:
-            self._display.show()
-            self._display.raise_()
-            return
-        if self.detail:
-            self._open_ui()
-        elif self.typhos_name:
-            self._open_typhos()
 
-    def _open_typhos(self) -> None:
-        """Open a Typhos device display, loaded from happi by name."""
-        # happi/typhos are optional runtime deps; reuse the IndicatorGrid
-        # helpers so we get the same client caching and display construction.
-        try:
-            from pcdswidgets.common.dock.indicator_grid import display_for_device, get_happi_client
-        except ImportError:
-            logger.error("Cannot open Typhos screen for %s: happi/typhos not available", self.name)
+        The screen is handed to a :class:`TabDock` via
+        ``add_to_dock_user_keybinds`` -- exactly how ``IndicatorGrid`` opens
+        device screens on the KFE home screen -- so it docks as a tab (Ctrl =
+        new tab, Shift = new window).  If no ``TabDock`` exists on the screen,
+        we fall back to a floating window.
+        """
+        if self.detail:
+            builder = self._build_ui_display
+        elif self.typhos_name:
+            # Fail fast (and quietly) if the optional deps are missing, so we
+            # never hand the dock a builder that will raise.
+            try:
+                import happi  # noqa: F401
+                import typhos  # noqa: F401
+            except ImportError:
+                logger.error("Cannot open Typhos screen for %s: happi/typhos not available", self.name)
+                return
+            builder = self._build_typhos_display
+        else:
             return
+        self._dock(builder)
+
+    def _dock(self, builder) -> None:
+        """Dock the builder's widget into the TabDock, or float it if none."""
+        from pcdswidgets.common.dock.tab_dock import TabDock
+
+        if TabDock.dock_exists():
+            TabDock.add_to_dock_user_keybinds(widget=builder, title=self.name)
+        else:
+            # No dock on this screen: build and show as a standalone window.
+            widget = builder()
+            if widget is not None:
+                self._display = widget
+                widget.show()
+                widget.raise_()
+
+    def _build_typhos_display(self) -> "QWidget | None":
+        """Build a Typhos device display, loaded from happi by name."""
+        # Reuse the IndicatorGrid helpers so we get the same client caching and
+        # display construction the KFE/LFE home screen uses.
+        from pcdswidgets.common.dock.indicator_grid import display_for_device, get_happi_client
+
         try:
             results = get_happi_client().search(name=self.typhos_name)
             if not results:
                 logger.error("No happi device named %r for %s", self.typhos_name, self.name)
-                return
-            device = results[0].get()
-            display = display_for_device(device)
+                return None
+            display = display_for_device(results[0].get())
         except Exception:
             logger.exception("Failed to open Typhos screen for %s (%s)", self.name, self.typhos_name)
-            return
+            return None
         display.setWindowTitle(self.name)
-        self._display = display
-        display.show()
-        display.raise_()
+        return display
 
-    def _open_ui(self) -> None:
-        """Open the configured PyDM ``.ui`` detail screen with macros."""
+    def _build_ui_display(self) -> QWidget:
+        """Build the configured PyDM ``.ui`` detail screen with macros."""
         display = PyDMEmbeddedDisplay()
         macros = self.macros
         if isinstance(macros, dict):
@@ -358,12 +379,7 @@ class DeviceStatus(QObject):
             macros = json.dumps(macros)
         display.set_macros_and_filename(self.detail, macros)
         display.setWindowTitle(self.name)
-        display.destroyed.connect(self._clear_display)
-        self._display = display
-        display.show()
-
-    def _clear_display(self, *args) -> None:
-        self._display = None
+        return display
 
 
 class DeviceGridCell(QWidget):
