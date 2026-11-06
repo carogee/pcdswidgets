@@ -1,7 +1,7 @@
 """
 A configurable matrix of device-status indicators.
 
-``DeviceGrid`` lays out a table of device *categories* (rows, grouped under
+``AlarmGrid`` lays out a table of device *categories* (rows, grouped under
 bold section headers) against *locations* (columns).  Each interior cell shows
 a single status box whose color reflects the **worst** EPICS alarm severity of
 the devices configured for that category + location.  Clicking a category's
@@ -410,7 +410,7 @@ class DeviceStatus(QObject):
         return display
 
 
-class DeviceGridCell(QWidget):
+class AlarmGridCell(QWidget):
     """
     A single interior cell of the grid.
 
@@ -494,7 +494,7 @@ class CategoryMenu(QMenu):
                 action.setIcon(status_icon(device.level))
 
 
-class DeviceGrid(QWidget):
+class AlarmGrid(QWidget):
     """
     A matrix of device-status indicators, configured from a YAML file.
 
@@ -517,7 +517,7 @@ class DeviceGrid(QWidget):
         self._config_file = ""
         self._columns: list[str] = []
         # category title -> list of its cells (one per column)
-        self._row_cells: dict[str, list[DeviceGridCell]] = {}
+        self._row_cells: dict[str, list[AlarmGridCell]] = {}
         # category title -> its device dropdown menu / header widget
         self._row_menus: dict[str, CategoryMenu] = {}
         self._row_headers: dict[str, QWidget] = {}
@@ -627,7 +627,7 @@ class DeviceGrid(QWidget):
             with open(path) as fp:
                 return yaml.safe_load(fp)
         except Exception:
-            logger.exception("Failed to load DeviceGrid config %s", path)
+            logger.exception("Failed to load AlarmGrid config %s", path)
             return None
 
     def _load_resolved_config(self) -> "tuple[dict, str] | None":
@@ -639,7 +639,7 @@ class DeviceGrid(QWidget):
             # Could not locate the file yet.  If we have a parent display this
             # is a real error; otherwise showEvent() will retry once attached.
             if self._find_parent_display() is not None or is_qt_designer():
-                logger.error("DeviceGrid could not find config file %r", self._config_file)
+                logger.error("AlarmGrid could not find config file %r", self._config_file)
             return None
         config = self._load_config(path)
         if not config:
@@ -725,9 +725,9 @@ class DeviceGrid(QWidget):
 
         # Build the dropdown menu that lists this category's devices.
         menu = CategoryMenu(title, self)
-        row_cells: list[DeviceGridCell] = []
+        row_cells: list[AlarmGridCell] = []
         for col_idx, col_name in enumerate(self._columns):
-            cell = DeviceGridCell()
+            cell = AlarmGridCell()
             devices = [self._make_device(c, base_dir, col_name) for c in (cells_cfg.get(col_name, []) or [])]
             for device in devices:
                 cell.add_device(device)

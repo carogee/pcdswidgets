@@ -1,13 +1,13 @@
-"""Unit tests for the DeviceGrid widget."""
+"""Unit tests for the AlarmGrid widget."""
 
 import textwrap
 
 import pytest
 from pytestqt.qtbot import QtBot
 
-from pcdswidgets.common.device_grid.device_grid import (
-    DeviceGrid,
-    DeviceGridCell,
+from pcdswidgets.common.alarm_grid.alarm_grid import (
+    AlarmGrid,
+    AlarmGridCell,
     DeviceStatus,
     StatusLevel,
 )
@@ -35,7 +35,7 @@ CONFIG = textwrap.dedent(
 
 
 def test_level_word_labels():
-    from pcdswidgets.common.device_grid.device_grid import _LEVEL_TEXT
+    from pcdswidgets.common.alarm_grid.alarm_grid import _LEVEL_TEXT
 
     assert _LEVEL_TEXT[StatusLevel.NO_ALARM] == "OK"
     assert _LEVEL_TEXT[StatusLevel.MINOR] == "Warning"
@@ -78,13 +78,13 @@ def test_worst():
 
 # -- Cell aggregation -----------------------------------------------------
 @pytest.fixture(scope="function")
-def cell(qtbot: QtBot) -> DeviceGridCell:
-    cell = DeviceGridCell()
+def cell(qtbot: QtBot) -> AlarmGridCell:
+    cell = AlarmGridCell()
     qtbot.addWidget(cell)
     return cell
 
 
-def _add(cell: DeviceGridCell, name: str) -> DeviceStatus:
+def _add(cell: AlarmGridCell, name: str) -> DeviceStatus:
     device = DeviceStatus(name=name, channels=f"loc://{name}?type=int&init=0")
     cell.add_device(device)
     return device
@@ -138,10 +138,10 @@ def test_multi_channel_device_is_worst(qtbot):
 
 # -- Full grid ------------------------------------------------------------
 @pytest.fixture(scope="function")
-def grid(qtbot: QtBot, tmp_path) -> DeviceGrid:
+def grid(qtbot: QtBot, tmp_path) -> AlarmGrid:
     config_file = tmp_path / "grid.yaml"
     config_file.write_text(CONFIG)
-    grid = DeviceGrid()
+    grid = AlarmGrid()
     qtbot.addWidget(grid)
     grid.configFile = str(config_file)
     return grid
@@ -221,7 +221,7 @@ def test_typhos_key_sets_device_name(qtbot, tmp_path):
             """
         )
     )
-    grid = DeviceGrid()
+    grid = AlarmGrid()
     qtbot.addWidget(grid)
     grid.configFile = str(config_file)
 

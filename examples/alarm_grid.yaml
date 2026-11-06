@@ -1,4 +1,4 @@
-# Example DeviceGrid configuration reproducing the beamline status-overview
+# Example AlarmGrid configuration reproducing the beamline status-overview
 # screenshot.  Columns are locations; rows are device categories grouped under
 # bold section headers.
 #

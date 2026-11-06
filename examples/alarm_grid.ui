@@ -55,9 +55,9 @@
         <item>
          <layout class="QVBoxLayout" name="gridColumn">
           <item>
-           <widget class="DeviceGrid" name="deviceGrid">
+           <widget class="AlarmGrid" name="alarmGrid">
             <property name="configFile" stdset="0">
-             <string>device_grid.yaml</string>
+             <string>alarm_grid.yaml</string>
             </property>
            </widget>
           </item>
@@ -93,9 +93,9 @@
    <header>pydm.widgets.label</header>
   </customwidget>
   <customwidget>
-   <class>DeviceGrid</class>
+   <class>AlarmGrid</class>
    <extends>QWidget</extends>
-   <header>pcdswidgets.common.device_grid.device_grid</header>
+   <header>pcdswidgets.common.alarm_grid.alarm_grid</header>
   </customwidget>
   <customwidget>
    <class>TabDock</class>

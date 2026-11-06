@@ -33,6 +33,7 @@ write_to = "pcdswidgets/_version.py"
 
 [project.entry-points."pydm.widget"]
 AcquisitionControlFull = "pcdswidgets.imaging.common.acquisition_control_full:AcquisitionControlFull"
+AlarmGrid = "pcdswidgets.common.alarm_grid.alarm_grid:AlarmGrid"
 ApertureValve = "pcdswidgets.vacuum.valves:ApertureValve"
 CameraViewerStretch = "pcdswidgets.imaging.common.camera_viewer_stretch:CameraViewerStretch"
 CapacitanceManometerGauge = "pcdswidgets.vacuum.gauges:CapacitanceManometerGauge"
@@ -43,7 +44,6 @@ ColormapIntesityControlFull = "pcdswidgets.imaging.common.colormap_intesity_cont
 ControlOnlyValveNC = "pcdswidgets.vacuum.valves:ControlOnlyValveNC"
 ControlOnlyValveNO = "pcdswidgets.vacuum.valves:ControlOnlyValveNO"
 ControlValve = "pcdswidgets.vacuum.valves:ControlValve"
-DeviceGrid = "pcdswidgets.common.device_grid.device_grid:DeviceGrid"
 EPSByteIndicator = "pcdswidgets.eps_byteindicator:EPSByteIndicator"
 EpicsRoiFull = "pcdswidgets.imaging.common.epics_roi_full:EpicsRoiFull"
 ExposureTimingControlFull = "pcdswidgets.imaging.common.exposure_timing_control_full:ExposureTimingControlFull"
