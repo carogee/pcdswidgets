@@ -1,0 +1,216 @@
+"""Unit tests for the DeviceGrid widget."""
+
+import textwrap
+
+import pytest
+from pytestqt.qtbot import QtBot
+
+from pcdswidgets.common.device_grid.device_grid import (
+    DeviceGrid,
+    DeviceGridCell,
+    DeviceStatus,
+    StatusLevel,
+)
+
+CONFIG = textwrap.dedent(
+    """
+    columns: [EBD, FEE]
+    rows:
+      - section: OPTICS SYSTEM
+      - category: Mirrors
+        cells:
+          FEE:
+            - {name: MR1L0, channel: "loc://mr1l0?type=int&init=0"}
+            - {name: MR2L0, channel: "loc://mr2l0?type=int&init=0"}
+          EBD: []
+      - category: Slits
+        cells:
+          EBD:
+            - name: SL1K0
+              channels:
+                - "ca://SL1K0:POWER:MMS:TOP"
+                - "ca://SL1K0:POWER:MMS:BOTTOM"
+    """
+)
+
+
+# -- StatusLevel: pure logic (no Qt) --------------------------------------
+def test_from_severity_connected():
+    assert StatusLevel.from_severity(0, True) is StatusLevel.OK
+    assert StatusLevel.from_severity(1, True) is StatusLevel.WARN
+    assert StatusLevel.from_severity(2, True) is StatusLevel.FAULT
+    assert StatusLevel.from_severity(3, True) is StatusLevel.FAULT
+
+
+def test_from_severity_disconnected_or_unknown():
+    assert StatusLevel.from_severity(0, False) is StatusLevel.NONE
+    assert StatusLevel.from_severity(2, False) is StatusLevel.NONE
+    assert StatusLevel.from_severity(None, True) is StatusLevel.NONE
+
+
+def test_worst():
+    assert StatusLevel.worst([]) is StatusLevel.NONE
+    assert StatusLevel.worst([StatusLevel.OK, StatusLevel.OK]) is StatusLevel.OK
+    assert StatusLevel.worst([StatusLevel.OK, StatusLevel.WARN]) is StatusLevel.WARN
+    assert StatusLevel.worst([StatusLevel.WARN, StatusLevel.FAULT, StatusLevel.OK]) is StatusLevel.FAULT
+    assert StatusLevel.worst([StatusLevel.NONE, StatusLevel.OK]) is StatusLevel.OK
+
+
+# -- Cell aggregation -----------------------------------------------------
+@pytest.fixture(scope="function")
+def cell(qtbot: QtBot) -> DeviceGridCell:
+    cell = DeviceGridCell()
+    qtbot.addWidget(cell)
+    return cell
+
+
+def _add(cell: DeviceGridCell, name: str) -> DeviceStatus:
+    device = DeviceStatus(name=name, channels=f"loc://{name}?type=int&init=0")
+    cell.add_device(device)
+    return device
+
+
+def test_empty_cell_is_none(cell):
+    cell.update_aggregate()
+    assert cell.aggregate.get_level() is StatusLevel.NONE
+
+
+def test_aggregate_updates_with_child_severity(cell):
+    d1 = _add(cell, "d1")
+    d2 = _add(cell, "d2")
+
+    # Both connected + ok -> OK
+    d1.set_status(0, True)
+    d2.set_status(0, True)
+    assert cell.aggregate.get_level() is StatusLevel.OK
+
+    # One goes MINOR -> WARN
+    d2.set_status(1, True)
+    assert cell.aggregate.get_level() is StatusLevel.WARN
+
+    # One goes MAJOR -> FAULT
+    d1.set_status(2, True)
+    assert cell.aggregate.get_level() is StatusLevel.FAULT
+
+    # Disconnect everything -> NONE (blank)
+    d1.set_status(0, False)
+    d2.set_status(0, False)
+    assert cell.aggregate.get_level() is StatusLevel.NONE
+
+
+def test_multi_channel_device_is_worst(qtbot):
+    # One device watching four PVs: its level is the worst across them.
+    device = DeviceStatus(
+        name="SL1K0",
+        channels=[f"ca://SL1K0:POWER:MMS:{b}" for b in ("TOP", "BOTTOM", "NORTH", "SOUTH")],
+    )
+    for addr in device.addresses:
+        device.set_status(0, True, address=addr)
+    assert device.level is StatusLevel.OK
+    device.set_status(2, True, address=device.addresses[1])  # BOTTOM faults
+    assert device.level is StatusLevel.FAULT
+
+
+# -- Full grid ------------------------------------------------------------
+@pytest.fixture(scope="function")
+def grid(qtbot: QtBot, tmp_path) -> DeviceGrid:
+    config_file = tmp_path / "grid.yaml"
+    config_file.write_text(CONFIG)
+    grid = DeviceGrid()
+    qtbot.addWidget(grid)
+    grid.configFile = str(config_file)
+    return grid
+
+
+def test_grid_structure(grid):
+    assert grid.configFile.endswith("grid.yaml")
+    assert grid._columns == ["EBD", "FEE"]
+    # Two category rows were built.
+    assert set(grid._row_cells) == {"Mirrors", "Slits"}
+    # One cell per column in each category row.
+    assert len(grid._row_cells["Mirrors"]) == 2
+    assert len(grid._row_cells["Slits"]) == 2
+
+
+def test_grid_cell_device_counts(grid):
+    mirrors_ebd, mirrors_fee = grid._row_cells["Mirrors"]
+    assert len(mirrors_ebd.devices) == 0  # EBD empty
+    assert len(mirrors_fee.devices) == 2  # MR1L0, MR2L0
+    assert mirrors_ebd.aggregate.get_level() is StatusLevel.NONE
+
+
+def test_grid_channels_registered(grid):
+    # One channel per PV: MR1L0, MR2L0 (1 each) + SL1K0 (2 blade PVs) = 4.
+    assert len(grid.channels()) == 4
+
+
+def test_slits_single_combined_entry(grid):
+    # SL1K0 is a single device/menu entry even though it watches four PVs.
+    slits_ebd = grid._row_cells["Slits"][0]
+    assert len(slits_ebd.devices) == 1
+    device = slits_ebd.devices[0]
+    assert device.name == "SL1K0"
+    assert len(device.addresses) == 2  # the two blade PVs in the test config
+    menu = grid._row_menus["Slits"]
+    device_actions = [a for a in menu.actions() if isinstance(a.data(), DeviceStatus)]
+    assert len(device_actions) == 1
+    assert device_actions[0].data().name == "SL1K0"
+
+
+def test_category_menus_built(grid):
+    # Every category has a dropdown menu; categories with devices have content.
+    assert set(grid._row_menus) == {"Mirrors", "Slits"}
+    assert grid._row_menus["Mirrors"].has_content()
+    assert grid._row_menus["Slits"].has_content()
+
+
+def test_menu_lists_devices_with_location(grid):
+    menu = grid._row_menus["Mirrors"]
+    # Device actions carry a DeviceStatus in their data(); both Mirrors devices
+    # are in the FEE column.
+    entries = [
+        (a.data().name, a.data().location)
+        for a in menu.actions()
+        if isinstance(a.data(), DeviceStatus)
+    ]
+    assert entries == [("MR1L0", "FEE"), ("MR2L0", "FEE")]
+
+
+def test_menu_entry_triggers_open_detail(grid):
+    menu = grid._row_menus["Mirrors"]
+    device_actions = [a for a in menu.actions() if isinstance(a.data(), DeviceStatus)]
+    assert len(device_actions) == 2
+    # Triggering an action should reach its device's open_detail.  With no
+    # ``detail`` configured in the test config, open_detail is a safe no-op, so
+    # this exercises the full signal path without opening a window.
+    for action in device_actions:
+        action.trigger()  # must not raise
+
+
+def test_menu_icons_refresh_on_show(grid):
+    menu = grid._row_menus["Mirrors"]
+    device_actions = [a for a in menu.actions() if isinstance(a.data(), DeviceStatus)]
+    # Drive one device to OK and refresh the icons (what aboutToShow does).
+    device_actions[0].data().set_status(0, True)
+    menu._refresh_icons()
+    assert not device_actions[0].icon().isNull()
+
+
+def test_grid_rebuild_clears_old(grid, tmp_path):
+    new_config = tmp_path / "grid2.yaml"
+    new_config.write_text(
+        textwrap.dedent(
+            """
+            columns: [A]
+            rows:
+              - category: Only
+                cells:
+                  A:
+                    - {name: X, channel: "loc://x?type=int&init=0"}
+            """
+        )
+    )
+    grid.configFile = str(new_config)
+    assert grid._columns == ["A"]
+    assert set(grid._row_cells) == {"Only"}
+    assert len(grid.channels()) == 1

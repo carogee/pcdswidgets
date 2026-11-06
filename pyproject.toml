@@ -43,6 +43,7 @@ ColormapIntesityControlFull = "pcdswidgets.imaging.common.colormap_intesity_cont
 ControlOnlyValveNC = "pcdswidgets.vacuum.valves:ControlOnlyValveNC"
 ControlOnlyValveNO = "pcdswidgets.vacuum.valves:ControlOnlyValveNO"
 ControlValve = "pcdswidgets.vacuum.valves:ControlValve"
+DeviceGrid = "pcdswidgets.common.device_grid.device_grid:DeviceGrid"
 EPSByteIndicator = "pcdswidgets.eps_byteindicator:EPSByteIndicator"
 EpicsRoiFull = "pcdswidgets.imaging.common.epics_roi_full:EpicsRoiFull"
 ExposureTimingControlFull = "pcdswidgets.imaging.common.exposure_timing_control_full:ExposureTimingControlFull"

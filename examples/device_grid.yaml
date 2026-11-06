@@ -1,0 +1,76 @@
+# Example DeviceGrid configuration reproducing the beamline status-overview
+# screenshot.  Columns are locations; rows are device categories grouped under
+# bold section headers.
+#
+# Each device entry needs a `name` and a `channel` (any PV whose alarm severity
+# reflects device health).  Optionally add `detail` (a PyDM .ui screen, relative
+# to this file) and `macros` to open a per-device screen on click.
+#
+# This example uses `loc://` local channels so it can be launched without a live
+# IOC.  Swap these for real `ca://...` PVs in production, and verify the PV
+# suffixes with `caget` -- do not trust the ophyd/pcdsdevices class.
+
+columns: [EBD, FEE]
+
+rows:
+  - section: OPTICS SYSTEM
+  - category: Mirrors
+    cells:
+      FEE:
+        - {name: MR1L0, channel: "loc://mr1l0?type=int&init=0"}
+        - {name: MR2L0, channel: "loc://mr2l0?type=int&init=0"}
+  - category: Slits
+    cells:
+      EBD:
+        # SL1K0 is one slit with four blade motors and no device-level summary
+        # PV.  A single device entry can watch multiple PVs via `channels`; its
+        # status is the worst across all of them.  So SL1K0 shows up as ONE menu
+        # entry whose color aggregates TOP/BOTTOM/NORTH/SOUTH.
+        #
+        # `detail` is the .ui opened when the entry is clicked (any .ui you like
+        # -- here the Beckhoff slit screen), and `macros` fills its ${...}
+        # placeholders.  The path is relative to this config file, or absolute.
+        - name: SL1K0
+          channels:
+            - "ca://SL1K0:POWER:MMS:TOP"
+            - "ca://SL1K0:POWER:MMS:BOTTOM"
+            - "ca://SL1K0:POWER:MMS:NORTH"
+            - "ca://SL1K0:POWER:MMS:SOUTH"
+          detail: "slit.ui"
+          macros: {prefix: "SL1K0:POWER"}
+  - category: Attenuators
+    cells:
+      FEE:
+        - {name: AT1L0, channel: "loc://at1l0?type=int&init=0"}
+  - category: Photon Collimator
+    cells: {}
+
+  - section: BEAM ENERGY
+  - category: Gas ATT
+    cells:
+      FEE:
+        - {name: GATT, channel: "loc://gatt?type=int&init=0"}
+  - category: GMD
+    cells:
+      EBD:
+        - {name: GMD, channel: "loc://gmd?type=int&init=1"}
+  - category: XGMD
+    cells:
+      FEE:
+        - {name: XGMD, channel: "loc://xgmd?type=int&init=0"}
+  - category: Beam stopper
+    cells:
+      EBD:
+        - {name: STOPPER, channel: "loc://stopper?type=int&init=0"}
+
+  - section: ENVIRONMENT
+  - category: Sensors
+    cells:
+      EBD:
+        - {name: ENV1, channel: "loc://env1?type=int&init=0"}
+      FEE:
+        - {name: ENV2, channel: "loc://env2?type=int&init=0"}
+  - category: RTDS
+    cells:
+      EBD:
+        - {name: RTDS, channel: "loc://rtds?type=int&init=2"}

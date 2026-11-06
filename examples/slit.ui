@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Form</class>
+ <widget class="QWidget" name="Form">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>594</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <widget class="MotorClassicFull" name="MotorClassicFull_top">
+   <property name="geometry">
+    <rect>
+     <x>210</x>
+     <y>170</y>
+     <width>400</width>
+     <height>141</height>
+    </rect>
+   </property>
+   <property name="toolTip">
+    <string/>
+   </property>
+   <property name="motor" stdset="0">
+    <string>${prefix}:MMS:TOP</string>
+   </property>
+  </widget>
+  <widget class="MotorClassicFull" name="MotorClassicFull_north">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>310</y>
+     <width>400</width>
+     <height>141</height>
+    </rect>
+   </property>
+   <property name="toolTip">
+    <string/>
+   </property>
+   <property name="motor" stdset="0">
+    <string>${prefix}:MMS:NORTH</string>
+   </property>
+  </widget>
+  <widget class="MotorClassicFull" name="MotorClassicFull_bottom">
+   <property name="geometry">
+    <rect>
+     <x>210</x>
+     <y>450</y>
+     <width>400</width>
+     <height>141</height>
+    </rect>
+   </property>
+   <property name="toolTip">
+    <string/>
+   </property>
+   <property name="motor" stdset="0">
+    <string>${prefix}:MMS:BOTTOM</string>
+   </property>
+  </widget>
+  <widget class="MotorClassicFull" name="MotorClassicFull_south">
+   <property name="geometry">
+    <rect>
+     <x>400</x>
+     <y>310</y>
+     <width>400</width>
+     <height>141</height>
+    </rect>
+   </property>
+   <property name="toolTip">
+    <string/>
+   </property>
+   <property name="motor" stdset="0">
+    <string>${prefix}:MMS:SOUTH</string>
+   </property>
+  </widget>
+  <widget class="MotorBeckhoffSlits" name="MotorBeckhoffSlits">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>50</y>
+     <width>800</width>
+     <height>121</height>
+    </rect>
+   </property>
+   <property name="toolTip">
+    <string/>
+   </property>
+   <property name="prefix" stdset="0">
+    <string>${prefix}</string>
+   </property>
+  </widget>
+  <widget class="PyDMLabel" name="DeviceName">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>10</y>
+     <width>800</width>
+     <height>37</height>
+    </rect>
+   </property>
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="minimumSize">
+    <size>
+     <width>0</width>
+     <height>30</height>
+    </size>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>12</pointsize>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
+   </property>
+   <property name="showUnits">
+    <bool>false</bool>
+   </property>
+   <property name="precisionFromPV">
+    <bool>true</bool>
+   </property>
+   <property name="alarmSensitiveContent">
+    <bool>false</bool>
+   </property>
+   <property name="alarmSensitiveBorder">
+    <bool>false</bool>
+   </property>
+   <property name="channel">
+    <string>ca://${prefix}</string>
+   </property>
+   <property name="displayFormat">
+    <enum>PyDMLabel::String</enum>
+   </property>
+  </widget>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>PyDMLabel</class>
+   <extends>QLabel</extends>
+   <header>pydm.widgets.label</header>
+  </customwidget>
+  <customwidget>
+   <class>MotorBeckhoffSlits</class>
+   <extends>QWidget</extends>
+   <header>pcdswidgets.motion.common.motor_beckhoff_slits</header>
+  </customwidget>
+  <customwidget>
+   <class>MotorClassicFull</class>
+   <extends>QWidget</extends>
+   <header>pcdswidgets.motion.common.motor_classic_full</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>
