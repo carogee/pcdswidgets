@@ -23,21 +23,21 @@ rows:
         # typhos at runtime; the live status via ca:// works regardless).
         - name: MR1K1
           channels:
-            - "ca://MR1K1:BEND:MMS:PITCH"
-            - "ca://MR1K1:BEND:MMS:US"
-            - "ca://MR1K1:BEND:MMS:DS"
-            - "ca://MR1K1:BEND:MMS:YUP"
-            - "ca://MR1K1:BEND:MMS:YDWN"
-            - "ca://MR1K1:BEND:MMS:XUP"
-            - "ca://MR1K1:BEND:MMS:XDWN"
+            - "ca://MR1K1:BEND:MMS:PITCH.RBV"
+            - "ca://MR1K1:BEND:MMS:US.RBV"
+            - "ca://MR1K1:BEND:MMS:DS.RBV"
+            - "ca://MR1K1:BEND:MMS:YUP.RBV"
+            - "ca://MR1K1:BEND:MMS:YDWN.RBV"
+            - "ca://MR1K1:BEND:MMS:XUP.RBV"
+            - "ca://MR1K1:BEND:MMS:XDWN.RBV"
           typhos: mr1k1_bend
         - name: MR1K2
           channels:
-            - "ca://MR1K2:SWITCH:MMS:PITCH"
-            - "ca://MR1K2:SWITCH:MMS:YLEFT"
-            - "ca://MR1K2:SWITCH:MMS:YRIGHT"
-            - "ca://MR1K2:SWITCH:MMS:XUP"
-            - "ca://MR1K2:SWITCH:MMS:XDWN"
+            - "ca://MR1K2:SWITCH:MMS:PITCH.RBV"
+            - "ca://MR1K2:SWITCH:MMS:YLEFT.RBV"
+            - "ca://MR1K2:SWITCH:MMS:YRIGHT.RBV"
+            - "ca://MR1K2:SWITCH:MMS:XUP.RBV"
+            - "ca://MR1K2:SWITCH:MMS:XDWN.RBV"
           typhos: mr1k2_switch
   - category: Slits
     cells:
@@ -48,19 +48,19 @@ rows:
       EBD:
         - name: SL1K0
           channels:
-            - "ca://SL1K0:POWER:MMS:TOP"
-            - "ca://SL1K0:POWER:MMS:BOTTOM"
-            - "ca://SL1K0:POWER:MMS:NORTH"
-            - "ca://SL1K0:POWER:MMS:SOUTH"
+            - "ca://SL1K0:POWER:MMS:TOP.RBV"
+            - "ca://SL1K0:POWER:MMS:BOTTOM.RBV"
+            - "ca://SL1K0:POWER:MMS:NORTH.RBV"
+            - "ca://SL1K0:POWER:MMS:SOUTH.RBV"
           detail: "slit.ui"
           macros: {prefix: "SL1K0:POWER"}
       FEE:
         - name: SL2K0
           channels:
-            - "ca://SL2K0:POWER:MMS:TOP"
-            - "ca://SL2K0:POWER:MMS:BOTTOM"
-            - "ca://SL2K0:POWER:MMS:NORTH"
-            - "ca://SL2K0:POWER:MMS:SOUTH"
+            - "ca://SL2K0:POWER:MMS:TOP.RBV"
+            - "ca://SL2K0:POWER:MMS:BOTTOM.RBV"
+            - "ca://SL2K0:POWER:MMS:NORTH.RBV"
+            - "ca://SL2K0:POWER:MMS:SOUTH.RBV"
           detail: "slit.ui"
           macros: {prefix: "SL2K0:POWER"}
   - category: Attenuators
