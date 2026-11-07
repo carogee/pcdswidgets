@@ -118,7 +118,7 @@ rows:
             - "loc://pf1k0_flow_switch?type=int&init=0"
 
   - section: BEAMLINE
-  - category: TV1L0
+  - category: Vacuum
     cells: {}
 
   - section: ENVIRONMENT
