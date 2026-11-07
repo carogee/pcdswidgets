@@ -588,6 +588,8 @@ class AlarmGrid(QWidget):
         self._row_headers: dict[str, QWidget] = {}
         # cell -> that single cell's device menu (one location only)
         self._cell_menus: dict[AlarmGridCell, CategoryMenu] = {}
+        # collapsible section records (see _add_section_row)
+        self._sections: list[dict] = []
         self._channels: list[PyDMChannel] = []
         # True once we have successfully built from the config; lets showEvent
         # retry a build that failed earlier because the parent display (and thus
@@ -901,6 +903,7 @@ class AlarmGrid(QWidget):
         self._row_menus = {}
         self._cell_menus = {}
         self._row_headers = {}
+        self._sections = []
         self._columns = []
         while self.grid.count():
             item = self.grid.takeAt(0)
@@ -955,12 +958,18 @@ class AlarmGrid(QWidget):
             self.grid.addWidget(self._make_column_header(col_name), 0, col_idx + 1)
 
         row_idx = 1
+        current_section: dict | None = None
         for entry in config.get("rows", []):
             if "section" in entry:
-                self._add_section_row(entry["section"], row_idx)
+                current_section = self._add_section_row(entry["section"], row_idx)
+                row_idx += 1
+                # Hidden per-column summary row, shown when the section collapses.
+                self._add_section_summary(current_section, row_idx)
                 row_idx += 1
             elif "category" in entry:
                 self._add_category_row(entry, row_idx, base_dir)
+                if current_section is not None:
+                    current_section["categories"].append(entry["category"])
                 row_idx += 1
 
         # In a live screen, connect all channels now and register them with PyDM.
@@ -969,9 +978,10 @@ class AlarmGrid(QWidget):
                 cell.create_channels()
             self._channels = [ch for d in self._iter_devices() for ch in d.channels]
 
-        # Keep the list view in sync with device status changes.
+        # Keep the list view and any collapsed section summaries in sync.
         for device in self._iter_devices():
             device.changed.connect(self._schedule_list_refresh)
+            device.changed.connect(self._update_all_section_summaries)
         self._refresh_list()
 
     def _make_column_header(self, text: str) -> QLabel:
@@ -983,13 +993,94 @@ class AlarmGrid(QWidget):
         label.setStyleSheet("QLabel { background-color: #e0e0e0; padding: 4px; }")
         return label
 
-    def _add_section_row(self, text: str, row_idx: int) -> None:
+    def _add_section_row(self, text: str, row_idx: int) -> dict:
+        """
+        Add a collapsible section header spanning all columns.
+
+        Returns a record tracking the section so its category rows can be
+        hidden/shown and a per-column summary box toggled when collapsed.
+        """
+        header = QWidget()
+        header.setCursor(Qt.PointingHandCursor)
+        header.setStyleSheet("QWidget { background-color: #e0e0e0; }")
+        hlayout = QHBoxLayout(header)
+        hlayout.setContentsMargins(6, 3, 4, 3)
+        hlayout.setSpacing(4)
+
+        arrow = QToolButton(header)
+        arrow.setText("▾")  # ▾ expanded / ▸ collapsed
+        arrow.setFocusPolicy(Qt.NoFocus)
+        arrow.setStyleSheet(
+            "QToolButton { border: none; background: transparent; color: #393939; font-size: 14px; }"
+            "QToolButton:hover { color: #0f62fe; }"
+        )
+        arrow.setCursor(Qt.PointingHandCursor)
+        hlayout.addWidget(arrow)
+
         label = QLabel(text)
         font = QFont()
         font.setBold(True)
         label.setFont(font)
-        label.setStyleSheet("QLabel { background-color: #e0e0e0; padding: 4px; }")
-        self.grid.addWidget(label, row_idx, 0, 1, len(self._columns) + 1)
+        label.setStyleSheet("QLabel { background: transparent; }")
+        hlayout.addWidget(label)
+        hlayout.addStretch()
+        self.grid.addWidget(header, row_idx, 0, 1, len(self._columns) + 1)
+
+        record = {
+            "name": text,
+            "header": header,
+            "arrow": arrow,
+            "summary_cells": [],
+            "categories": [],
+            "collapsed": False,
+        }
+        self._sections.append(record)
+        arrow.clicked.connect(lambda _c=False, r=record: self._toggle_section(r))
+        header.mousePressEvent = lambda _ev, r=record: self._toggle_section(r)
+        return record
+
+    def _add_section_summary(self, record: dict, row_idx: int) -> None:
+        """Add the per-column summary boxes shown while the section is collapsed."""
+        for col_idx in range(len(self._columns)):
+            box = StatusIndicator(size=20, stretch=True)
+            box.setVisible(False)
+            self.grid.addWidget(box, row_idx, col_idx + 1)
+            record["summary_cells"].append(box)
+
+    def _toggle_section(self, record: dict) -> None:
+        collapsed = not record["collapsed"]
+        record["collapsed"] = collapsed
+        record["arrow"].setText("▸" if collapsed else "▾")
+        # Hide/show every category row that belongs to this section.
+        for title in record["categories"]:
+            header = self._row_headers.get(title)
+            if header is not None:
+                header.setVisible(not collapsed)
+            for cell in self._row_cells.get(title, []):
+                cell.setVisible(not collapsed)
+        # Show the per-column summary boxes only while collapsed.
+        for box in record["summary_cells"]:
+            box.setVisible(collapsed)
+        if collapsed:
+            self._update_section_summary(record)
+
+    def _update_section_summary(self, record: dict) -> None:
+        """Set each summary box to the worst status across the section's column."""
+        for col_idx, box in enumerate(record["summary_cells"]):
+            levels: list[StatusLevel] = []
+            has_devices = False
+            for title in record["categories"]:
+                cells = self._row_cells.get(title, [])
+                if col_idx < len(cells) and cells[col_idx].devices:
+                    has_devices = True
+                    levels.extend(d.level for d in cells[col_idx].devices)
+            box.set_empty(not has_devices)
+            box.set_level(StatusLevel.worst(levels))
+
+    def _update_all_section_summaries(self) -> None:
+        for record in self._sections:
+            if record["collapsed"]:
+                self._update_section_summary(record)
 
     def _add_category_row(self, entry: dict, row_idx: int, base_dir: str) -> None:
         title = entry["category"]

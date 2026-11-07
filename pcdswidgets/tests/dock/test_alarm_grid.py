@@ -292,6 +292,33 @@ def test_grid_rebuild_clears_old(grid, tmp_path):
     assert len(grid.channels()) == 1
 
 
+def test_section_collapse_shows_summary(grid):
+    # Find the OPTICS SYSTEM section (contains Mirrors + Slits + ...).
+    section = next(s for s in grid._sections if s["name"] == "OPTICS SYSTEM")
+    assert section["collapsed"] is False
+    # Expanded: category rows visible, summary boxes hidden.
+    assert grid._row_headers["Mirrors"].isVisibleTo(grid)
+    assert all(not box.isVisibleTo(grid) for box in section["summary_cells"])
+
+    # Drive devices: MR1K-equivalents are in the test config as MR1L0 (FEE, MAJOR).
+    _set(_dev(grid, "MR1L0"), 2)
+    _set(_dev(grid, "MR2L0"), 1)
+
+    grid._toggle_section(section)
+    assert section["collapsed"] is True
+    # Collapsed: category rows hidden, summary boxes shown.
+    assert not grid._row_headers["Mirrors"].isVisibleTo(grid)
+    assert all(box.isVisibleTo(grid) for box in section["summary_cells"])
+    # FEE column summary = worst of its section devices (MR1L0 MAJOR, MR2L0 MINOR).
+    fee_idx = grid._columns.index("FEE")
+    assert section["summary_cells"][fee_idx].get_level() is StatusLevel.MAJOR
+
+    # Toggling back expands again.
+    grid._toggle_section(section)
+    assert section["collapsed"] is False
+    assert all(not box.isVisibleTo(grid) for box in section["summary_cells"])
+
+
 # -- List view ------------------------------------------------------------
 def _dev(grid: AlarmGrid, name: str) -> DeviceStatus:
     return next(d for d in grid._iter_devices() if d.name == name)
