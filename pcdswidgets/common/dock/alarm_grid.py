@@ -529,6 +529,31 @@ class CategoryMenu(QMenu):
                 action.setIcon(status_icon(device.level))
 
 
+class _ListTable(QTableWidget):
+    """
+    QTableWidget whose Device column never gets condensed.
+
+    Every other column sizes to its content; the Device column takes all the
+    remaining width but never shrinks below ``device_min`` (a horizontal
+    scrollbar appears instead), so device names stay readable even when the
+    widget is narrow.
+    """
+
+    device_col = 1
+    device_min = 160
+
+    def resizeEvent(self, event):
+        super().resizeEvent(event)
+        self.fit_device_column()
+
+    def fit_device_column(self) -> None:
+        others = sum(
+            self.columnWidth(c) for c in range(self.columnCount()) if c != self.device_col
+        )
+        avail = self.viewport().width() - others
+        self.setColumnWidth(self.device_col, max(self.device_min, avail))
+
+
 class AlarmGrid(QWidget):
     """
     A matrix of device-status indicators, configured from a YAML file.
@@ -549,7 +574,7 @@ class AlarmGrid(QWidget):
 
     # List-view columns.
     _COL_STATE, _COL_DEVICE, _COL_CATEGORY, _COL_LOCATION, _COL_STATUS, _COL_ACK, _COL_ACKTIME = range(7)
-    _LIST_HEADERS = ["", "Device", "Category", "Location", "Status", "Acknowledge", "Ack Time"]
+    _LIST_HEADERS = ["", "Device", "Category", "Location", "Status", "Ack", "Ack Time"]
     _ACK_TIME_FMT = "%Y-%m-%d %H:%M:%S"
 
     def __init__(self, parent: QWidget | None = None):
@@ -649,15 +674,18 @@ class AlarmGrid(QWidget):
         controls.addWidget(self._count_label)
         vbox.addLayout(controls)
 
-        self._table = QTableWidget(0, len(self._LIST_HEADERS))
+        self._table = _ListTable(0, len(self._LIST_HEADERS))
+        self._table.device_col = self._COL_DEVICE
         self._table.setHorizontalHeaderLabels(self._LIST_HEADERS)
         self._table.verticalHeader().setVisible(False)
         self._table.setSelectionMode(QTableWidget.NoSelection)
         self._table.setEditTriggers(QTableWidget.NoEditTriggers)
         self._table.setShowGrid(False)
         header = self._table.horizontalHeader()
+        # Every column hugs its content; the Device column (handled by
+        # _ListTable) takes the slack but never collapses below its minimum.
         header.setSectionResizeMode(QHeaderView.ResizeToContents)
-        header.setSectionResizeMode(self._COL_DEVICE, QHeaderView.Stretch)
+        header.setSectionResizeMode(self._COL_DEVICE, QHeaderView.Interactive)
         header.setSectionsClickable(True)
         header.sectionClicked.connect(self._on_header_clicked)
         self._table.cellClicked.connect(self._on_cell_clicked)
@@ -707,6 +735,7 @@ class AlarmGrid(QWidget):
         self._count_label.setText(f"{count} device{'' if count == 1 else 's'}")
         self._update_ack_all()
         self._apply_filter(self._filter_edit.text())
+        self._table.fit_device_column()
 
     def _fill_list_row(self, row: int, device: DeviceStatus) -> None:
         table = self._table
