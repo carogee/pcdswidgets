@@ -47,6 +47,7 @@ SCREEN_PATHS = {
 }
 WIDGET_PATHS = {
     "AcquisitionControlFull": "pcdswidgets.imaging.common.acquisition_control_full:AcquisitionControlFull",
+    "AlarmGrid": "pcdswidgets.common.dock.alarm_grid:AlarmGrid",
     "ApertureValve": "pcdswidgets.vacuum.valves:ApertureValve",
     "CameraViewerStretch": "pcdswidgets.imaging.common.camera_viewer_stretch:CameraViewerStretch",
     "CapacitanceManometerGauge": "pcdswidgets.vacuum.gauges:CapacitanceManometerGauge",
@@ -57,7 +58,6 @@ WIDGET_PATHS = {
     "ControlOnlyValveNC": "pcdswidgets.vacuum.valves:ControlOnlyValveNC",
     "ControlOnlyValveNO": "pcdswidgets.vacuum.valves:ControlOnlyValveNO",
     "ControlValve": "pcdswidgets.vacuum.valves:ControlValve",
-    "AlarmGrid": "pcdswidgets.common.dock.alarm_grid:AlarmGrid",
     "EPSByteIndicator": "pcdswidgets.eps_byteindicator:EPSByteIndicator",
     "EpicsRoiFull": "pcdswidgets.imaging.common.epics_roi_full:EpicsRoiFull",
     "ExposureTimingControlFull": "pcdswidgets.imaging.common.exposure_timing_control_full:ExposureTimingControlFull",
