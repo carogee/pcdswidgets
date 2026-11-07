@@ -275,3 +275,93 @@ def test_grid_rebuild_clears_old(grid, tmp_path):
     assert grid._columns == ["A"]
     assert set(grid._row_cells) == {"Only"}
     assert len(grid.channels()) == 1
+
+
+# -- List view ------------------------------------------------------------
+def _dev(grid: AlarmGrid, name: str) -> DeviceStatus:
+    return next(d for d in grid._iter_devices() if d.name == name)
+
+
+def _set(device: DeviceStatus, severity: int, connected: bool = True) -> None:
+    for addr in device.addresses:
+        device.set_status(severity, connected, address=addr)
+
+
+def test_view_toggle_switches_stack(grid):
+    assert grid._stack.currentIndex() == 0  # Grid by default
+    grid._set_view(1)
+    assert grid._stack.currentIndex() == 1
+    grid._set_view(0)
+    assert grid._stack.currentIndex() == 0
+
+
+def test_list_default_sort_severity_desc(grid):
+    _set(_dev(grid, "MR1L0"), 2)  # MAJOR
+    _set(_dev(grid, "MR2L0"), 1)  # MINOR
+    _set(_dev(grid, "SL1K0"), 0)  # NO_ALARM
+    grid._refresh_list()
+    assert [d.name for d in grid._row_devices] == ["MR1L0", "MR2L0", "SL1K0"]
+
+
+def test_acknowledge_sinks_within_severity(grid):
+    _set(_dev(grid, "MR1L0"), 2)  # MAJOR
+    _set(_dev(grid, "MR2L0"), 2)  # MAJOR
+    _set(_dev(grid, "SL1K0"), 0)
+    _dev(grid, "MR1L0").acknowledge()
+    grid._refresh_list()
+    # Both MAJOR, but the acked one sinks below the unacked one.
+    assert [d.name for d in grid._row_devices] == ["MR2L0", "MR1L0", "SL1K0"]
+    assert _dev(grid, "MR1L0").ack_time is not None
+
+
+def test_ack_all_count_and_action(grid):
+    _set(_dev(grid, "MR1L0"), 2)
+    _set(_dev(grid, "MR2L0"), 1)
+    _set(_dev(grid, "SL1K0"), 0)  # OK -> not ackable
+    grid._refresh_list()
+    assert grid._ack_all_btn.text() == "Ack all (2)"
+    assert grid._ack_all_btn.isEnabled()
+    grid._acknowledge_all()
+    assert _dev(grid, "MR1L0").acknowledged and _dev(grid, "MR2L0").acknowledged
+    assert not _dev(grid, "SL1K0").acknowledged  # OK was never ackable
+    assert grid._ack_all_btn.text() == "Ack all (0)"
+    assert not grid._ack_all_btn.isEnabled()
+
+
+def test_ack_clears_when_alarm_clears(grid):
+    device = _dev(grid, "MR1L0")
+    _set(device, 2)
+    device.acknowledge()
+    assert device.acknowledged
+    _set(device, 0)  # alarm clears to OK
+    assert not device.acknowledged
+    assert device.ack_time is None
+
+
+def test_ackable_only_when_alarmed(grid):
+    _set(_dev(grid, "SL1K0"), 0)
+    _set(_dev(grid, "MR1L0"), 2)
+    assert not _dev(grid, "SL1K0").ackable
+    assert _dev(grid, "MR1L0").ackable
+
+
+def test_header_click_sorts_device_column(grid):
+    grid._on_header_clicked(grid._COL_DEVICE)
+    assert grid._sort_col == grid._COL_DEVICE and grid._sort_desc is False
+    names = [d.name for d in grid._row_devices]
+    assert names == sorted(names, key=str.lower)
+    grid._on_header_clicked(grid._COL_DEVICE)  # toggle to descending
+    assert grid._sort_desc is True
+    names_desc = [d.name for d in grid._row_devices]
+    assert names_desc == sorted(names, key=str.lower, reverse=True)
+
+
+def test_filter_hides_nonmatching_rows(grid):
+    grid._refresh_list()
+    grid._apply_filter("MR1L0")
+    visible = [
+        d.name for row, d in enumerate(grid._row_devices) if not grid._table.isRowHidden(row)
+    ]
+    assert visible == ["MR1L0"]
+    grid._apply_filter("")  # cleared -> all visible
+    assert not any(grid._table.isRowHidden(r) for r in range(len(grid._row_devices)))

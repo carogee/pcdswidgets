@@ -41,20 +41,29 @@ import enum
 import functools
 import logging
 import os
+from datetime import datetime
 from typing import Any
 
 import yaml
 from pydm.utilities import find_file, is_qt_designer
 from pydm.widgets import PyDMEmbeddedDisplay
 from pydm.widgets.channel import PyDMChannel
-from qtpy.QtCore import Property, QObject, QSize, Qt, Signal
+from qtpy.QtCore import Property, QObject, QSize, Qt, QTimer, Signal
 from qtpy.QtGui import QColor, QFont, QFontMetrics, QIcon, QPainter, QPen, QPixmap
 from qtpy.QtWidgets import (
+    QButtonGroup,
+    QCheckBox,
     QGridLayout,
     QHBoxLayout,
+    QHeaderView,
     QLabel,
+    QLineEdit,
     QMenu,
+    QPushButton,
     QSizePolicy,
+    QStackedWidget,
+    QTableWidget,
+    QTableWidgetItem,
     QToolButton,
     QVBoxLayout,
     QWidget,
@@ -259,6 +268,7 @@ class DeviceStatus(QObject):
         macros: dict[str, Any] | None = None,
         typhos_name: str | None = None,
         location: str = "",
+        category: str = "",
         parent: QObject | None = None,
     ):
         super().__init__(parent)
@@ -272,6 +282,11 @@ class DeviceStatus(QObject):
         self.macros = macros or {}
         self.typhos_name = typhos_name
         self.location = location
+        self.category = category
+
+        # Acknowledgement state (in-session; cleared when the alarm clears).
+        self.acknowledged = False
+        self.ack_time: datetime | None = None
 
         # Per-address (severity, connected) state, keyed by address.
         self._state: dict[str, tuple[int | None, bool]] = dict.fromkeys(self.addresses, (None, False))
@@ -284,6 +299,19 @@ class DeviceStatus(QObject):
         return StatusLevel.worst(
             [StatusLevel.from_severity(sev, conn) for sev, conn in self._state.values()]
         )
+
+    @property
+    def ackable(self) -> bool:
+        """True if this device is in an alarm state that can be acknowledged."""
+        return self.level != StatusLevel.NO_ALARM
+
+    def acknowledge(self, when: datetime | None = None) -> None:
+        """Mark this device's alarm acknowledged, stamping the time."""
+        if not self.ackable:
+            return
+        self.acknowledged = True
+        self.ack_time = when or datetime.now()
+        self.changed.emit()
 
     def menu_text(self) -> str:
         """The label shown for this device in the dropdown menu."""
@@ -312,12 +340,12 @@ class DeviceStatus(QObject):
     def _connection_changed(self, address: str, conn: bool) -> None:
         sev, _ = self._state.get(address, (None, False))
         self._state[address] = (sev, conn)
-        self.changed.emit()
+        self._state_changed()
 
     def _severity_changed(self, address: str, severity: int) -> None:
         _, conn = self._state.get(address, (None, False))
         self._state[address] = (severity, conn)
-        self.changed.emit()
+        self._state_changed()
 
     def set_status(self, severity: int | None, connected: bool, address: str | None = None) -> None:
         """
@@ -332,6 +360,13 @@ class DeviceStatus(QObject):
                 return
             address = self.addresses[0]
         self._state[address] = (severity, connected)
+        self._state_changed()
+
+    def _state_changed(self) -> None:
+        """Clear a stale acknowledgement if the alarm cleared, then notify."""
+        if self.acknowledged and self.level == StatusLevel.NO_ALARM:
+            self.acknowledged = False
+            self.ack_time = None
         self.changed.emit()
 
     def open_detail(self) -> None:
@@ -512,6 +547,11 @@ class AlarmGrid(QWidget):
         "is_container": False,
     }
 
+    # List-view columns.
+    _COL_STATE, _COL_DEVICE, _COL_CATEGORY, _COL_LOCATION, _COL_STATUS, _COL_ACK, _COL_ACKTIME = range(7)
+    _LIST_HEADERS = ["", "Device", "Category", "Location", "Status", "Acknowledge", "Ack Time"]
+    _ACK_TIME_FMT = "%Y-%m-%d %H:%M:%S"
+
     def __init__(self, parent: QWidget | None = None):
         super().__init__(parent)
         self._config_file = ""
@@ -526,11 +566,220 @@ class AlarmGrid(QWidget):
         # retry a build that failed earlier because the parent display (and thus
         # the base path for relative config paths) was not available yet.
         self._built = False
+        # List-view sort state: default = Status column, descending (worst first).
+        self._sort_col = self._COL_STATUS
+        self._sort_desc = True
 
-        self.grid = QGridLayout(self)
+        # Outer layout: a top bar with the Grid/List toggle, then a stack of the
+        # two views.
+        outer = QVBoxLayout(self)
+        outer.setContentsMargins(0, 0, 0, 0)
+        outer.setSpacing(2)
+        outer.addLayout(self._build_toggle_bar())
+
+        self._stack = QStackedWidget(self)
+        outer.addWidget(self._stack)
+
+        # Page 0: the matrix ("grid") view.
+        self._grid_container = QWidget()
+        self.grid = QGridLayout(self._grid_container)
         self.grid.setContentsMargins(6, 6, 6, 6)
         self.grid.setHorizontalSpacing(1)
         self.grid.setVerticalSpacing(1)
+        self._stack.addWidget(self._grid_container)
+
+        # Page 1: the sortable, acknowledgeable "list" view.
+        self._stack.addWidget(self._build_list_view())
+
+        # Coalesce bursts of channel updates into one list refresh.
+        self._list_timer = QTimer(self)
+        self._list_timer.setSingleShot(True)
+        self._list_timer.setInterval(50)
+        self._list_timer.timeout.connect(self._refresh_list)
+
+    # -- view toggle + list view construction -----------------------------
+    def _build_toggle_bar(self) -> QHBoxLayout:
+        bar = QHBoxLayout()
+        bar.setContentsMargins(6, 2, 6, 0)
+        bar.addStretch()
+        self._view_buttons = QButtonGroup(self)
+        self._view_buttons.setExclusive(True)
+        for idx, text in ((0, "⊞ Grid"), (1, "≡ List")):
+            btn = QToolButton(self)
+            btn.setText(text)
+            btn.setCheckable(True)
+            btn.setCursor(Qt.PointingHandCursor)
+            btn.setFocusPolicy(Qt.NoFocus)
+            btn.setChecked(idx == 0)
+            btn.clicked.connect(lambda _c=False, i=idx: self._set_view(i))
+            self._view_buttons.addButton(btn, idx)
+            bar.addWidget(btn)
+        return bar
+
+    def _set_view(self, index: int) -> None:
+        self._stack.setCurrentIndex(index)
+        btn = self._view_buttons.button(index)
+        if btn is not None:
+            btn.setChecked(True)
+        if index == 1:
+            self._refresh_list()
+
+    def _build_list_view(self) -> QWidget:
+        container = QWidget()
+        vbox = QVBoxLayout(container)
+        vbox.setContentsMargins(6, 2, 6, 6)
+        vbox.setSpacing(4)
+
+        controls = QHBoxLayout()
+        self._filter_edit = QLineEdit()
+        self._filter_edit.setPlaceholderText("Filter devices…")
+        self._filter_edit.setClearButtonEnabled(True)
+        self._filter_edit.setMaximumWidth(240)
+        self._filter_edit.textChanged.connect(self._apply_filter)
+        controls.addWidget(self._filter_edit)
+
+        self._ack_all_btn = QPushButton("Ack all (0)")
+        self._ack_all_btn.setCursor(Qt.PointingHandCursor)
+        self._ack_all_btn.clicked.connect(self._acknowledge_all)
+        controls.addWidget(self._ack_all_btn)
+
+        controls.addStretch()
+        self._count_label = QLabel("0 devices")
+        self._count_label.setStyleSheet("QLabel { color: #525252; }")
+        controls.addWidget(self._count_label)
+        vbox.addLayout(controls)
+
+        self._table = QTableWidget(0, len(self._LIST_HEADERS))
+        self._table.setHorizontalHeaderLabels(self._LIST_HEADERS)
+        self._table.verticalHeader().setVisible(False)
+        self._table.setSelectionMode(QTableWidget.NoSelection)
+        self._table.setEditTriggers(QTableWidget.NoEditTriggers)
+        self._table.setShowGrid(False)
+        header = self._table.horizontalHeader()
+        header.setSectionResizeMode(QHeaderView.ResizeToContents)
+        header.setSectionResizeMode(self._COL_DEVICE, QHeaderView.Stretch)
+        header.setSectionsClickable(True)
+        header.sectionClicked.connect(self._on_header_clicked)
+        vbox.addWidget(self._table)
+        self._row_devices: list[DeviceStatus] = []
+        return container
+
+    # -- list view data / sorting -----------------------------------------
+    def _sorted_devices(self) -> list[DeviceStatus]:
+        """All devices ordered by the current list-view sort."""
+        devices = list(self._iter_devices())
+        col, desc = self._sort_col, self._sort_desc
+        # Stable multi-pass: apply least-significant key first.
+        devices.sort(key=lambda d: d.name.lower())
+        if col in (self._COL_STATE, self._COL_STATUS):
+            # Within a severity, unacked rows always above acked ones, so acking
+            # sinks an alarm to the bottom of its severity band.
+            devices.sort(key=lambda d: d.acknowledged)
+            devices.sort(key=lambda d: d.level.value, reverse=desc)
+        elif col == self._COL_CATEGORY:
+            devices.sort(key=lambda d: d.category.lower(), reverse=desc)
+        elif col == self._COL_LOCATION:
+            devices.sort(key=lambda d: d.location.lower(), reverse=desc)
+        elif col == self._COL_ACK:
+            devices.sort(key=lambda d: d.acknowledged, reverse=desc)
+        elif col == self._COL_ACKTIME:
+            devices.sort(key=lambda d: d.ack_time or datetime.min, reverse=desc)
+        else:  # _COL_DEVICE
+            devices.sort(key=lambda d: d.name.lower(), reverse=desc)
+        return devices
+
+    def _schedule_list_refresh(self) -> None:
+        """Coalesce channel-update bursts into a single list refresh."""
+        if hasattr(self, "_list_timer"):
+            self._list_timer.start()
+
+    def _refresh_list(self) -> None:
+        if not hasattr(self, "_table"):
+            return
+        devices = self._sorted_devices()
+        self._row_devices = devices
+        table = self._table
+        table.setRowCount(len(devices))
+        for row, device in enumerate(devices):
+            self._fill_list_row(row, device)
+        count = len(devices)
+        self._count_label.setText(f"{count} device{'' if count == 1 else 's'}")
+        self._update_ack_all()
+        self._apply_filter(self._filter_edit.text())
+
+    def _fill_list_row(self, row: int, device: DeviceStatus) -> None:
+        table = self._table
+        level = device.level
+        fill, _glyph, _border, _text = _LEVEL_STYLE[level]
+
+        state_item = QTableWidgetItem()
+        state_item.setIcon(status_icon(level))
+        state_item.setTextAlignment(Qt.AlignCenter)
+        table.setItem(row, self._COL_STATE, state_item)
+
+        table.setItem(row, self._COL_DEVICE, QTableWidgetItem(device.name))
+        table.setItem(row, self._COL_CATEGORY, QTableWidgetItem(device.category))
+        table.setItem(row, self._COL_LOCATION, QTableWidgetItem(device.location))
+
+        status_item = QTableWidgetItem(_LEVEL_TEXT[level])
+        status_item.setForeground(QColor(fill))
+        font = status_item.font()
+        font.setBold(True)
+        status_item.setFont(font)
+        table.setItem(row, self._COL_STATUS, status_item)
+
+        # Acknowledge checkbox (centered), enabled only for active alarms.
+        wrapper = QWidget()
+        box = QHBoxLayout(wrapper)
+        box.setContentsMargins(0, 0, 0, 0)
+        box.addStretch()
+        cb = QCheckBox()
+        cb.setEnabled(device.ackable)
+        cb.setChecked(device.acknowledged)
+        cb.toggled.connect(functools.partial(self._on_ack_toggled, device))
+        box.addWidget(cb)
+        box.addStretch()
+        table.setCellWidget(row, self._COL_ACK, wrapper)
+
+        ack_text = device.ack_time.strftime(self._ACK_TIME_FMT) if device.ack_time else ""
+        table.setItem(row, self._COL_ACKTIME, QTableWidgetItem(ack_text))
+
+    def _on_ack_toggled(self, device: DeviceStatus, checked: bool) -> None:
+        if checked:
+            device.acknowledge()
+        elif device.acknowledged:
+            device.acknowledged = False
+            device.ack_time = None
+            device.changed.emit()
+
+    def _on_header_clicked(self, col: int) -> None:
+        if col == self._sort_col:
+            self._sort_desc = not self._sort_desc
+        else:
+            self._sort_col = col
+            # Severity / ack columns default to "most-notable first".
+            self._sort_desc = col in (self._COL_STATE, self._COL_STATUS, self._COL_ACK, self._COL_ACKTIME)
+        self._refresh_list()
+
+    def _apply_filter(self, text: str) -> None:
+        needle = (text or "").strip().lower()
+        for row, device in enumerate(self._row_devices):
+            haystack = " ".join(
+                [device.name, device.category, device.location, _LEVEL_TEXT[device.level]]
+            ).lower()
+            self._table.setRowHidden(row, bool(needle) and needle not in haystack)
+
+    def _update_ack_all(self) -> None:
+        pending = sum(1 for d in self._iter_devices() if d.ackable and not d.acknowledged)
+        self._ack_all_btn.setText(f"Ack all ({pending})")
+        self._ack_all_btn.setEnabled(pending > 0)
+
+    def _acknowledge_all(self) -> None:
+        now = datetime.now()
+        for device in self._iter_devices():
+            if device.ackable and not device.acknowledged:
+                device.acknowledge(now)
+        self._refresh_list()
 
     # -- PyDM contract ----------------------------------------------------
     def channels(self) -> list[PyDMChannel]:
@@ -677,6 +926,11 @@ class AlarmGrid(QWidget):
                 cell.create_channels()
             self._channels = [ch for d in self._iter_devices() for ch in d.channels]
 
+        # Keep the list view in sync with device status changes.
+        for device in self._iter_devices():
+            device.changed.connect(self._schedule_list_refresh)
+        self._refresh_list()
+
     def _make_column_header(self, text: str) -> QLabel:
         label = QLabel(text)
         label.setAlignment(Qt.AlignCenter)
@@ -728,7 +982,7 @@ class AlarmGrid(QWidget):
         row_cells: list[AlarmGridCell] = []
         for col_idx, col_name in enumerate(self._columns):
             cell = AlarmGridCell()
-            devices = [self._make_device(c, base_dir, col_name) for c in (cells_cfg.get(col_name, []) or [])]
+            devices = [self._make_device(c, base_dir, col_name, title) for c in (cells_cfg.get(col_name, []) or [])]
             for device in devices:
                 cell.add_device(device)
             cell.update_aggregate()
@@ -754,7 +1008,7 @@ class AlarmGrid(QWidget):
         global_pos = header.mapToGlobal(header.rect().bottomLeft())
         menu.exec_(global_pos)
 
-    def _make_device(self, cfg: dict, base_dir: str, location: str = "") -> DeviceStatus:
+    def _make_device(self, cfg: dict, base_dir: str, location: str = "", category: str = "") -> DeviceStatus:
         detail = cfg.get("detail")
         if detail and not os.path.isabs(detail):
             # Resolve relative detail paths against the config file's directory.
@@ -768,5 +1022,6 @@ class AlarmGrid(QWidget):
             macros=cfg.get("macros"),
             typhos_name=cfg.get("typhos"),
             location=location,
+            category=category,
             parent=self,
         )
