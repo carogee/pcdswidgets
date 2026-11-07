@@ -356,6 +356,19 @@ def test_header_click_sorts_device_column(grid):
     assert names_desc == sorted(names, key=str.lower, reverse=True)
 
 
+def test_device_name_click_opens_detail(grid, monkeypatch):
+    grid._refresh_list()
+    opened = []
+    for device in grid._row_devices:
+        monkeypatch.setattr(device, "open_detail", lambda d=device: opened.append(d.name))
+    # Click the Device column of the first row.
+    grid._on_cell_clicked(0, grid._COL_DEVICE)
+    assert opened == [grid._row_devices[0].name]
+    # Clicking another column does nothing.
+    grid._on_cell_clicked(0, grid._COL_STATUS)
+    assert opened == [grid._row_devices[0].name]
+
+
 def test_filter_hides_nonmatching_rows(grid):
     grid._refresh_list()
     grid._apply_filter("MR1L0")

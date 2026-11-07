@@ -660,6 +660,7 @@ class AlarmGrid(QWidget):
         header.setSectionResizeMode(self._COL_DEVICE, QHeaderView.Stretch)
         header.setSectionsClickable(True)
         header.sectionClicked.connect(self._on_header_clicked)
+        self._table.cellClicked.connect(self._on_cell_clicked)
         vbox.addWidget(self._table)
         self._row_devices: list[DeviceStatus] = []
         return container
@@ -717,7 +718,12 @@ class AlarmGrid(QWidget):
         state_item.setTextAlignment(Qt.AlignCenter)
         table.setItem(row, self._COL_STATE, state_item)
 
-        table.setItem(row, self._COL_DEVICE, QTableWidgetItem(device.name))
+        # The device name is a clickable link to its detail screen.
+        device_item = QTableWidgetItem(device.name)
+        if device.detail or device.typhos_name:
+            device_item.setForeground(QColor("#0f62fe"))
+            device_item.setToolTip("Open detail screen")
+        table.setItem(row, self._COL_DEVICE, device_item)
         table.setItem(row, self._COL_CATEGORY, QTableWidgetItem(device.category))
         table.setItem(row, self._COL_LOCATION, QTableWidgetItem(device.location))
 
@@ -751,6 +757,11 @@ class AlarmGrid(QWidget):
             device.acknowledged = False
             device.ack_time = None
             device.changed.emit()
+
+    def _on_cell_clicked(self, row: int, col: int) -> None:
+        """Clicking a device name opens that device's detail screen."""
+        if col == self._COL_DEVICE and 0 <= row < len(self._row_devices):
+            self._row_devices[row].open_detail()
 
     def _on_header_clicked(self, col: int) -> None:
         if col == self._sort_col:
