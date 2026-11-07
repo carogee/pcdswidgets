@@ -88,6 +88,39 @@ rows:
       EBD:
         - {name: STOPPER, channel: "loc://stopper?type=int&init=0"}
 
+  # NOTE: the new rows below are placeholders -- columns default to EBD; move an
+  # entry under `FEE:` to change its column.  Swap the loc:// channels for real
+  # ca:// PVs when available.
+  - section: BEAM IMAGING
+  - category: Diodes
+    cells: {}
+  - category: Imagers
+    cells:
+      EBD:
+        - name: IM1K0_detector
+          channels:
+            - "loc://im1k0_target?type=int&init=0"
+            - "loc://im1k0_motor?type=int&init=0"
+        - name: IM2K0_detector
+          channels:
+            - "loc://im2k0_target?type=int&init=0"
+            - "loc://im2k0_motor?type=int&init=0"
+  - category: Wavefront Sensors
+    cells:
+      EBD:
+        - name: PF1K0
+          channels:
+            - "loc://pf1k0_target?type=int&init=0"
+            - "loc://pf1k0_y_motor?type=int&init=0"
+            - "loc://pf1k0_z_motor?type=int&init=0"
+            - "loc://pf1k0_thermocouple1?type=int&init=0"
+            - "loc://pf1k0_thermocouple2?type=int&init=0"
+            - "loc://pf1k0_flow_switch?type=int&init=0"
+
+  - section: BEAMLINE
+  - category: TV1L0
+    cells: {}
+
   - section: ENVIRONMENT
   - category: Sensors
     cells:
@@ -98,4 +131,21 @@ rows:
   - category: RTDS
     cells:
       EBD:
-        - {name: RTDS, channel: "loc://rtds?type=int&init=2"}
+        - {name: rtdsk0_mpa1, channel: "loc://rtdsk0_mpa1?type=int&init=0"}
+        - {name: rtdsk0_mpa2, channel: "loc://rtdsk0_mpa2?type=int&init=0"}
+        # Rtdsx01_mms{x,y,z} are motion devices.
+        - {name: Rtdsx01_mmsx, channel: "loc://rtdsx01_mmsx?type=int&init=0"}
+        - {name: Rtdsx01_mmsy, channel: "loc://rtdsx01_mmsy?type=int&init=0"}
+        - {name: Rtdsx01_mmsz, channel: "loc://rtdsx01_mmsz?type=int&init=0"}
+
+  - section: TIMING SYSTEM
+  - category: TPRs/EVRs
+    cells: {}
+
+  - section: INFRASTRUCTURE
+  - category: Servers
+    cells: {}
+  - category: PDUs
+    cells: {}
+  - category: Rad monitoring
+    cells: {}
