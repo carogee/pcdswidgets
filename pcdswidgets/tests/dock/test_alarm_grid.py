@@ -237,6 +237,21 @@ def test_typhos_key_sets_device_name(qtbot, tmp_path):
             a.trigger()
 
 
+def test_cell_menu_shows_only_that_cell(grid):
+    # Each cell's menu lists only that cell's (category + location) devices;
+    # the whole-category menu still lists every column's devices.
+    ebd_cell, fee_cell = grid._row_cells["Mirrors"]
+    assert not grid._cell_menus[ebd_cell].has_content()  # EBD is empty
+    fee_menu = grid._cell_menus[fee_cell]
+    names = [a.data().name for a in fee_menu.actions() if isinstance(a.data(), DeviceStatus)]
+    assert names == ["MR1L0", "MR2L0"]
+    # Category-wide menu still has the same (here only FEE has devices).
+    cat_names = [
+        a.data().name for a in grid._row_menus["Mirrors"].actions() if isinstance(a.data(), DeviceStatus)
+    ]
+    assert cat_names == ["MR1L0", "MR2L0"]
+
+
 def test_menu_entry_triggers_open_detail(grid):
     menu = grid._row_menus["Mirrors"]
     device_actions = [a for a in menu.actions() if isinstance(a.data(), DeviceStatus)]

@@ -583,9 +583,11 @@ class AlarmGrid(QWidget):
         self._columns: list[str] = []
         # category title -> list of its cells (one per column)
         self._row_cells: dict[str, list[AlarmGridCell]] = {}
-        # category title -> its device dropdown menu / header widget
+        # category title -> its (whole-category) device menu / header widget
         self._row_menus: dict[str, CategoryMenu] = {}
         self._row_headers: dict[str, QWidget] = {}
+        # cell -> that single cell's device menu (one location only)
+        self._cell_menus: dict[AlarmGridCell, CategoryMenu] = {}
         self._channels: list[PyDMChannel] = []
         # True once we have successfully built from the config; lets showEvent
         # retry a build that failed earlier because the parent display (and thus
@@ -891,12 +893,13 @@ class AlarmGrid(QWidget):
             device.destroy_channel()
             device.setParent(None)
             device.deleteLater()
-        for menu in self._row_menus.values():
+        for menu in (*self._row_menus.values(), *self._cell_menus.values()):
             menu.setParent(None)
             menu.deleteLater()
         self._channels = []
         self._row_cells = {}
         self._row_menus = {}
+        self._cell_menus = {}
         self._row_headers = {}
         self._columns = []
         while self.grid.count():
@@ -1017,7 +1020,8 @@ class AlarmGrid(QWidget):
         header_layout.addStretch()
         self.grid.addWidget(header, row_idx, 0)
 
-        # Build the dropdown menu that lists this category's devices.
+        # Whole-category menu (opened from the category name/triangle): every
+        # device in the row, across all columns.
         menu = CategoryMenu(title, self)
         row_cells: list[AlarmGridCell] = []
         for col_idx, col_name in enumerate(self._columns):
@@ -1027,26 +1031,37 @@ class AlarmGrid(QWidget):
                 cell.add_device(device)
             cell.update_aggregate()
             menu.add_devices(devices)
-            # Clicking a cell's aggregate box also opens the category menu.
-            cell.aggregate.clicked.connect(lambda t=title: self._show_menu(t))
+            # Per-cell menu (opened from this status box): only this column's
+            # (category + location) devices.
+            cell_menu = CategoryMenu(f"{title} — {col_name}", self)
+            cell_menu.add_devices(devices)
+            self._cell_menus[cell] = cell_menu
+            cell.aggregate.clicked.connect(lambda c=cell: self._show_cell_menu(c))
             self.grid.addWidget(cell, row_idx, col_idx + 1)
             row_cells.append(cell)
 
         self._row_cells[title] = row_cells
         self._row_menus[title] = menu
         self._row_headers[title] = header
-        # Clicking the header (bar or arrow) pops up the device menu.
+        # Clicking the header (bar or arrow) pops up the whole-category menu.
         arrow.clicked.connect(lambda _checked=False, t=title: self._show_menu(t))
         header.mousePressEvent = lambda _ev, t=title: self._show_menu(t)
 
     def _show_menu(self, title: str) -> None:
-        """Pop up the device menu for the given category, below its name."""
+        """Pop up the whole-category device menu, below the category name."""
         menu = self._row_menus.get(title)
         header = self._row_headers.get(title)
         if menu is None or header is None or not menu.has_content():
             return
-        global_pos = header.mapToGlobal(header.rect().bottomLeft())
-        menu.exec_(global_pos)
+        menu.exec_(header.mapToGlobal(header.rect().bottomLeft()))
+
+    def _show_cell_menu(self, cell: "AlarmGridCell") -> None:
+        """Pop up only this cell's (category + location) devices, below its box."""
+        menu = self._cell_menus.get(cell)
+        if menu is None or not menu.has_content():
+            return
+        box = cell.aggregate
+        menu.exec_(box.mapToGlobal(box.rect().bottomLeft()))
 
     def _make_device(self, cfg: dict, base_dir: str, location: str = "", category: str = "") -> DeviceStatus:
         detail = cfg.get("detail")
