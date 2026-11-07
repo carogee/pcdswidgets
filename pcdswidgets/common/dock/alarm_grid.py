@@ -572,9 +572,9 @@ class AlarmGrid(QWidget):
         "is_container": False,
     }
 
-    # List-view columns.
-    _COL_STATE, _COL_DEVICE, _COL_CATEGORY, _COL_LOCATION, _COL_STATUS, _COL_ACK, _COL_ACKTIME = range(7)
-    _LIST_HEADERS = ["", "Device", "Category", "Location", "Status", "Ack", "Ack Time"]
+    # List-view columns (Status word first, left of Device).
+    _COL_STATUS, _COL_DEVICE, _COL_CATEGORY, _COL_LOCATION, _COL_ACK, _COL_ACKTIME = range(6)
+    _LIST_HEADERS = ["Status", "Device", "Category", "Location", "Ack", "Ack Time"]
     _ACK_TIME_FMT = "%Y-%m-%d %H:%M:%S"
 
     def __init__(self, parent: QWidget | None = None):
@@ -704,7 +704,7 @@ class AlarmGrid(QWidget):
         col, desc = self._sort_col, self._sort_desc
         # Stable multi-pass: apply least-significant key first.
         devices.sort(key=lambda d: d.name.lower())
-        if col in (self._COL_STATE, self._COL_STATUS):
+        if col == self._COL_STATUS:
             # Within a severity, unacked rows always above acked ones, so acking
             # sinks an alarm to the bottom of its severity band.
             devices.sort(key=lambda d: d.acknowledged)
@@ -746,10 +746,13 @@ class AlarmGrid(QWidget):
         level = device.level
         fill, _glyph, _border, _text = _LEVEL_STYLE[level]
 
-        state_item = QTableWidgetItem()
-        state_item.setIcon(status_icon(level))
-        state_item.setTextAlignment(Qt.AlignCenter)
-        table.setItem(row, self._COL_STATE, state_item)
+        # Status word (colored) is the first column, left of the device name.
+        status_item = QTableWidgetItem(_LEVEL_TEXT[level])
+        status_item.setForeground(QColor(fill))
+        font = status_item.font()
+        font.setBold(True)
+        status_item.setFont(font)
+        table.setItem(row, self._COL_STATUS, status_item)
 
         # The device name is a clickable link to its detail screen.
         device_item = QTableWidgetItem(device.name)
@@ -759,13 +762,6 @@ class AlarmGrid(QWidget):
         table.setItem(row, self._COL_DEVICE, device_item)
         table.setItem(row, self._COL_CATEGORY, QTableWidgetItem(device.category))
         table.setItem(row, self._COL_LOCATION, QTableWidgetItem(device.location))
-
-        status_item = QTableWidgetItem(_LEVEL_TEXT[level])
-        status_item.setForeground(QColor(fill))
-        font = status_item.font()
-        font.setBold(True)
-        status_item.setFont(font)
-        table.setItem(row, self._COL_STATUS, status_item)
 
         # Acknowledge checkbox (centered), enabled only for active alarms.
         wrapper = QWidget()
@@ -802,7 +798,7 @@ class AlarmGrid(QWidget):
         else:
             self._sort_col = col
             # Severity / ack columns default to "most-notable first".
-            self._sort_desc = col in (self._COL_STATE, self._COL_STATUS, self._COL_ACK, self._COL_ACKTIME)
+            self._sort_desc = col in (self._COL_STATUS, self._COL_ACK, self._COL_ACKTIME)
         self._refresh_list()
 
     def _apply_filter(self, text: str) -> None:
