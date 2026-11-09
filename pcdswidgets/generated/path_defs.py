@@ -64,6 +64,7 @@ WIDGET_PATHS = {
     "FastShutter": "pcdswidgets.vacuum.valves:FastShutter",
     "FeatureFinder": "pcdswidgets.common.tools.feature_finder:FeatureFinder",
     "FilterSortWidgetTable": "pcdswidgets.table:FilterSortWidgetTable",
+    "GenericPvRow": "pcdswidgets.common.display.generic_pv_row:GenericPvRow",
     "GetterPump": "pcdswidgets.vacuum.pumps:GetterPump",
     "HotCathodeComboGauge": "pcdswidgets.vacuum.gauges:HotCathodeComboGauge",
     "HotCathodeGauge": "pcdswidgets.vacuum.gauges:HotCathodeGauge",
